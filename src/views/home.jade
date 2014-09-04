@@ -1,0 +1,14 @@
+extends ./layout
+block bodyContainer
+  include ./menu
+  include ./header
+  .homePage(ng-controller='HomePageController')
+    p 测试页
+  //- p #{viewData.a.c}
+  //- .icon1
+  //- .icon2
+  
+  - fileImporter.import('/javascripts/book.js');
+  
+  - fileImporter.import('/javascripts/home.js');
+  - fileImporter.import('/stylesheets/home.css');

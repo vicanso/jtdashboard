@@ -1,0 +1,73 @@
+{
+  "home": {
+    "js": [
+      "/components/angularjs/angular.js",
+      "/components/script.js/dist/script.js",
+      "/components/angular-local-storage/angular-local-storage.js",
+      "/services/utils.js",
+      "/services/http_log.js",
+      "/services/user.js",
+      "/directives/common.js",
+      "/components/debug/dist/debug.js",
+      "/services/debug.js",
+      "/javascripts/global.js",
+      "/javascripts/book.js",
+      "/javascripts/home.js"
+    ],
+    "css": [
+      "/stylesheets/bootstrap.css",
+      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "/stylesheets/global.css",
+      "/stylesheets/menu.css",
+      "/stylesheets/header.css",
+      "/stylesheets/home.css"
+    ],
+    "modifiedAt": "2014-09-04 19:10:31"
+  },
+  "add": {
+    "js": [
+      "/components/angularjs/angular.js",
+      "/components/script.js/dist/script.js",
+      "/components/angular-local-storage/angular-local-storage.js",
+      "/services/utils.js",
+      "/services/http_log.js",
+      "/services/user.js",
+      "/directives/common.js",
+      "/components/debug/dist/debug.js",
+      "/services/debug.js",
+      "/javascripts/global.js",
+      "/javascripts/add.js"
+    ],
+    "css": [
+      "/stylesheets/bootstrap.css",
+      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "/stylesheets/global.css",
+      "/stylesheets/menu.css",
+      "/stylesheets/header.css",
+      "/stylesheets/add.css"
+    ],
+    "modifiedAt": "2014-09-04 21:14:59"
+  },
+  "dashboard": {
+    "js": [
+      "/components/angularjs/angular.js",
+      "/components/script.js/dist/script.js",
+      "/components/angular-local-storage/angular-local-storage.js",
+      "/services/utils.js",
+      "/services/http_log.js",
+      "/services/user.js",
+      "/directives/common.js",
+      "/components/debug/dist/debug.js",
+      "/services/debug.js",
+      "/javascripts/global.js"
+    ],
+    "css": [
+      "/stylesheets/bootstrap.css",
+      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "/stylesheets/global.css",
+      "/stylesheets/menu.css",
+      "/stylesheets/header.css"
+    ],
+    "modifiedAt": "2014-09-04 20:43:57"
+  }
+}

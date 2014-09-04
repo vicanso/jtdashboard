@@ -1,0 +1,27 @@
+extends ./layout
+block bodyContainer
+  include ./menu
+  include ./header
+  .addPage(ng-controller='AddPageController')
+    .row
+      .col-sm-6.col-md-3.configContainer: div
+        h4.title
+          i.fa.fa-area-chart 
+          | 图表类型
+        ul.typeList.clearfix
+          each chart, i in viewData.chartTypes
+            - var chartType = chart.type;
+            li(ng-click='selectChartType("#{chartType}")')
+              i.fa(ng-class='{"fa-square" : chartType == "#{chartType}", "fa-square-o" : chartType != "#{chartType}"}')
+              span #{chart.name}
+      .col-sm-6.col-md-3.configContainer: div
+        h4.title
+          i.fa.fa-calendar-o 
+          | 时间选择
+      .col-sm-6.col-md-3.configContainer: div
+        h4.title 
+          i.fa.fa-gear
+          | 参数选择
+      //- .col-sm-6.col-md-3.configContainer: div
+
+  - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

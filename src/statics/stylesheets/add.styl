@@ -1,0 +1,39 @@
+@import 'nib'
+@import './common'
+
+.addPage
+  margin-left $MENU_WIDTH + 20
+  margin-top 20px
+  .configContainer
+    > div
+      height 300px
+      padding 4px
+      border-radius 4px
+      border 1px solid $BORDER_COLOR
+      background-color #f7f7f9
+    .title
+      background-color #1f2025
+      color #fff
+      margin 0
+      padding 5px 10px
+      .fa
+        margin-right 5px
+
+  .typeList
+    margin 10px 0
+    padding 0
+    li
+      list-style none
+      float left
+      width 50%
+      padding 8px 0
+      text-indent 5px
+      cursor pointer
+      &:hover
+        color #fff
+        background-color #3f9dd9
+      .fa
+        margin-right 5px
+      .fa-square-o
+        color #1f2025
+        margin-right 6px
