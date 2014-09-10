@@ -34,8 +34,6 @@ script.
       }
       if(CONFIG.env === 'development'){
         alert('msg:' + msg + ', url:' + url + ', line:' + line + ', row:' + row + ', stack:' + stack);
-      }else{
-        $.post('/errorlog', {msg : msg, url : url, line : line, row : row, stack : stack});
       }
     };
   })(this);

@@ -57,6 +57,11 @@ routeInfos = [
     route : '/user'
     handler : controllers.user
   }
+  # 获取collection中的所有key
+  {
+    route : '/collection/:collection/keys'
+    handler : controllers.collection.getKeys
+  }
 ]
 
 

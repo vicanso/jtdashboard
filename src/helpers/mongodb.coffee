@@ -5,7 +5,7 @@ requireTree = require 'require-tree'
 logger = require('./logger') __filename
 
 client = null
-
+modelDict = {}
 ###*
  * [init description]
  * @param  {[type]} uri     [description]
@@ -43,7 +43,7 @@ module.exports.initModels = (modelPath) ->
     if model.indexes
       _.each model.indexes, (indexOptions) ->
         schema.index.apply schema, indexOptions
-    client.model name, schema
+    modelDict[name] = client.model name, schema
 
 ###*
  * [model 获取mongoose的model]
@@ -52,7 +52,26 @@ module.exports.initModels = (modelPath) ->
 ###
 module.exports.model = (name) ->
   throw new Error 'the db is not init!' if !client
-  client.model name
+  if modelDict[name]
+    modelDict[name]
+  else
+    schema = new Schema {}, {
+      safe : false
+      strict : false
+      collection : name
+    }
+    schema.index [
+      {
+        key : 1
+      }
+      {
+        key : 1
+        date : 1
+      }
+    ]
+    model = client.model name, schema
+    modelDict[name] = model
+    model
 
 
 module.exports.getCollectionNames = (cbf) ->

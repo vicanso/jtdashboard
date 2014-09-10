@@ -1,0 +1,69 @@
+@import 'nib'
+@import './common'
+
+.uiSelect
+  border 1px solid $BORDER_COLOR
+  padding 5px 0
+  position relative
+  &:hover ul
+    display block
+  .fa-plus
+    color #0c91c8
+    margin-left 10px
+  .placeholder
+    margin-left 10px
+    color #aaa
+  ul
+    display none
+    position absolute
+    margin 0
+    margin-top 5px
+    list-style none
+    left 0
+    min-width 180px
+    border 1px solid $BORDER_COLOR
+    padding 10px 15px
+    line-height 20px
+    box-shadow 0 2px 8px #888
+    background-color #fff
+    z-index 1
+    &:before, &:after
+      content ' '
+      position absolute
+      left 7px
+      top -16px
+      width 0
+      height 3px
+      border 8px solid #fff
+      border-color transparent
+      border-bottom-color $BORDER_COLOR
+    &:after
+      top -15px
+      border-bottom-color #fff
+    li
+      padding 3px
+      cursor pointer
+      &:nth-child(10n + 0) .fa
+        color #0c92c9
+      &:nth-child(10n + 1) .fa
+        color #0cc99a
+      &:nth-child(10n + 2) .fa
+        color #ffd200
+      &:nth-child(10n + 3) .fa
+        color #ff7f02
+      &:nth-child(10n + 4) .fa
+        color #ff0202
+      &:nth-child(10n + 5) .fa
+        color #ff02af
+      &:nth-child(10n + 6) .fa
+        color #c20cff
+      &:nth-child(10n + 7) .fa
+        color #4c16ff
+      &:nth-child(10n + 8) .fa
+        color #1f63ff
+      &:nth-child(10n + 9) .fa
+        color #28fff7
+      .fa
+        margin-right 6px
+        &.fa-square-o
+          margin-right 7px

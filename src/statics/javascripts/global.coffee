@@ -11,6 +11,7 @@ app.addRequires = (arr) ->
     return
   return
 
+
 app.config(['localStorageServiceProvider', (localStorageServiceProvider) ->
   # localstorage的前缀
   localStorageServiceProvider.prefix = 'jt'
@@ -18,7 +19,30 @@ app.config(['localStorageServiceProvider', (localStorageServiceProvider) ->
 ]).config(['$httpProvider', ($httpProvider) ->
   # 所有的http请求添加http log
   $httpProvider.interceptors.push 'httpLog'
+]).config(['$provide', ($provide) ->
+  params = [
+    '$delegate', '$injector', ($delegate, $injector) ->
+      (exception, cause) ->
+        $delegate exception, cause
+        if CONFIG.env == 'development'
+          alert "exception:#{exception}, cause:#{cause}"
+  ]
+  $provide.decorator '$exceptionHandler', params
 ])
+
+
+
+# app.config(function($provide){
+
+#     $provide.decorator("$exceptionHandler", function($delegate, $injector){
+#         return function(exception, cause){
+#             var $rootScope = $injector.get("$rootScope");
+#             $rootScope.addError({message:"Exception", reason:exception});
+#             $delegate(exception, cause);
+#         };
+#     });
+
+# });
 
 app.run ['$http', ($http) ->
   timeline = window.TIME_LINE

@@ -41,12 +41,13 @@
     "css": [
       "/stylesheets/bootstrap.css",
       "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-09-04 21:14:59"
+    "modifiedAt": "2014-09-10 19:54:15"
   },
   "dashboard": {
     "js": [
@@ -64,10 +65,11 @@
     "css": [
       "/stylesheets/bootstrap.css",
       "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
       "/stylesheets/header.css"
     ],
-    "modifiedAt": "2014-09-04 20:43:57"
+    "modifiedAt": "2014-09-06 09:11:41"
   }
 }

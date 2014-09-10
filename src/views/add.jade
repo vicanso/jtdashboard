@@ -3,25 +3,35 @@ block bodyContainer
   include ./menu
   include ./header
   .addPage(ng-controller='AddPageController')
-    .row
+    .row.clearfix
       .col-sm-6.col-md-3.configContainer: div
         h4.title
           i.fa.fa-area-chart 
           | 图表类型
-        ul.typeList.clearfix
+        ul.typeList.clearfix.content(ng-init='config.chartType="#{viewData.chartTypes[0].type}"')
           each chart, i in viewData.chartTypes
             - var chartType = chart.type;
             li(ng-click='selectChartType("#{chartType}")')
-              i.fa(ng-class='{"fa-square" : chartType == "#{chartType}", "fa-square-o" : chartType != "#{chartType}"}')
+              i.fa(ng-class='{"fa-square" : config.chartType == "#{chartType}", "fa-square-o" : config.chartType != "#{chartType}"}')
               span #{chart.name}
       .col-sm-6.col-md-3.configContainer: div
         h4.title
           i.fa.fa-calendar-o 
           | 时间选择
+        .content.dateSelector
+          .uiSelect(jt-select='intervalList' placeholder='请选择时间间隔', ng-model='config.interval')
+          .uiSelect(jt-select='dateList' placeholder='请选择日期', ng-model='config.date')
+          input(type='text', placeholder='开始日期(yyyy-mm-dd)', ng-model='config.startDate', require)
+          input(type='text', placeholder='结束日期(yyyy-mm-dd)', ng-model='config.endDate', require)
+
       .col-sm-6.col-md-3.configContainer: div
         h4.title 
           i.fa.fa-gear
           | 参数选择
-      //- .col-sm-6.col-md-3.configContainer: div
-
+        .content.paramSelector
+          .uiSelect(jt-select='categoryList' placeholder='请选择统计类别', ng-model='config.stats[0].category')
+          .uiSelect(jt-select='keys[config.stats[0].category]' placeholder='请选择分类', ng-model='config.stats[0].keys')
+      .col-sm-6.col-md-3.configContainer: div
+        a(href='javascript:;', ng-click='save()') save
+    .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')
   - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

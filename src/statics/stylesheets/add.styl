@@ -2,9 +2,15 @@
 @import './common'
 
 .addPage
-  margin-left $MENU_WIDTH + 20
-  margin-top 20px
+  position absolute
+  left $MENU_WIDTH
+  top $HEADER_HEIGHT
+  right 0
+  bottom 0
+  overflow-y scroll
+  padding 15px
   .configContainer
+    margin-bottom 20px
     > div
       height 300px
       padding 4px
@@ -18,17 +24,17 @@
       padding 5px 10px
       .fa
         margin-right 5px
-
+    .content
+      margin 15px
   .typeList
-    margin 10px 0
     padding 0
     li
       list-style none
       float left
       width 50%
       padding 8px 0
-      text-indent 5px
       cursor pointer
+      text-indent 3px
       &:hover
         color #fff
         background-color #3f9dd9
@@ -37,3 +43,9 @@
       .fa-square-o
         color #1f2025
         margin-right 6px
+  .dateSelector, .paramSelector
+    > *
+      margin 15px 0
+    input
+      display block
+      width 100%
