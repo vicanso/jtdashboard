@@ -8,35 +8,20 @@ logger = require('../helpers/logger') __filename
 
 module.exports = (req, res, cbf) ->
 
-  query = req.query
+  query = JSON.parse req.query.conditions
 
   # TODO
   # 判断query的字段
   if !query.date
     cbf new Error 'date can not be null'
     return
-  try
-    query.date = JSON.parse query.date
-  catch error
-    cbf new error
-    return
 
   if !query.keys
     cbf new Error 'keys can not be null'
     return
-  try
-    query.keys = JSON.parse query.keys
-  catch error
-    cbf new error
-    return
 
   if !query.point
     cbf new Error 'point can not be null'
-    return
-  try
-    query.point = JSON.parse query.point
-  catch error
-    cbf new error
     return
 
 
@@ -64,7 +49,7 @@ module.exports = (req, res, cbf) ->
 getStatsData = (query, key, cbf) ->
   collection = query.category
   date = query.date
-  fill = query.fill == 'true'
+  fill = query.fill
   point = query.point
   interval = GLOBAL.parseInt point?.interval
   interval = 60 if _.isNaN interval

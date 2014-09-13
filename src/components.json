@@ -29,6 +29,7 @@
       "/components/angularjs/angular.js",
       "/components/script.js/dist/script.js",
       "/components/angular-local-storage/angular-local-storage.js",
+      "/components/echarts/build/echarts-plain-original.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
@@ -48,13 +49,14 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-09-13 12:25:23"
+    "modifiedAt": "2014-09-13 22:10:44"
   },
   "dashboard": {
     "js": [
       "/components/angularjs/angular.js",
       "/components/script.js/dist/script.js",
       "/components/angular-local-storage/angular-local-storage.js",
+      "/services/echarts.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
@@ -71,6 +73,6 @@
       "/stylesheets/menu.css",
       "/stylesheets/header.css"
     ],
-    "modifiedAt": "2014-09-06 09:11:41"
+    "modifiedAt": "2014-09-13 22:02:54"
   }
 }

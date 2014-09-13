@@ -1,7 +1,7 @@
 module = angular.module 'jt.addPage', []
 
-module.factory 'Stats', ['$http', ($http) ->
-
+module.factory 'Stats', ['$http', 'jtDebug', ($http, jtDebug) ->
+  debug = jtDebug 'jt.Stats'
   intervalConvertInfos = 
     '1分钟' : 60
     '5分钟' : 300
@@ -23,9 +23,11 @@ module.factory 'Stats', ['$http', ($http) ->
   stats = 
     getKeys : (category, cbf) ->
       $http.get("/collection/#{category}/keys").success((res)->
+        debug 'getKeys res:%j', res
         cbf null, res
-      ).error (res) ->
-        cbf res
+      ).error (err) ->
+        debug 'getKeys err:%j', err
+        cbf err
     getIntervalList : ->
       '1分钟 5分钟 10分钟 30分钟 1小时 2小时 6小时 12小时 1天'.split ' '
     convertInterval : (interval) ->
@@ -42,7 +44,7 @@ module.factory 'Stats', ['$http', ($http) ->
   stats
 ]
 
-fn = ($scope, $http, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
+fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
   debug = jtDebug 'jt.addPage'
 
   
@@ -68,20 +70,7 @@ fn = ($scope, $http, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
   getKeys = jtUtils.memoize Stats.getKeys
 
 
-
-  $scope.selectChartType = (type) ->
-    $scope.config.chartType = type
-
-  $scope.addParamSelector = ->
-    $scope.config.stats.push {
-      chart : $scope.config.chartType
-    }
-
-  $scope.deleteParamSelector = (index) ->
-    $scope.config.stats.splice index, 1
-
-
-  $scope.save = ->
+  getStatsOptions = ->
     config = $scope.config
     msgList = []
     msgList.push '请选择时间间隔' if !config.interval
@@ -116,8 +105,37 @@ fn = ($scope, $http, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
           }
       options.stats.push statConfig
     debug "options:%j", options
+    options
+
+
+  $scope.selectChartType = (type) ->
+    $scope.config.chartType = type
+
+  $scope.addParamSelector = ->
+    $scope.config.stats.push {
+      chart : $scope.config.chartType
+    }
+
+  $scope.deleteParamSelector = (index) ->
+    $scope.config.stats.splice index, 1
+
+
+  $scope.preview = ->
+    $scope.error.save = ''
+    options = getStatsOptions()
+    interval = options.point?.interval
     jtChart.getData options, (err, data) ->
-      console.dir data
+      if err
+        $scope.error.save = '获取数据失败！' 
+      else
+        container = null
+        angular.forEach $element.children(), (dom) ->
+          container = dom if angular.element(dom).hasClass 'chart'
+        jtChart[options.type] container, data, {
+          title : 
+            text : options.name || '未定义'
+          interval : interval
+        }
 
     # console.dir config.stats
 
@@ -159,7 +177,7 @@ fn = ($scope, $http, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
       $scope.config.endDate = dateRange[1]
 
 
-fn.$inject = ['$scope', '$http', 'jtDebug', '$log', 'jtUtils', 'user', 'Stats', 'jtChart']
+fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'Stats', 'jtChart']
 
 JT_APP.addRequires ['jt.addPage', 'jt.chart']
 JT_APP.controller 'AddPageController', fn

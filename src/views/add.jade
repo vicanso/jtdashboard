@@ -48,8 +48,9 @@ block bodyContainer
           .input-group
             .input-group-addon 统计描述
             input.form-control(type='text', placeholder='请输入该统计的描述', ng-model='desc')
-          a.btn.btn-primary(href='javascript:;', ng-click='review()') 预览
+          a.btn.btn-primary(href='javascript:;', ng-click='preview()') 预览
           a.btn.btn-success(href='javascript:;', ng-click='save()') 保存
     .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')
+    .chart
   - fileImporter.import('/services/chart.js');
   - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

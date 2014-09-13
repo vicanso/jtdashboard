@@ -31,19 +31,6 @@ app.config(['localStorageServiceProvider', (localStorageServiceProvider) ->
 ])
 
 
-
-# app.config(function($provide){
-
-#     $provide.decorator("$exceptionHandler", function($delegate, $injector){
-#         return function(exception, cause){
-#             var $rootScope = $injector.get("$rootScope");
-#             $rootScope.addError({message:"Exception", reason:exception});
-#             $delegate(exception, cause);
-#         };
-#     });
-
-# });
-
 app.run ['$http', ($http) ->
   timeline = window.TIME_LINE
   if timeline

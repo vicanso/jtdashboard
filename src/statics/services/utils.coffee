@@ -112,6 +112,21 @@ module.factory 'jtUtils', ['$http', '$rootScope', ($http, $rootScope) ->
       memoized.unmemoized = fn
       memoized
 
+    sortedIndex : (arr, v, compare) ->
+      low = 0
+      high = arr?.length || low
+      while low < high
+        mid = (low + high) >>> 1
+        if compare
+          if compare(arr[mid], v) < 0
+            low = mid + 1
+          else
+            high = mid
+        else if arr[mid] < v
+          low = mid + 1
+        else
+          high = mid
+      low
 
   utils
 ]
