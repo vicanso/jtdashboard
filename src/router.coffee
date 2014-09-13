@@ -62,6 +62,11 @@ routeInfos = [
     route : '/collection/:collection/keys'
     handler : controllers.collection.getKeys
   }
+  # 根据参数获取统计数据
+  {
+    route : '/stats'
+    handler : controllers.stats
+  }
 ]
 
 

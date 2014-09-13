@@ -6,7 +6,7 @@ module = angular.module 'jt.httpLog', ['LocalStorageModule']
 
 now = Date.now || ->
   new Date().getTime()
-module.factory 'httpLog', ['$injector', 'localStorageService', ($injector, localStorageService) ->
+module.factory 'jtHttpLog', ['$injector', 'localStorageService', ($injector, localStorageService) ->
   # 本地存储http log，定时将所有的log往服务器发送
   httpLogStorage = localStorageService.get('httpLog') || {
     success : []

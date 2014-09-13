@@ -1,7 +1,7 @@
 module = angular.module 'jt.utils', []
 
 
-module.factory 'utils', ['$http', '$rootScope', ($http, $rootScope) -> 
+module.factory 'jtUtils', ['$http', '$rootScope', ($http, $rootScope) -> 
 
   utils =
     now : Date.now || ->

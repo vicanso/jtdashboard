@@ -18,7 +18,7 @@ app.config(['localStorageServiceProvider', (localStorageServiceProvider) ->
   return
 ]).config(['$httpProvider', ($httpProvider) ->
   # 所有的http请求添加http log
-  $httpProvider.interceptors.push 'httpLog'
+  $httpProvider.interceptors.push 'jtHttpLog'
 ]).config(['$provide', ($provide) ->
   params = [
     '$delegate', '$injector', ($delegate, $injector) ->

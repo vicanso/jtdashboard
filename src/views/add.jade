@@ -8,12 +8,10 @@ block bodyContainer
         h4.title
           i.fa.fa-area-chart 
           | 图表类型
-        ul.typeList.clearfix.content(ng-init='config.chartType="#{viewData.chartTypes[0].type}"')
-          each chart, i in viewData.chartTypes
-            - var chartType = chart.type;
-            li(ng-click='selectChartType("#{chartType}")')
-              i.fa(ng-class='{"fa-square" : config.chartType == "#{chartType}", "fa-square-o" : config.chartType != "#{chartType}"}')
-              span #{chart.name}
+        ul.typeList.clearfix.content
+          li(ng-repeat='chart in chartTypes', ng-click='selectChartType(chart.type)')
+            i.fa(ng-class='{"fa-square" : config.chartType == chart.type, "fa-square-o" : config.chartType != chart.type}')
+            span(ng-bind='chart.name')
       .col-sm-6.col-md-3.configContainer: div
         h4.title
           i.fa.fa-calendar-o 
@@ -21,17 +19,37 @@ block bodyContainer
         .content.dateSelector
           .uiSelect(jt-select='intervalList' placeholder='请选择时间间隔', ng-model='config.interval')
           .uiSelect(jt-select='dateList' placeholder='请选择日期', ng-model='config.date')
-          input(type='text', placeholder='开始日期(yyyy-mm-dd)', ng-model='config.startDate', require)
-          input(type='text', placeholder='结束日期(yyyy-mm-dd)', ng-model='config.endDate', require)
+          input.form-control(type='text', placeholder='开始日期(yyyy-mm-dd)', ng-model='config.startDate', require)
+          input.form-control(type='text', placeholder='结束日期(yyyy-mm-dd)', ng-model='config.endDate', require)
 
-      .col-sm-6.col-md-3.configContainer: div
+
+    
+      .col-sm-6.col-md-3.configContainer(ng-repeat='stat in config.stats'): div
         h4.title 
           i.fa.fa-gear
           | 参数选择
         .content.paramSelector
-          .uiSelect(jt-select='categoryList' placeholder='请选择统计类别', ng-model='config.stats[0].category')
-          .uiSelect(jt-select='keys[config.stats[0].category]' placeholder='请选择分类', ng-model='config.stats[0].keys')
+          .uiSelect(jt-select='categoryList' placeholder='请选择统计类别', ng-model='stat.category')
+          .uiSelect(jt-select='$parent.keys[stat.category]' placeholder='请选择分类', ng-model='stat.keys', multiple='multiple')
+          .btn-group
+            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "line"', ng-class='{"btn-success" : stat.chart == "line"}') 折线图
+            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "bar"', ng-class='{"btn-success" : stat.chart == "bar"}') 柱状图
+            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "pie"', ng-class='{"btn-success" : stat.chart == "pie"}') 饼图
+          a.btn.btn-danger(href='javascript:;', ng-click='deleteParamSelector($index)', ng-show='!$first') 删除
+          a.btn.btn-success(href='javascript:;', ng-click='addParamSelector()', ng-show='$first') 增加
       .col-sm-6.col-md-3.configContainer: div
-        a(href='javascript:;', ng-click='save()') save
+        h4.title 
+          i.fa.fa-magic
+          | 保存结果
+        .content.resultContainer
+          .input-group
+            .input-group-addon 统计名称
+            input.form-control(type='text', placeholder='请输入该统计的名称', ng-model='name')
+          .input-group
+            .input-group-addon 统计描述
+            input.form-control(type='text', placeholder='请输入该统计的描述', ng-model='desc')
+          a.btn.btn-primary(href='javascript:;', ng-click='review()') 预览
+          a.btn.btn-success(href='javascript:;', ng-click='save()') 保存
     .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')
+  - fileImporter.import('/services/chart.js');
   - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

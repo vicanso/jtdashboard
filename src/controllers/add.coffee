@@ -72,8 +72,8 @@ module.exports = (req, res, cbf) ->
       cbf null, {
         viewData :
           page : 'add'
-          chartTypes : chartTypes
           globalVariable :
             collections : collections
+            chartTypes : chartTypes
             
       }

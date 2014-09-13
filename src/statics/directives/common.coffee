@@ -29,15 +29,37 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
 
       placeholder = attr.placeholder
       model = attr.ngModel
-      element.find('span').text placeholder if placeholder
+      jtSelect = attr.jtSelect
+
+      # if scope.$index != undefined
+      #   model = model.replace '$index', scope.$index
+      #   jtSelect = jtSelect.replace '$index', scope.$index
+      selectedItemObj = element.find('span').text placeholder if placeholder
+      multiple = attr.multiple == 'multiple'
+
+      
+
       
       appendList = (items) ->
         htmlArr = []
+        keyList = model.split '.'
+        lastKey = keyList.pop()
+        result = scope
+        angular.forEach keyList, (key) ->
+          result = scope[key]
+        if multiple
+          result[lastKey] = {}
+        else
+          result[lastKey] = ''
         angular.forEach items, (item, i) ->
-          ngClick = "#{model}='#{item}'"
-          ngClass = "{'fa-square' : #{model} == '#{item}', 'fa-square-o' : #{model} != '#{item}'}"
+          if multiple
+            ngClick = "#{model}['#{item}'] = !#{model}['#{item}']"
+            ngClass = "{'fa-square' : #{model}['#{item}'], 'fa-square-o' : !#{model}['#{item}']}"
+          else
+            ngClick = "#{model}='#{item}'"
+            ngClass = "{'fa-square' : #{model} == '#{item}', 'fa-square-o' : #{model} != '#{item}'}"
           html = '<li ng-click="' + ngClick + '">' +
-            '<i class="fa", ng-class="' + ngClass + '"></i>' +
+            '<i class="fa" ng-class="' + ngClass + '"></i>' +
             item +
           '</li>'
           htmlArr.push html
@@ -46,17 +68,30 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
         $compile(dom) scope
         return
 
-      appendList scope[attr.jtSelect]
+      appendList scope[jtSelect] if scope[jtSelect]
 
-      scope.$watch attr.jtSelect, (newValues, oldValues) ->
+      scope.$watch jtSelect, (newValues, oldValues) ->
         return if newValues == oldValues
         appendList newValues
         return
       
       scope.$watch model, (v) ->
-        element.find('span').text v if v
+        return if !v
+        if multiple
+          values = []
+          angular.forEach v, (checked, key) ->
+            values.push key if checked
+          if values.length
+            selectedItemObj.text values.join ' '
+          else
+            selectedItemObj.text placeholder
+        else
+          if v
+            selectedItemObj.text v
+          else
+            selectedItemObj.text placeholder
         return
-
+      , multiple
 
       return
 

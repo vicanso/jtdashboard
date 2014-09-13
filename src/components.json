@@ -36,6 +36,7 @@
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
+      "/services/chart.js",
       "/javascripts/add.js"
     ],
     "css": [
@@ -47,7 +48,7 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-09-10 19:54:15"
+    "modifiedAt": "2014-09-13 12:25:23"
   },
   "dashboard": {
     "js": [

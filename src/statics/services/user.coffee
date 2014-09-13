@@ -1,6 +1,6 @@
 module = angular.module 'jt.user', []
 
-module.factory 'user', ['$http', 'localStorageService', 'utils', ($http, localStorageService, utils) ->
+module.factory 'user', ['$http', 'localStorageService', 'jtUtils', ($http, localStorageService, utils) ->
 
   getUserLocation = utils.memoize (cbf) ->
     $script '//int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', ->
