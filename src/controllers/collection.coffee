@@ -29,7 +29,9 @@ module.exports.getKeys = (req, res, cbf) ->
         cbf err, result
     (result, cbf) ->
       value = result?[0]?.value
-      if !value.keys
+      if !value
+        keys = []
+      else if !value.keys
         keys = [value]
       else
         keys = _.sortBy value.keys, (key) ->

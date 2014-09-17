@@ -60,6 +60,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
     ]
     chartType : $scope.chartTypes[0].type
   $scope.error = {}
+  $scope.success = {}
   $scope.dateList = Stats.getDateList()
 
   $scope.categoryList = JT_GLOBAL.collections
@@ -85,6 +86,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
 
     options =
       name : $scope.name
+      desc : $scope.desc
       type : config.chartType
       point :
         interval : Stats.convertInterval config.interval
@@ -136,10 +138,25 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
             text : options.name || '未定义'
           interval : interval
         }
+  $scope.save = ->
+    $scope.error.save = ''
+    options = getStatsOptions()
+    errMsgs = []
+    errMsgs.push '统计名称不能为空' if !options.name
+    errMsgs.push '统计描述不能为空' if !options.desc
+    if errMsgs.length
+      $scope.error.save = errMsgs.join ','
+      return
+    options.cache = false
+    success = (res, status) ->
+      $scope.success.save = '已成功保存配置，3秒后将刷新！'
+      window.location.reload()
+    error = (err, status) ->
+      $scope.error.save = '保存配置失败，' + err.msg
+    $http.post('/config', options).success(success).error error
+    return
 
-    # console.dir config.stats
 
-    # console.dir data
 
   $scope.$watch 'config.stats', (newValues, oldValues) ->
     angular.forEach newValues, (newValue, i) ->
@@ -175,6 +192,9 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
     if dateRange
       $scope.config.startDate = dateRange[0]
       $scope.config.endDate = dateRange[1]
+
+
+  $element.removeClass 'hidden'
 
 
 fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'Stats', 'jtChart']

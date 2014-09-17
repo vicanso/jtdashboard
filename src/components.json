@@ -49,21 +49,22 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-09-13 22:10:44"
+    "modifiedAt": "2014-09-15 18:24:55"
   },
   "dashboard": {
     "js": [
       "/components/angularjs/angular.js",
       "/components/script.js/dist/script.js",
       "/components/angular-local-storage/angular-local-storage.js",
-      "/services/echarts.js",
+      "/components/echarts/build/echarts-plain-original.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
       "/directives/common.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
-      "/javascripts/global.js"
+      "/javascripts/global.js",
+      "/javascripts/dashboard.js"
     ],
     "css": [
       "/stylesheets/bootstrap.css",
@@ -73,6 +74,33 @@
       "/stylesheets/menu.css",
       "/stylesheets/header.css"
     ],
-    "modifiedAt": "2014-09-13 22:02:54"
+    "modifiedAt": "2014-09-17 13:53:39"
+  },
+  "configs": {
+    "js": [
+      "/components/angularjs/angular.js",
+      "/components/script.js/dist/script.js",
+      "/components/angular-local-storage/angular-local-storage.js",
+      "/components/echarts/build/echarts-plain-original.js",
+      "/services/utils.js",
+      "/services/http_log.js",
+      "/services/user.js",
+      "/directives/common.js",
+      "/components/debug/dist/debug.js",
+      "/services/debug.js",
+      "/javascripts/global.js",
+      "/services/chart.js",
+      "/javascripts/configs.js"
+    ],
+    "css": [
+      "/stylesheets/bootstrap.css",
+      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "/stylesheets/ui.css",
+      "/stylesheets/global.css",
+      "/stylesheets/menu.css",
+      "/stylesheets/header.css",
+      "/stylesheets/configs.css"
+    ],
+    "modifiedAt": "2014-09-17 22:26:31"
   }
 }

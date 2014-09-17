@@ -31,9 +31,7 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
       model = attr.ngModel
       jtSelect = attr.jtSelect
 
-      # if scope.$index != undefined
-      #   model = model.replace '$index', scope.$index
-      #   jtSelect = jtSelect.replace '$index', scope.$index
+
       selectedItemObj = element.find('span').text placeholder if placeholder
       multiple = attr.multiple == 'multiple'
 

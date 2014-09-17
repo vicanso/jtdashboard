@@ -2,4 +2,6 @@ extends ./layout
 block bodyContainer
   include ./menu
   include ./header
-  .homePage
+  .dashboardPage(ng-controller='DashboardController')
+
+  - fileImporter.import('/javascripts/dashboard.js');

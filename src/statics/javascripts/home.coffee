@@ -1,6 +1,5 @@
-fn = ($scope, $http, debug, $log, utils, user, Book) ->
+fn = ($scope, $http, debug, $log, utils, user) ->
   debug = debug 'jt.homePage'
-  debug Book
   debug 'start'
 
   $scope.chartType = ''
@@ -8,8 +7,7 @@ fn = ($scope, $http, debug, $log, utils, user, Book) ->
   user.getInfo (err, data) ->
     console.dir data
 
-fn.$inject = ['$scope', '$http', 'debug', '$log', 'utils', 'user', 'Book']
-JT_APP.addRequires ['jt.book']
+fn.$inject = ['$scope', '$http', 'debug', '$log', 'utils', 'user']
 JT_APP.controller 'HomePageController', fn
 
 

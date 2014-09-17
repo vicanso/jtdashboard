@@ -2,7 +2,7 @@ extends ./layout
 block bodyContainer
   include ./menu
   include ./header
-  .addPage(ng-controller='AddPageController')
+  .addPage.hidden(ng-controller='AddPageController')
     .row.clearfix
       .col-sm-6.col-md-3.configContainer: div
         h4.title
@@ -51,6 +51,7 @@ block bodyContainer
           a.btn.btn-primary(href='javascript:;', ng-click='preview()') 预览
           a.btn.btn-success(href='javascript:;', ng-click='save()') 保存
     .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')
+    .alert.alert-success.hidden(ng-class='{hidden : !success.save}', ng-bind='success.save')
     .chart
   - fileImporter.import('/services/chart.js');
   - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

@@ -1,10 +1,10 @@
 module = angular.module 'jt.user', []
 
-module.factory 'user', ['$http', 'localStorageService', 'jtUtils', ($http, localStorageService, utils) ->
+module.factory 'user', ['$http', '$document', 'localStorageService', 'jtUtils', ($http, $document, localStorageService, utils) ->
 
-  getUserLocation = utils.memoize (cbf) ->
-    $script '//int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', ->
-      cbf null, window.remote_ip_info
+  # getUserLocation = utils.memoize (cbf) ->
+  #   $script '//int.dpool.sina.com.cn/iplookup/iplookup.php?format=js', ->
+  #     cbf null, window.remote_ip_info
 
   getUserInfo = utils.memoize (cbf) ->
     $http.get('/user').success((res) ->
@@ -16,15 +16,14 @@ module.factory 'user', ['$http', 'localStorageService', 'jtUtils', ($http, local
   if !userInfo
     userInfo = 
       uuid : utils.uuid()
-
   userInfo.updatedAt = utils.now()
-
+  localStorageService.cookie.set 'uuid', userInfo.uuid
   localStorageService.set 'user', userInfo
 
-  # getUserLocation ->
-  #   console.dir arguments
+
   user =
-    getInfo : getUserInfo
+    getInfo : (cbf) ->
+      cbf null, userInfo
       
   user
 

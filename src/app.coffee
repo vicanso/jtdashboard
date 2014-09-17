@@ -150,7 +150,7 @@ staticHandler = do ->
       app.use mount, jtDev.coffee.parser staticPath
     app.use mount, (req, res, next) ->
       res.header 'Expires', expires if expires
-      res.header 'Cache-Control', "public, max-age=#{staticMaxAge}, s-maxage=#{hour}"
+      res.header 'Cache-Control', "public, max-age=#{staticMaxAge}, s-maxage=30"
       handler req, res, (err) ->
         return next err if err
         logger.error "#{req.url} is not found!"

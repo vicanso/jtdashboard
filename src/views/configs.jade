@@ -1,0 +1,30 @@
+extends ./layout
+block bodyContainer
+  include ./menu
+  include ./header
+  .configsPage.hidden(ng-controller='ConfigsPageController')
+    .panel.panel-default
+      .panel-heading 可以通过各种配置的组合，生成自定义的统计分析
+      table.table.configs
+        thead: tr
+          th 名称
+          th 类型
+          th 开始日期
+          th 结束日期
+          th 统计间隔
+          th 操作
+        tbody
+          tr(ng-repeat='config in configs')
+            td.name(ng-bind='config.name')
+            td(ng-bind='config.type')
+            td(ng-bind='config.date.start')
+            td(ng-bind='config.date.end')
+            td(ng-bind='config.point.interval')
+            td.op
+              a(href='javascript:;', title='预览')
+                i.fa.fa-play
+              a(href='javascript:;', title='配置详情')
+                i.fa.fa-code
+
+  - fileImporter.import('/services/chart.js');
+  - fileImporter.import('/stylesheets/configs.css', '/javascripts/configs.js');

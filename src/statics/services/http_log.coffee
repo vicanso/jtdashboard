@@ -35,6 +35,7 @@ module.factory 'jtHttpLog', ['$injector', 'localStorageService', ($injector, loc
 
   httpLog =
     request : (config) ->
+      # 开始时间
       config._createdAt = now()
       config
     response : (res) ->

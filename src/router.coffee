@@ -14,31 +14,46 @@ addImporter = (req, res, next) ->
   fileImporter = new FileImporter merger
   fileImporter.debug true if res.locals.DEBUG
   fileImporter.hosts config.staticHosts
-  # template = res.locals.TEMPLATE
-  # if template && components
-  #   currentTemplateComponents = components[template]
-  #   fileImporter.importJs currentTemplateComponents?.js
-  #   fileImporter.importCss currentTemplateComponents?.css
 
   fileImporter.version crc32Config if crc32Config
   fileImporter.prefix config.staticUrlPrefix
   res.locals.fileImporter = fileImporter
   next()
+###*
+ * [setNoCache 所有不可以缓存的GET请求，都应带上cache=false，方便haproxy判断该请求是否可以进入varnish]
+ * @param {[type]}   req  [description]
+ * @param {[type]}   res  [description]
+ * @param {Function} next [description]
+###
+setNoCache = (req, res, next) ->
+  query = req.query
+  if req.method == 'GET' && query.cache != 'false'
+    query.cache = false
+    querystring = require 'querystring'
+    url = require 'url'
+    urlInfo = url.parse req.url
+    res.redirect 301, "#{urlInfo.pathname}?#{querystring.stringify(query)}"
+  else
+    res.header 'Cache-Control', 'no-cache, no-store'
+    next()
 
 routeInfos = [
   {
     route : '/import/files'
     type : 'post'
+    middleware : [setNoCache]
     handler : controllers.import_files
   }
   {
     route : '/timeline'
     type : 'post'
+    middleware : [setNoCache]
     handler : controllers.timeline
   }
   {
     route : '/httplog'
     type : 'post'
+    middleware : [setNoCache]
     handler : controllers.http_log
   }
   {
@@ -54,7 +69,14 @@ routeInfos = [
     template : 'add'
   }
   {
+    route : '/configs'
+    handler : controllers.configs
+    middleware : [addImporter]
+    template : 'configs'
+  }
+  {
     route : '/user'
+    middleware : [setNoCache]
     handler : controllers.user
   }
   # 获取collection中的所有key
@@ -66,6 +88,11 @@ routeInfos = [
   {
     route : '/stats'
     handler : controllers.stats
+  }
+  {
+    route : '/config'
+    type : 'post'
+    handler : controllers.config
   }
 ]
 

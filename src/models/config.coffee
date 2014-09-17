@@ -1,9 +1,9 @@
 module.exports =
   name : 'stats_config'
   schema :
-    creator : 
-      type : String
-      require : true
+    # creator : 
+    #   type : String
+    #   require : true
     name : 
       type : String
       require : true

@@ -6,7 +6,6 @@ moment = require 'moment'
 componentsFile = path.join __dirname, '../components.json'
 
 module.exports = (req, res, cbf) ->
-  res.header 'Cache-Control', 'no-cache, no-store'
   data = req.body
   if !data?.template
     cbf null, {
