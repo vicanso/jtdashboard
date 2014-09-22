@@ -3,9 +3,9 @@ block bodyContainer
   include ./menu
   include ./header
   .configsPage.hidden(ng-controller='ConfigsPageController')
-    .panel.panel-default
+    .panel.panel-default.configs(ng-class='{shorter : selectedItems.length}')
       .panel-heading 可以通过各种配置的组合，生成自定义的统计分析
-      table.table.configs
+      table.table
         thead: tr
           th 名称
           th 类型
@@ -13,6 +13,7 @@ block bodyContainer
           th 结束日期
           th 统计间隔
           th 操作
+          th 显示区域
         tbody
           tr(ng-repeat='config in configs')
             td.name(ng-bind='config.name')
@@ -21,10 +22,40 @@ block bodyContainer
             td(ng-bind='config.date.end')
             td(ng-bind='config.point.interval')
             td.op
-              a(href='javascript:;', title='预览')
+              a(href='javascript:;', title='预览', ng-click='preview(config, "chart")')
                 i.fa.fa-play
-              a(href='javascript:;', title='配置详情')
+              a(href='javascript:;', title='参数', ng-click='preview(config, "stats")')
                 i.fa.fa-code
-
+              a(href='javascript:;', title='添加', ng-click='toggleSelected(config)')
+                i.fa.fa-check(ng-class='{selected : config.selected}')
+            td: .btn-group
+              button.btn.btn-default(title='占显示区域1/3')
+                i.fa.fa-align-left
+              button.btn.btn-default(title='占显示区域1/2')
+                i.fa.fa-align-center
+              button.btn.btn-default(title='占显示区域2/3')
+                i.fa.fa-align-right
+              button.btn.btn-default(title='占满显示区域')
+                i.fa.fa-align-justify
+      .alert.alert-warning.hidden(ng-class='{hidden : !error.preview}', ng-bind='error.preview')
+    .previewContainer.panel.panel-default.hidden
+      .panel-heading
+        i.fa.fa-close(ng-click='closePreview()')
+        span(ng-bind='preview.type == "stats"? "配置参数" : "图表预览"')
+      .content
+    //- .selectedItemsContainer.panel.panel-default.hidden(ng-class='{hidden : !selectedItems.length}')
+    //-   .panel-heading 已选择统计：
+    //-   .content: .row
+    //-     .col-xs-6(ng-repeat='item in selectedItems'): .config
+    //-       .name(ng-bind='item.name')
+          //- .btn-group.area
+          //-   button.btn.btn-default
+          //-     span 33.3%
+          //-   button.btn.btn-default
+          //-     span 50%
+          //-   button.btn.btn-default
+          //-     span 66.7%
+          //-   button.btn.btn-default
+          //-     span 100%
   - fileImporter.import('/services/chart.js');
   - fileImporter.import('/stylesheets/configs.css', '/javascripts/configs.js');

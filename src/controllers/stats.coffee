@@ -28,9 +28,11 @@ module.exports = (req, res, cbf) ->
   interval = query.point?.interval
   if interval && interval > 0
     maxAge = Math.min interval, 1800
-  maxAge = 0 if config.env == 'development'
-  headerOptions = 
-    'Cache-Control' : "public, max-age=#{maxAge}"
+
+  if config.env == 'development'
+    res.header 'Cache-Control', 'no-cache, no-store'
+  else
+    res.header 'Cache-Control', "public, max-age=#{maxAge}"
 
   keys = query.keys
   keys = [keys] if !_.isArray keys
@@ -44,7 +46,7 @@ module.exports = (req, res, cbf) ->
     else
       data = _.flatten data, true
       debug 'finished:%j ', query
-      cbf null, data, headerOptions
+      cbf null, data
 
 getStatsData = (query, key, cbf) ->
   collection = query.category

@@ -8,7 +8,7 @@ logger = require('../helpers/logger') __filename
 module.exports = (req, res, cbf) ->
   Config = mongodb.model 'stats_config'
   method = req.method
-
+  console.dir method
 
   save = (data, cbf) ->
     async.waterfall [
@@ -24,6 +24,7 @@ module.exports = (req, res, cbf) ->
     ], cbf
 
   get = (query, cbf) ->
+    console.dir query
     if !query
       cbf new Error 'query can not be null'
       return

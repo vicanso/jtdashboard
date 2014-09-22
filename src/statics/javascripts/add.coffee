@@ -125,7 +125,6 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
   $scope.preview = ->
     $scope.error.save = ''
     options = getStatsOptions()
-    interval = options.point?.interval
     jtChart.getData options, (err, data) ->
       if err
         $scope.error.save = '获取数据失败！' 
@@ -136,8 +135,8 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
         jtChart[options.type] container, data, {
           title : 
             text : options.name || '未定义'
-          interval : interval
-        }
+          interval : options.point?.interval
+        } if container
   $scope.save = ->
     $scope.error.save = ''
     options = getStatsOptions()

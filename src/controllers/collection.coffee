@@ -8,10 +8,6 @@ debug = require('debug') 'controllers'
 
 
 module.exports.getKeys = (req, res, cbf) ->
-  maxAge = 600
-  maxAge = 0 if config.env == 'development'
-  headerOptions = 
-    'Cache-Control' : "public, max-age=#{maxAge}"
   collection = req.param 'collection'
 
   mapOptions = 
@@ -36,5 +32,5 @@ module.exports.getKeys = (req, res, cbf) ->
       else
         keys = _.sortBy value.keys, (key) ->
           key
-      cbf null, keys, headerOptions
+      cbf null, keys
   ], cbf

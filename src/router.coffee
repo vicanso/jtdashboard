@@ -37,6 +37,13 @@ setNoCache = (req, res, next) ->
     res.header 'Cache-Control', 'no-cache, no-store'
     next()
 
+getCacheController = (ttl) ->
+  (req, res, next) ->
+    if config.env == 'development'
+      res.header 'Cache-Control', 'no-cache, no-store'
+    else
+      res.header 'Cache-Control', "public, max-age=#{ttl}"
+    next()
 routeInfos = [
   {
     route : '/import/files'
@@ -59,13 +66,19 @@ routeInfos = [
   {
     route : ['/', '/dashboard']
     handler : controllers.dashboard
-    middleware : [addImporter]
+    middleware : [
+      getCacheController(600)
+      addImporter
+    ]
     template : 'dashboard'
   }
   {
     route : '/add'
     handler : controllers.add
-    middleware : [addImporter]
+    middleware : [
+      getCacheController(600)
+      addImporter
+    ]
     template : 'add'
   }
   {
@@ -82,6 +95,9 @@ routeInfos = [
   # 获取collection中的所有key
   {
     route : '/collection/:collection/keys'
+    middleware : [
+      getCacheController(600)
+    ]
     handler : controllers.collection.getKeys
   }
   # 根据参数获取统计数据
@@ -92,6 +108,15 @@ routeInfos = [
   {
     route : '/config'
     type : 'post'
+    middleware : [setNoCache]
+    handler : controllers.config
+  }
+  {
+    route : '/config'
+    type : 'get'
+    middleware : [
+      getCacheController(600)
+    ]
     handler : controllers.config
   }
 ]
