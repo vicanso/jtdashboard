@@ -24,11 +24,13 @@ fn = ($scope, $http, $element, jtDebug, jtChart) ->
 
   $scope.preview = {}
 
-  # $scope.selectedItems = []
+  $scope.selectedItems = []
 
   $scope.selectedTotal = 0
 
   $element.removeClass 'hidden'
+
+  $scope.set = {}
 
 
 
@@ -84,17 +86,34 @@ fn = ($scope, $http, $element, jtDebug, jtChart) ->
 
 
   $scope.toggleSelected = (item) ->
-    # if item.selected
-    #   index = $scope.selectedItems.indexOf item
-    #   $scope.selectedItems.splice index, 1
-    # else
-    #   $scope.selectedItems.push item
+    if item.selected
+      index = $scope.selectedItems.indexOf item
+      $scope.selectedItems.splice index, 1
+    else
+      item.area = 1
+      $scope.selectedItems.push item
     item.selected = !item.selected
     return
 
-    # $http.get("/config?_id=#{item._id}").success((res) ->
-    #   console.dir res
-    # ).error (err) ->
+
+  $scope.save = ->
+    if !$scope.set.name
+      return
+    data = 
+      name : $scope.set.name
+    configs = []
+    angular.forEach $scope.selectedItems, (item) ->
+      configs.push {
+        id : item._id
+        area : item.area
+      }
+    data.configs = configs
+    $http.post('/set', data).success((res)->
+      console.dir res
+    ).error (res) ->
+
+    return
+
 
 
 
