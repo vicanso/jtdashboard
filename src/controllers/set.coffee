@@ -14,6 +14,8 @@ get = (id, cbf) ->
       if !doc
         cbf new Error "can not find doc by #{id}"
         return
+      doc = doc.toObject()
+      console.dir doc.configs
       ids = _.pluck doc.configs, 'id'
       fnList = _.map ids, (id) ->
         (cbf) ->
@@ -22,7 +24,6 @@ get = (id, cbf) ->
       async.parallel fnList, (err, configs) ->
         cbf err, doc, configs
     (doc, configs, cbf) ->
-      doc = doc.toObject()
       _.each configs, (tmp, i) ->
         doc.configs[i] = _.extend tmp.toObject(), doc.configs[i]
         return

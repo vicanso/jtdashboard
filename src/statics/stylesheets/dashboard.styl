@@ -1,0 +1,41 @@
+@import 'nib'
+@import './common'
+.dashboardPage
+  .tabsContainer
+    background-color #1f2025
+    height $HEADER_HEIGHT
+    line-height @height
+    padding-left $MENU_WIDTH + 20px
+    .tabs
+      margin 0
+      padding 0
+      padding-top 10px
+      height $HEADER_HEIGHT - 13
+      line-height @height
+      li
+        border-bottom 3px solid #1f2025
+        list-style none
+        display inline-block
+        &.selected
+          border-color #d9534f
+        a
+          display block
+          padding 0 30px
+          color #fff
+    .setList
+      padding-right 20px
+      float right
+      color #fff
+      &:hover
+        .dropdown-menu
+          display block
+      .dropdown-menu
+        right 0
+        left auto
+        margin-top -1px
+        border-left 3px solid #d9534f
+        a
+          padding 5px 20px
+          color #333
+      a
+        color #fff

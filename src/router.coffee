@@ -67,7 +67,7 @@ routeInfos = [
     route : ['/', '/dashboard']
     handler : controllers.dashboard
     middleware : [
-      getCacheController(600)
+      getCacheController 600
       addImporter
     ]
     template : 'dashboard'
@@ -76,7 +76,7 @@ routeInfos = [
     route : '/add'
     handler : controllers.add
     middleware : [
-      getCacheController(600)
+      getCacheController 600
       addImporter
     ]
     template : 'add'
@@ -96,7 +96,7 @@ routeInfos = [
   {
     route : '/collection/:collection/keys'
     middleware : [
-      getCacheController(600)
+      getCacheController 600
     ]
     handler : controllers.collection.getKeys
   }
@@ -115,7 +115,7 @@ routeInfos = [
     route : '/config'
     type : 'get'
     middleware : [
-      getCacheController(600)
+      getCacheController 600
     ]
     handler : controllers.config
   }
@@ -123,6 +123,13 @@ routeInfos = [
     route : '/set'
     type : 'post'
     middleware : [setNoCache]
+    handler : controllers.set
+  }
+  {
+    route : '/set/:id'
+    middleware : [
+      getCacheController 600
+    ]
     handler : controllers.set
   }
 ]

@@ -22,6 +22,8 @@ fn = ($scope, $http, $element, jtDebug, jtChart) ->
 
   $scope.error = {}
 
+  $scope.success = {}
+
   $scope.preview = {}
 
   $scope.selectedItems = []
@@ -108,10 +110,12 @@ fn = ($scope, $http, $element, jtDebug, jtChart) ->
         area : item.area
       }
     data.configs = configs
-    $http.post('/set', data).success((res)->
-      console.dir res
-    ).error (res) ->
-
+    $http.post('/set', data).then (res)->
+      $scope.error.save = ''
+      $scope.success.save = '已成功保存该配置'
+    , (res) ->
+      $scope.success.save = ''
+      $scope.error.save = '保存不成功'
     return
 
 

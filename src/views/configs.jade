@@ -41,6 +41,8 @@ block bodyContainer
           span.input-group-addon: a(href='javascript:;', ng-click='save()')
             i.fa.fa-floppy-o
         | 已选择统计：
+        span.success(ng-bind='success.save', ng-show='success.save')
+        span.error(ng-bind='error.save', ng-show='error.save')
       .content: .row
         div(ng-repeat='item in selectedItems', ng-class='{"col-xs-4" : item.area == 0, "col-xs-6" : item.area == 1, "col-xs-8" : item.area == 2, "col-xs-12" : item.area == 3}'): .config
           .name(ng-bind='item.name')
