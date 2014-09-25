@@ -10,8 +10,12 @@ block bodyContainer
         ul.dropdown-menu
           - var items = viewData.globalVariable.setList;
           each item, i in items
-            li: a(href='javascript:;', ng-click='show(#{i})') #{item.name}
+            li: a(href='javascript:;', ng-click='add(#{i})') #{item.name}
       ul.tabs
         li(ng-repeat='set in selectedSetList', ng-class='{selected : set.selected}')
-          a(href='javascript:;', ng-bind='set.name')
+          i.fa.fa-close(ng-click='remove(set)')
+          a(href='javascript:;', ng-bind='set.name', ng-click='show(set)')
+
+    .chartListContainer
+  - fileImporter.import('/services/chart.js');
   - fileImporter.import('/javascripts/dashboard.js', '/stylesheets/dashboard.css');

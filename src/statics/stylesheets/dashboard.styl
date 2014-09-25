@@ -16,6 +16,18 @@
         border-bottom 3px solid #1f2025
         list-style none
         display inline-block
+        position relative
+        margin-right 20px
+        &:hover
+          .fa-close
+            color #aaa
+            &:hover
+              color #fff
+        .fa-close
+          position absolute
+          right 0
+          top 0
+          cursor pointer
         &.selected
           border-color #d9534f
         a
@@ -39,3 +51,10 @@
           color #333
       a
         color #fff
+
+  .chartListContainer
+    position absolute
+    left $MENU_WIDTH
+    top $HEADER_HEIGHT
+    right 0
+    bottom 0

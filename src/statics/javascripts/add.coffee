@@ -1,7 +1,7 @@
 module = angular.module 'jt.addPage', []
 
-module.factory 'Stats', ['$http', 'jtDebug', ($http, jtDebug) ->
-  debug = jtDebug 'jt.Stats'
+module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
+  debug = jtDebug 'jt.jtStats'
   intervalConvertInfos = 
     '1分钟' : 60
     '5分钟' : 300
@@ -44,13 +44,13 @@ module.factory 'Stats', ['$http', 'jtDebug', ($http, jtDebug) ->
   stats
 ]
 
-fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
+fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats, jtChart) ->
   debug = jtDebug 'jt.addPage'
 
   
 
-  $scope.intervalList = Stats.getIntervalList()
-  $scope.chartTypes = Stats.getChartTypes()
+  $scope.intervalList = jtStats.getIntervalList()
+  $scope.chartTypes = jtStats.getChartTypes()
 
   $scope.config = 
     stats : [
@@ -61,14 +61,14 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
     chartType : $scope.chartTypes[0].type
   $scope.error = {}
   $scope.success = {}
-  $scope.dateList = Stats.getDateList()
+  $scope.dateList = jtStats.getDateList()
 
   $scope.categoryList = JT_GLOBAL.collections
   $scope.keys = {}
 
 
 
-  getKeys = jtUtils.memoize Stats.getKeys
+  getKeys = jtUtils.memoize jtStats.getKeys
 
 
   getStatsOptions = ->
@@ -89,7 +89,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
       desc : $scope.desc
       type : config.chartType
       point :
-        interval : Stats.convertInterval config.interval
+        interval : jtStats.convertInterval config.interval
       date :
         start : config.startDate
         end : config.endDate
@@ -187,7 +187,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
       return
 
   $scope.$watch 'config.date', (v)->
-    dateRange = Stats.getDateRange v
+    dateRange = jtStats.getDateRange v
     if dateRange
       $scope.config.startDate = dateRange[0]
       $scope.config.endDate = dateRange[1]
@@ -196,7 +196,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, Stats, jtChart) ->
   $element.removeClass 'hidden'
 
 
-fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'Stats', 'jtChart']
+fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats', 'jtChart']
 
 JT_APP.addRequires ['jt.addPage', 'jt.chart']
 JT_APP.controller 'AddPageController', fn
