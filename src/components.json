@@ -37,7 +37,7 @@
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
-      "/services/chart.js",
+      "/directives/chart.js",
       "/javascripts/add.js"
     ],
     "css": [
@@ -49,7 +49,7 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-09-15 18:24:55"
+    "modifiedAt": "2014-09-26 21:04:38"
   },
   "dashboard": {
     "js": [
@@ -64,7 +64,7 @@
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
-      "/services/chart.js",
+      "/directives/chart.js",
       "/javascripts/dashboard.js"
     ],
     "css": [
@@ -75,7 +75,7 @@
       "/stylesheets/menu.css",
       "/stylesheets/dashboard.css"
     ],
-    "modifiedAt": "2014-09-25 21:57:04"
+    "modifiedAt": "2014-09-26 20:47:17"
   },
   "configs": {
     "js": [

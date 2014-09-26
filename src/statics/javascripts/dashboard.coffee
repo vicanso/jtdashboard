@@ -45,8 +45,8 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
         return
     set.selected = true
     jtSet.get set._id, (err, data) ->
-      console.dir err
-      console.dir data
+      if data?.configs?.length
+        $scope.configs = data.configs
     return
 
 

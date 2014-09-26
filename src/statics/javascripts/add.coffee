@@ -44,7 +44,7 @@ module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
   stats
 ]
 
-fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats, jtChart) ->
+fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
   debug = jtDebug 'jt.addPage'
 
   
@@ -124,19 +124,8 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats, jtChart) -
 
   $scope.preview = ->
     $scope.error.save = ''
-    options = getStatsOptions()
-    jtChart.getData options, (err, data) ->
-      if err
-        $scope.error.save = '获取数据失败！' 
-      else
-        container = null
-        angular.forEach $element.children(), (dom) ->
-          container = dom if angular.element(dom).hasClass 'chart'
-        jtChart[options.type] container, data, {
-          title : 
-            text : options.name || '未定义'
-          interval : options.point?.interval
-        } if container
+    $scope.statsOptions = getStatsOptions()
+
   $scope.save = ->
     $scope.error.save = ''
     options = getStatsOptions()
@@ -196,7 +185,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats, jtChart) -
   $element.removeClass 'hidden'
 
 
-fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats', 'jtChart']
+fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats']
 
 JT_APP.addRequires ['jt.addPage', 'jt.chart']
 JT_APP.controller 'AddPageController', fn

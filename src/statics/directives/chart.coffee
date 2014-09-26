@@ -1,6 +1,6 @@
 module = angular.module 'jt.chart', ['jt.utils', 'jt.debug']
 
-module.factory 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jtUtils, jtDebug) ->
+module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jtUtils, jtDebug) ->
   debug = jtDebug 'jt.chart'
   jtChart =
     ###*
@@ -920,11 +920,25 @@ module.factory 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jtUt
     textStyle:
       fontFamily: "微软雅黑, Arial, Verdana, sans-serif"
 
-
-
-
-
-
-  jtChart
+  {
+    restrict : 'A'
+    link : (scope, element, attr, ctrl) ->
+      model = attr.jtChart
+      config = scope[model]
+      show = (options) ->
+        type = options.type
+        jtChart.getData options, (err, data) ->
+          if err
+            element.html err.msg
+          else
+            jtChart[type] element[0], data, {
+              title : 
+                text : options.name || '未定义'
+              interval : options.point?.interval
+            }
+      show config if config
+      scope.$watch model, (v) ->
+        show v if v
+  }
 
 ]

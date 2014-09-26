@@ -17,5 +17,6 @@ block bodyContainer
           a(href='javascript:;', ng-bind='set.name', ng-click='show(set)')
 
     .chartListContainer
-  - fileImporter.import('/services/chart.js');
+      .chart(ng-repeat='config in configs', jt-chart='config')
+  - fileImporter.import('/directives/chart.js');
   - fileImporter.import('/javascripts/dashboard.js', '/stylesheets/dashboard.css');

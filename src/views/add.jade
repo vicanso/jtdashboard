@@ -52,6 +52,6 @@ block bodyContainer
           a.btn.btn-success(href='javascript:;', ng-click='save()') 保存
     .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')
     .alert.alert-success.hidden(ng-class='{hidden : !success.save}', ng-bind='success.save')
-    .chart
-  - fileImporter.import('/services/chart.js');
+    .chart(jt-chart='statsOptions')
+  - fileImporter.import('/directives/chart.js');
   - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

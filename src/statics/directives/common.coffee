@@ -92,8 +92,6 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
       , multiple
 
       return
-
-    # link: function(scope, element, attr, ngModel) {
   }
 
 ]
