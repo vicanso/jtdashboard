@@ -930,12 +930,17 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
         jtChart.getData options, (err, data) ->
           if err
             element.html err.msg
+          else if !data?.length
+            element.html '没有相关统计数据'
           else
-            jtChart[type] element[0], data, {
+            tmpObj = angular.element '<div style="height:100%"></div>'
+            element.empty().append tmpObj
+            jtChart[type] tmpObj[0], data, {
               title : 
                 text : options.name || '未定义'
               interval : options.point?.interval
             }
+        return
       show config if config
       scope.$watch model, (v) ->
         show v if v

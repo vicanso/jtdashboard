@@ -3,7 +3,7 @@ module = angular.module 'jt.configsPage', []
 
 
 
-fn = ($scope, $http, $element, jtDebug, jtChart) ->
+fn = ($scope, $http, $element, jtDebug) ->
   debug = jtDebug 'jt.configsPage'
   debug "configs:%j", JT_GLOBAL.configs
 
@@ -38,31 +38,17 @@ fn = ($scope, $http, $element, jtDebug, jtChart) ->
 
   
 
-  loading = false
+  # loading = false
   showChart = (item) ->
-    if loading
-      $scope.error.preview = '正在加载数据，请稍候！'
-      return 
-    loading = true
+    # if loading
+    #   $scope.error.preview = '正在加载数据，请稍候！'
+    #   return 
     $scope.error.preview = ''
     options = angular.copy item
     delete options.$$hashKey
     delete options._id
-    jtChart.getData options, (err, data) ->
-      loading = false
-      if err
-        $scope.error.preview = '获取数据失败'
-      else
-        $scope.error.preview = ''
-        tmpObj = angular.element '<div class="chart"></div>'
-        previewContent.empty()
-        previewContent.append tmpObj
-        previewContainer.removeClass 'hidden'
-        jtChart[options.type] tmpObj[0], data, {
-          title : 
-            text : options.name || '未定义'
-          interval : options.point?.interval
-        }
+    $scope.statsOptions = options
+    previewContainer.removeClass 'hidden'
     return
 
   showStats = (item) ->
@@ -121,7 +107,7 @@ fn = ($scope, $http, $element, jtDebug, jtChart) ->
 
 
 
-fn.$inject = ['$scope', '$http', '$element', 'jtDebug', 'jtChart']
+fn.$inject = ['$scope', '$http', '$element', 'jtDebug']
 
 JT_APP.addRequires ['jt.configsPage', 'jt.chart']
 JT_APP.controller 'ConfigsPageController', fn

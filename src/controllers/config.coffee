@@ -24,7 +24,6 @@ module.exports = (req, res, cbf) ->
     ], cbf
 
   get = (query, cbf) ->
-    console.dir query
     if !query
       cbf new Error 'query can not be null'
       return

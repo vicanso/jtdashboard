@@ -90,7 +90,7 @@
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
-      "/services/chart.js",
+      "/directives/chart.js",
       "/javascripts/configs.js"
     ],
     "css": [
@@ -102,6 +102,6 @@
       "/stylesheets/header.css",
       "/stylesheets/configs.css"
     ],
-    "modifiedAt": "2014-09-22 18:30:37"
+    "modifiedAt": "2014-09-26 21:30:03"
   }
 }
