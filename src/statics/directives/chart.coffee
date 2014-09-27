@@ -411,19 +411,22 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
    * @return {[type]}        [description]
   ###
   jtChart.pie = (dom, data, options) ->
-    data = _.map data, (item) ->
-      values = _.pluck item.values, 'v'
+    result = []
+    angular.forEach data, (item) ->
+      values = jtUtils.pluck item.values, 'v'
       switch item.type
         when 'counter' then value = sum values
         when 'average' then value = average values
-        when 'gauge' then value = _.last values
-      {
+        when 'gauge' then value = values[values.length - 1] || 0
+
+      result.push {
         name : item.key
         value : value
       }
-    options = _.extend {}, defaultPieOption, {
+      return
+    options = angular.extend {}, defaultPieOption, {
       legend :
-        data : _.pluck data, 'name'
+        data : jtUtils.pluck result, 'name'
         orient : 'vertical'
         x : 'left'
         y : '30px'
@@ -431,11 +434,37 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
         {
           name : options?.title?.text
           type : 'pie'
-          data : data
+          data : result
         }
       ]
       animation : false
     }, options
+
+    # data = _.map data, (item) ->
+    #   values = _.pluck item.values, 'v'
+    #   switch item.type
+    #     when 'counter' then value = sum values
+    #     when 'average' then value = average values
+    #     when 'gauge' then value = _.last values
+    #   {
+    #     name : item.key
+    #     value : value
+    #   }
+    # options = _.extend {}, defaultPieOption, {
+    #   legend :
+    #     data : _.pluck data, 'name'
+    #     orient : 'vertical'
+    #     x : 'left'
+    #     y : '30px'
+    #   series : [
+    #     {
+    #       name : options?.title?.text
+    #       type : 'pie'
+    #       data : data
+    #     }
+    #   ]
+    #   animation : false
+    # }, options
     myChart = echarts.init dom, defaultTheme
     myChart.setOption options, true
 

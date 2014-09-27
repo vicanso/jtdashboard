@@ -8,6 +8,11 @@ module.factory 'jtUtils', ['$http', '$rootScope', ($http, $rootScope) ->
       new Date().getTime()
     nextTick : (fn) ->
       setTimeout fn, 0
+    pluck : (arr, key) ->
+      result = []
+      angular.forEach arr, (tmp) ->
+        result.push tmp[key]
+      result
     throttle : (func, wait, options) ->
       context = undefined
       args = undefined

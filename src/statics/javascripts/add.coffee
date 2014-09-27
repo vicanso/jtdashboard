@@ -112,19 +112,23 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
 
   $scope.selectChartType = (type) ->
     $scope.config.chartType = type
+    return
 
   $scope.addParamSelector = ->
     $scope.config.stats.push {
       chart : $scope.config.chartType
     }
+    return
 
   $scope.deleteParamSelector = (index) ->
     $scope.config.stats.splice index, 1
+    return
 
 
   $scope.preview = ->
     $scope.error.save = ''
     $scope.statsOptions = getStatsOptions()
+    return
 
   $scope.save = ->
     $scope.error.save = ''
@@ -174,13 +178,14 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
     angular.forEach $scope.config.stats, (stat) ->
       stat.chart = defaultType
       return
+    return
 
   $scope.$watch 'config.date', (v)->
     dateRange = jtStats.getDateRange v
     if dateRange
       $scope.config.startDate = dateRange[0]
       $scope.config.endDate = dateRange[1]
-
+    return
 
   $element.removeClass 'hidden'
 

@@ -11,7 +11,9 @@ block bodyContainer
           - var items = viewData.globalVariable.setList;
           each item, i in items
             li: a(href='javascript:;', ng-click='add(#{i})') #{item.name}
-      ul.tabs
+          if !items.length
+            li: a(href='javascript:;') 没有配置统计数据
+      ul.tabs(ng-switch='selectedSetList.length')
         li(ng-repeat='set in selectedSetList', ng-class='{selected : set.selected}')
           i.fa.fa-close(ng-click='remove(set)')
           a(href='javascript:;', ng-bind='set.name', ng-click='show(set)')
