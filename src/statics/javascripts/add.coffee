@@ -59,6 +59,11 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
       }
     ]
     chartType : $scope.chartTypes[0].type
+  # $scope.chartTypeStatusDict = {
+  #   line : true
+  #   bar : true
+  #   pie : true
+  # }
   $scope.error = {}
   $scope.success = {}
   $scope.dateList = jtStats.getDateList()
@@ -112,6 +117,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
 
   $scope.selectChartType = (type) ->
     $scope.config.chartType = type
+    console.dir type
     return
 
   $scope.addParamSelector = ->
@@ -170,6 +176,9 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
       'line' : 'line stack'.split ' '
       'bar' : 'barVertical barHorizontal stackBarVertical stackBarHorizontal'.split ' '
       'pie' : 'pie nestedPie'
+
+    
+
     defaultType = 'none'
     angular.forEach typeMap, (charts, type) ->
       if ~charts.indexOf v
@@ -178,6 +187,22 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
     angular.forEach $scope.config.stats, (stat) ->
       stat.chart = defaultType
       return
+    if defaultType == 'pie'
+      $scope.chartTypeStatusDict =
+        line : false
+        bar : false
+        pie : true
+    else if defaultType == 'line' || defaultType == 'bar'
+      $scope.chartTypeStatusDict =
+        line : true
+        bar : true
+        pie : false
+    else
+      $scope.chartTypeStatusDict = 
+        line : false
+        bar : false
+        pie : false
+
     return
 
   $scope.$watch 'config.date', (v)->

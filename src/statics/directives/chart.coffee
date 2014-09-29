@@ -247,8 +247,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     #     formatStr = 'YYYY-MM-DD HH:mm'
     # _.map timeList, (time) ->
     #   moment(time * 1000).format formatStr
-  getDataZoom = (total) ->
-    onePagePoionts = 50
+  getDataZoom = (total, onePagePoionts = 50) ->
     if total > onePagePoionts
       {
         show : true
@@ -320,16 +319,19 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     values = convertData data, timeList
     timeList = formatTime timeList, options?.interval
 
-    series = _.map data, (item, i) ->
-      {
+    series = []
+
+    angular.forEach data, (item, i) ->
+      series.push {
         name : item.key
         type : item.chart
         stack : '总量'
         data : values[i]
       }
-    currentOptions = _.extend {}, defaultOption, {
+      return
+    currentOptions = angular.extend {}, defaultOption, {
       legend :
-        data : _.pluck data, 'key'
+        data : jtUtils.pluck data, 'key'
       dataZoom : getDataZoom timeList.length
       xAxis : [
         {
@@ -364,16 +366,18 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     values = convertData data, timeList
     timeList = formatTime timeList, options?.interval
 
-    series = _.map data, (item, i) ->
+    series = []
+    angular.forEach data, (item, i) ->
       tmp =
         name : item.key
         type : item.chart
         data : values[i]
       tmp.stack = '总量' if isStack
-      tmp
-    currentOptions = _.extend {}, defaultOption, {
+      series.push tmp
+      return
+    currentOptions = angular.extend {}, defaultOption, {
       legend :
-        data : _.pluck data, 'key'
+        data : jtUtils.pluck data, 'key'
       dataZoom : getDataZoom timeList.length
       xAxis : [
         {
@@ -485,7 +489,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
    * @return {[type]}         [description]
   ###
   jtChart.gauge = (dom, data, options) ->
-    currentOptions = _.extend {
+    currentOptions = angular.extend {
       toolbox : 
         show : true
         feature : 
@@ -496,8 +500,9 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
           saveAsImage :
             show : true
     }, options
-    currentOptions.series = _.map data, (item) ->
-      {
+    series = []
+    angular.forEach data, (item) ->
+      series.push {
         name : item.key
         type : 'gauge'
         detail : 
@@ -508,6 +513,8 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
           }
         ]
       }
+      return
+    currentOptions.series = series
     myChart = echarts.init dom, defaultTheme
     myChart.setOption currentOptions
 
@@ -519,25 +526,27 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
    * @return {[type]}         [description]
   ###
   jtChart.funnel = (dom, data, options) ->
-    data = _.map data, (item) ->
-      values = _.pluck item.values, 'v'
+    result = []
+    angular.forEach data, (item) ->
+      values = jtUtils.pluck item.values, 'v'
       switch item.type
         when 'counter' then value = sum values
         when 'average' then value = average values
-        when 'gauge' then value = _.last values
-      {
+        when 'gauge' then value = values[values.length - 1] || 0
+      result.push {
         name : item.key
         value : value
       }
+      return 
     maxValue = 0
-    _.each data, (item) ->
+    angular.forEach result, (item) ->
       maxValue = item.value if item.value > maxValue
       return
-    _.each data, (item) ->
+    angular.forEach result, (item) ->
       item.value = Math.floor item.value * 100 / maxValue
       return
 
-    currentOptions = _.extend {
+    currentOptions = angular.extend {
       title : options.title
       tooltip : 
         trigger : 'item'
@@ -555,12 +564,12 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
           saveAsImage :
             show : true
       legend : 
-        data : _.pluck data, 'name'
+        data : jtUtils.pluck result, 'name'
       calculable : true
       series : [
         {
           type : 'funnel'
-          data : data
+          data : result
         }
       ]
     }         
@@ -605,7 +614,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
   #   , 10 * 1000 if getData
 
   jtChart.columnFresh = (obj, data, option, getData) ->
-    currentOptions = _.extend {
+    currentOptions = angular.extend {
       toolbox : 
         show : true
         feature : 
@@ -625,7 +634,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     currentOptions.xAxis = [
       {
         type : 'category'
-        data : _.pluck data, 'key'
+        data : jtUtils.pluck data, 'key'
       }
     ]
 

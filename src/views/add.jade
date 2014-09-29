@@ -32,9 +32,9 @@ block bodyContainer
           .uiSelect(jt-select='categoryList' placeholder='请选择统计类别', ng-model='stat.category')
           .uiSelect(jt-select='$parent.keys[stat.category]' placeholder='请选择分类', ng-model='stat.keys', multiple='multiple')
           .btn-group
-            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "line"', ng-class='{"btn-success" : stat.chart == "line"}') 折线图
-            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "bar"', ng-class='{"btn-success" : stat.chart == "bar"}') 柱状图
-            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "pie"', ng-class='{"btn-success" : stat.chart == "pie"}') 饼图
+            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "line"', ng-class='{"btn-success" : stat.chart == "line", disabled : !chartTypeStatusDict.line}') 折线图
+            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "bar"', ng-class='{"btn-success" : stat.chart == "bar", disabled : !chartTypeStatusDict.bar}') 柱状图
+            a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "pie"', ng-class='{"btn-success" : stat.chart == "pie", disabled : !chartTypeStatusDict.pie}') 饼图
           a.btn.btn-danger(href='javascript:;', ng-click='deleteParamSelector($index)', ng-show='!$first') 删除
           a.btn.btn-success(href='javascript:;', ng-click='addParamSelector()', ng-show='$first') 增加
       .col-sm-6.col-md-3.configContainer: div

@@ -20,6 +20,8 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
 
   $scope.setList = JT_GLOBAL.setList
 
+  console.dir JT_GLOBAL.setList
+
   $scope.chartType = ''
 
   $scope.selectedSetList = []
@@ -40,6 +42,8 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
     return
 
   $scope.show = (set) ->
+    if set.selected
+      return
     angular.forEach $scope.selectedSetList, (tmp) ->
         tmp.selected = false
         return
