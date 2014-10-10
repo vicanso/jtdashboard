@@ -186,6 +186,24 @@ module.exports = (grunt) ->
         crc32Infos[destFile] = crc32.unsigned buf
     fs.writeFileSync path.join(destPath, 'crc32.json'), JSON.stringify( crc32Infos, null, 2)
 
+  grunt.registerTask 'version', ->
+    file = path.join destPath, 'version'
+    date = new Date()
+    month = date.getMonth() + 1
+    if month < 10
+      month = "0#{month}"
+    day = date.getDate()
+    if day < 10
+      day = "0#{day}"
+    hours = date.getHours()
+    if hours < 10
+      hours = "0#{hours}"
+    minutes = date.getMinutes()
+    if minutes < 10
+      minutes = "0#{minutes}"
+    fs.writeFileSync file, "#{date.getFullYear()}-#{month}-#{day} #{hours}:#{minutes}"
+
+
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
@@ -197,4 +215,4 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-concat'
 
   grunt.registerTask 'gen', ['clean:grunt', 'clean:dest', 'coffee', 'jshint', 'uglify', 'copy:build', 'stylus', 'cssmin', 'crc32', 'merge_static', 'imageEmbed', 'crc32', 'copy:js', 'clean:build']
-  grunt.registerTask 'default', ['gen']
+  grunt.registerTask 'default', ['gen', 'version']

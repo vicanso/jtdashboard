@@ -16,9 +16,6 @@
   ],
   "dependencies": {
     "debug": "visionmedia/debug#~1.0.4",
-    "angularjs": "1.2.23",
-    "angular-local-storage": "~0.0.7",
-    "script.js": "~2.5.7",
-    "echarts": "ecomfe/echarts#~2.0.3"
+    "angular-local-storage": "~0.0.7"
   }
 }

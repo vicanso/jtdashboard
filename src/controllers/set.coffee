@@ -15,7 +15,6 @@ get = (id, cbf) ->
         cbf new Error "can not find doc by #{id}"
         return
       doc = doc.toObject()
-      console.dir doc.configs
       ids = _.pluck doc.configs, 'id'
       fnList = _.map ids, (id) ->
         (cbf) ->

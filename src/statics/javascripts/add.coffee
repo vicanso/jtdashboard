@@ -117,7 +117,6 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
 
   $scope.selectChartType = (type) ->
     $scope.config.chartType = type
-    console.dir type
     return
 
   $scope.addParamSelector = ->
@@ -133,7 +132,8 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
 
   $scope.preview = ->
     $scope.error.save = ''
-    $scope.statsOptions = getStatsOptions()
+    options = getStatsOptions()
+    $scope.statsOptions = options
     return
 
   $scope.save = ->
@@ -145,12 +145,13 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
     if errMsgs.length
       $scope.error.save = errMsgs.join ','
       return
-    options.cache = false
     success = (res, status) ->
       $scope.success.save = '已成功保存配置，3秒后将刷新！'
       window.location.reload()
+      return
     error = (err, status) ->
       $scope.error.save = '保存配置失败，' + err.msg
+      return
     $http.post('/config', options).success(success).error error
     return
 
@@ -214,11 +215,13 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
 
   $element.removeClass 'hidden'
 
+  return
+
 
 fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats']
-
-JT_APP.addRequires ['jt.addPage', 'jt.chart']
-JT_APP.controller 'AddPageController', fn
+angular.module('jtApp')
+  .addRequires(['jt.addPage', 'jt.chart'])
+  .controller 'AddPageController', fn
 
 
 

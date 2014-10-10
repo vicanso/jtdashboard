@@ -1,6 +1,6 @@
 module = angular.module 'jt.chart', ['jt.utils', 'jt.debug']
 
-module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jtUtils, jtDebug) ->
+module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($http, $timeout, $q, jtUtils, jtDebug) ->
   debug = jtDebug 'jt.chart'
   jtChart =
     ###*
@@ -48,6 +48,8 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
       angular.forEach options.stats, (statOptions) ->
         defer = $q.defer()
         statOptions = angular.extend {}, baseQuery, statOptions
+        if statOptions.point?.interval < 0
+          statOptions.cache = false
         $http.get("/stats?conditions=#{JSON.stringify(statOptions)}").success((res)->
           if angular.isArray res
             angular.forEach res, (item) ->
@@ -56,8 +58,10 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
           else
             res.chart = statOptions.chart
           defer.resolve res
+          return
         ).error (res) ->
           defer.reject res
+          return
         funcs.push defer.promise
         return
 
@@ -71,9 +75,11 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
             result.push tmp
           return
         cbf null, result
+        return
       error = (err) ->
         debug 'getData options%j, err:%j', options, err
         cbf err
+        return
       $q.all(funcs).then success, error
       
 
@@ -155,6 +161,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
       angular.forEach item.values, (v) ->
         arr.push v.t
       tmpArrList.push arr
+      return
     result = tmpArrList.shift()
     angular.forEach tmpArrList, (arr) ->
       angular.forEach arr, (time, i) ->
@@ -299,6 +306,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     }, options
     myChart = echarts.init dom, defaultTheme
     myChart.setOption currentOptions, true
+    myChart
 
   ###*
    * [barVertical 柱状图]
@@ -344,6 +352,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     }, options
     myChart = echarts.init dom, defaultTheme
     myChart.setOption currentOptions, true
+    myChart
 
   ###*
    * [stackBarVertical 堆积柱状图]
@@ -395,6 +404,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     }, options
     myChart = echarts.init dom, defaultTheme
     myChart.setOption currentOptions, true
+    myChart
 
   ###*
    * [stackBarHorizontal 堆积条纹图]
@@ -404,7 +414,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
    * @return {[type]}         [description]
   ###
   jtChart.stackBarHorizontal = (dom, data, options) ->
-    jtChart.barHorizontal dom, data, options, true
+    return jtChart.barHorizontal dom, data, options, true
 
 
   ###*
@@ -443,35 +453,9 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
       ]
       animation : false
     }, options
-
-    # data = _.map data, (item) ->
-    #   values = _.pluck item.values, 'v'
-    #   switch item.type
-    #     when 'counter' then value = sum values
-    #     when 'average' then value = average values
-    #     when 'gauge' then value = _.last values
-    #   {
-    #     name : item.key
-    #     value : value
-    #   }
-    # options = _.extend {}, defaultPieOption, {
-    #   legend :
-    #     data : _.pluck data, 'name'
-    #     orient : 'vertical'
-    #     x : 'left'
-    #     y : '30px'
-    #   series : [
-    #     {
-    #       name : options?.title?.text
-    #       type : 'pie'
-    #       data : data
-    #     }
-    #   ]
-    #   animation : false
-    # }, options
     myChart = echarts.init dom, defaultTheme
     myChart.setOption options, true
-
+    myChart
   ###*
    * [nestedPie 嵌套饼图]
    * @param  {[type]} dom     [description]
@@ -517,6 +501,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     currentOptions.series = series
     myChart = echarts.init dom, defaultTheme
     myChart.setOption currentOptions
+    myChart
 
   ###*
    * [funnel 漏斗图]
@@ -576,96 +561,7 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
 
     myChart = echarts.init dom, defaultTheme
     myChart.setOption currentOptions, true
-
-  # exports.gauge = (obj, data, option, getData) ->
-    # currentOptions = _.extend {
-    #   toolbox : 
-    #     show : true
-    #     feature : 
-    #       mark : 
-    #         show : true
-    #       restore :
-    #         show : true
-    #       saveAsImage :
-    #         show : true
-    # }, option
-    # dom = $(obj).get 0
-    # currentOptions.series = _.map data, (item) ->
-    #   {
-    #     name : item.key
-    #     type : 'gauge'
-    #     detail : 
-    #       formatter : '{value}'
-    #     data : [
-    #       {
-    #         value : item.values[0].v
-    #       }
-    #     ]
-    #   }
-    # myChart = echarts.init dom, defaultTheme
-    # myChart.setOption currentOptions, true
-    
-  #   setInterval ->
-  #     getData (err, data) ->
-  #       if data
-  #         _.each data, (item, i) ->
-  #           currentOptions.series[i].data[0].value = item.values[0].v
-  #         myChart.setOption currentOptions, true
-  #   , 10 * 1000 if getData
-
-  jtChart.columnFresh = (obj, data, option, getData) ->
-    currentOptions = angular.extend {
-      toolbox : 
-        show : true
-        feature : 
-          mark : 
-            show : true
-          restore :
-            show : true
-          saveAsImage :
-            show : true
-      calculable : false
-      yAxis : [
-        {
-          type : 'value'
-        }
-      ]
-    }, option
-    currentOptions.xAxis = [
-      {
-        type : 'category'
-        data : jtUtils.pluck data, 'key'
-      }
-    ]
-
-    data = _.map data, (item) ->
-      item.values[0].v
-    currentOptions.series = [
-      {
-        type : 'bar'
-        data : data
-      }
-    ]
-    dom = $(obj).get 0
-    myChart = echarts.init dom, defaultTheme
-    myChart.setOption currentOptions, true
-    setInterval ->
-      getData (err, data) ->
-        if data
-          data = _.map data, (item) ->
-            item.values[0].v
-          currentOptions.series[0].data = data
-          myChart.setOption currentOptions, true
-    , 10 * 1000 if getData
-
-                    
-                    
-
-           
-
-
-
-
+    myChart
 
 
   defaultTheme =
@@ -958,13 +854,15 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
     textStyle:
       fontFamily: "微软雅黑, Arial, Verdana, sans-serif"
 
-  {
+  return {
     restrict : 'A'
     link : (scope, element, attr, ctrl) ->
       model = attr.jtChart
       config = scope[model]
       show = (options) ->
         type = options.type
+        refreshInterval = options.refreshInterval
+        element.empty()
         jtChart.getData options, (err, data) ->
           if err
             element.html err.msg
@@ -972,16 +870,23 @@ module.directive 'jtChart', ['$http', '$q', 'jtUtils', 'jtDebug', ($http, $q, jt
             element.html '没有相关统计数据'
           else
             tmpObj = angular.element '<div style="height:100%"></div>'
-            element.empty().append tmpObj
+            element.append tmpObj
             jtChart[type] tmpObj[0], data, {
               title : 
                 text : options.name || '未定义'
               interval : options.point?.interval
             }
+          if refreshInterval
+            $timeout ->
+              show options
+            , refreshInterval
+          return
         return
       show config if config
       scope.$watch model, (v) ->
         show v if v
+        return
+      return
   }
 
 ]

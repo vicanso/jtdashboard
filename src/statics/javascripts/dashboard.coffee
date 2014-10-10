@@ -20,7 +20,6 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
 
   $scope.setList = JT_GLOBAL.setList
 
-  console.dir JT_GLOBAL.setList
 
   $scope.chartType = ''
 
@@ -45,20 +44,24 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
     if set.selected
       return
     angular.forEach $scope.selectedSetList, (tmp) ->
-        tmp.selected = false
-        return
+      tmp.selected = false
+      return
     set.selected = true
     jtSet.get set._id, (err, data) ->
       if data?.configs?.length
+        # data.configs.length = 3
         $scope.configs = data.configs
+      return
     return
+
+  return
 
 
 fn.$inject = ['$scope', '$http', 'jtDebug', '$log', 'user', 'jtSet']
 
-JT_APP.addRequires ['jt.dashboardPage', 'jt.chart']
-
-JT_APP.controller 'DashboardController', fn
+angular.module('jtApp')
+  .addRequires(['jt.dashboardPage', 'jt.chart'])
+  .controller 'DashboardController', fn
 
 
 

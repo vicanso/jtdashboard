@@ -132,6 +132,14 @@ routeInfos = [
     ]
     handler : controllers.set
   }
+  {
+    route : '/readme'
+    template : 'readme'
+    middleware : [
+      addImporter
+    ]
+    handler : controllers.readme
+  }
 ]
 
 

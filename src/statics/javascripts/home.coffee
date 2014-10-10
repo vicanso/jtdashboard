@@ -7,8 +7,10 @@ fn = ($scope, $http, debug, $log, utils, user) ->
   user.getInfo (err, data) ->
     console.dir data
 
+  return
+
 fn.$inject = ['$scope', '$http', 'debug', '$log', 'utils', 'user']
-JT_APP.controller 'HomePageController', fn
+angular.module('jtApp').controller 'HomePageController', fn
 
 
 

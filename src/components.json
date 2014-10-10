@@ -1,107 +1,103 @@
 {
-  "home": {
+  "dashboard": {
     "js": [
-      "/components/angularjs/angular.js",
-      "/components/script.js/dist/script.js",
+      "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
       "/components/angular-local-storage/angular-local-storage.js",
+      "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
       "/directives/common.js",
+      "/directives/chart.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
-      "/javascripts/book.js",
-      "/javascripts/home.js"
+      "/javascripts/dashboard.js"
     ],
     "css": [
       "/stylesheets/bootstrap.css",
-      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
+      "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
-      "/stylesheets/header.css",
-      "/stylesheets/home.css"
+      "/stylesheets/dashboard.css"
     ],
-    "modifiedAt": "2014-09-04 19:10:31"
+    "modifiedAt": "2014-09-30 17:46:26"
   },
   "add": {
     "js": [
-      "/components/angularjs/angular.js",
-      "/components/script.js/dist/script.js",
+      "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
       "/components/angular-local-storage/angular-local-storage.js",
-      "/components/echarts/build/echarts-plain-original.js",
+      "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
       "/directives/common.js",
+      "/directives/chart.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
-      "/directives/chart.js",
       "/javascripts/add.js"
     ],
     "css": [
       "/stylesheets/bootstrap.css",
-      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-09-26 21:04:38"
-  },
-  "dashboard": {
-    "js": [
-      "/components/angularjs/angular.js",
-      "/components/script.js/dist/script.js",
-      "/components/angular-local-storage/angular-local-storage.js",
-      "/components/echarts/build/echarts-plain-original.js",
-      "/services/utils.js",
-      "/services/http_log.js",
-      "/services/user.js",
-      "/directives/common.js",
-      "/components/debug/dist/debug.js",
-      "/services/debug.js",
-      "/javascripts/global.js",
-      "/directives/chart.js",
-      "/javascripts/dashboard.js"
-    ],
-    "css": [
-      "/stylesheets/bootstrap.css",
-      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
-      "/stylesheets/ui.css",
-      "/stylesheets/global.css",
-      "/stylesheets/menu.css",
-      "/stylesheets/dashboard.css"
-    ],
-    "modifiedAt": "2014-09-26 20:47:17"
+    "modifiedAt": "2014-09-30 17:47:09"
   },
   "configs": {
     "js": [
-      "/components/angularjs/angular.js",
-      "/components/script.js/dist/script.js",
+      "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
       "/components/angular-local-storage/angular-local-storage.js",
-      "/components/echarts/build/echarts-plain-original.js",
+      "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
       "/directives/common.js",
+      "/directives/chart.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
-      "/directives/chart.js",
       "/javascripts/configs.js"
     ],
     "css": [
       "/stylesheets/bootstrap.css",
-      "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css",
+      "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
       "/stylesheets/header.css",
       "/stylesheets/configs.css"
     ],
-    "modifiedAt": "2014-09-26 21:30:03"
+    "modifiedAt": "2014-09-30 17:47:10"
+  },
+  "readme": {
+    "js": [
+      "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
+      "/components/angular-local-storage/angular-local-storage.js",
+      "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
+      "/services/utils.js",
+      "/services/http_log.js",
+      "/services/user.js",
+      "/directives/common.js",
+      "/directives/chart.js",
+      "/components/debug/dist/debug.js",
+      "/services/debug.js",
+      "/javascripts/global.js"
+    ],
+    "css": [
+      "/stylesheets/bootstrap.css",
+      "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
+      "/stylesheets/ui.css",
+      "/stylesheets/global.css",
+      "/stylesheets/menu.css",
+      "/stylesheets/header.css"
+    ],
+    "modifiedAt": "2014-09-30 17:46:25"
   }
 }

@@ -53,5 +53,4 @@ block bodyContainer
             each config, i in viewData.areaConfigs
               button.btn.btn-default(title='#{config.title}', ng-class='{selected : item.area == #{i}}', ng-click='item.area = #{i}')
                 i.fa(class='#{config.cssClass}')
-  - fileImporter.import('/directives/chart.js');
   - fileImporter.import('/stylesheets/configs.css', '/javascripts/configs.js');

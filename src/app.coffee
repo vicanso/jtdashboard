@@ -2,6 +2,8 @@ path = require 'path'
 config = require './config'
 moment = require 'moment'
 express = require 'express'
+fs = require 'fs'
+crypto = require 'crypto'
 _ = require 'underscore'
 JTStats = require './helpers/stats'
 logger = require('./helpers/logger') __filename
@@ -107,7 +109,6 @@ debugParamsHandler = ->
  * @return {[type]}     [description]
 ###
 adminHandler = (app) ->
-  crypto = require 'crypto'
   app.get '/jt/restart', (req, res) ->
     key = req.query?.key
     if key
@@ -119,6 +120,12 @@ adminHandler = (app) ->
         res.status(500).json {msg : 'fail, the key is wrong'}
     else
       res.status(500).json {msg : 'fail, the key is null'}
+  appVersion = 'no version'
+  fs.readFile path.join(__dirname, 'version'), (err, buf) ->
+    appVersion = buf.toString() if buf
+    return
+  app.get '/jt/version', (req, res) ->
+    res.send appVersion
 
 
 staticHandler = do ->

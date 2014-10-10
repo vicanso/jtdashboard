@@ -1,8 +1,5 @@
 module = angular.module 'jt.configsPage', []
 
-
-
-
 fn = ($scope, $http, $element, jtDebug) ->
   debug = jtDebug 'jt.configsPage'
   debug "configs:%j", JT_GLOBAL.configs
@@ -36,13 +33,17 @@ fn = ($scope, $http, $element, jtDebug) ->
 
 
 
-  
+  tmpOptions = `{"name":"PV分类统计","desc":"PV页面分类统计（间隔为1分钟）","type":"line","point":{"interval":-1}, "refreshInterval" : 10 * 1000, "date":{"start":"2014-08-05","end":"2014-08-05"},"stats":[{"chart":"line","category":"haproxy","keys":[{"value":"pv.category"},{"value":"pv.doc"},{"value":"pv.home"},{"value":"pv.item"}]}],"cache":false}`
+
+  setTimeout ->
+    $scope.$apply ->
+      $scope.statsOptions = tmpOptions
+  , 1000
 
   # loading = false
   showChart = (item) ->
-    # if loading
-    #   $scope.error.preview = '正在加载数据，请稍候！'
-    #   return 
+    
+
     $scope.error.preview = ''
     options = angular.copy item
     delete options.$$hashKey
@@ -99,15 +100,19 @@ fn = ($scope, $http, $element, jtDebug) ->
     $http.post('/set', data).then (res)->
       $scope.error.save = ''
       $scope.success.save = '已成功保存该配置'
+      return
     , (res) ->
       $scope.success.save = ''
       $scope.error.save = '保存不成功'
+      return
     return
-
+    
+  return
 
 
 
 fn.$inject = ['$scope', '$http', '$element', 'jtDebug']
 
-JT_APP.addRequires ['jt.configsPage', 'jt.chart']
-JT_APP.controller 'ConfigsPageController', fn
+angular.module('jtApp')
+  .addRequires(['jt.configsPage', 'jt.chart'])
+  .controller 'ConfigsPageController', fn

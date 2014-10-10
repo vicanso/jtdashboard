@@ -1,18 +1,26 @@
 {
   "except" : [
-    "/components/angularjs/angular.js",
+    "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
+    "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
     "/components/debug/dist/debug.js",
-    "//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css"
+    "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
+    "/stylesheets/bootstrap.css"
   ],
   "files" : [
     [
-      "/components/script.js/dist/script.js",
       "/components/angular-local-storage/angular-local-storage.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",
+      "/directives/common.js",
+      "/directives/chart.js",
       "/services/debug.js",
       "/javascripts/global.js"
+    ],
+    [
+      "/stylesheets/ui.css",
+      "/stylesheets/global.css",
+      "/stylesheets/menu.css"
     ]
   ]
 }

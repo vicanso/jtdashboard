@@ -53,5 +53,5 @@ block bodyContainer
     .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')
     .alert.alert-success.hidden(ng-class='{hidden : !success.save}', ng-bind='success.save')
     .chart(jt-chart='statsOptions')
-  - fileImporter.import('/directives/chart.js');
+  
   - fileImporter.import('/stylesheets/add.css', '/javascripts/add.js');

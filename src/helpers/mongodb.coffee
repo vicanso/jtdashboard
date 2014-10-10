@@ -27,6 +27,7 @@ module.exports.init = (uri, options = {}) ->
     logger.info "#{uri} connected"
   client.on 'disconnected', ->
     logger.info "#{uri} disconnected"
+  return
 
 
 ###*
@@ -44,6 +45,8 @@ module.exports.initModels = (modelPath) ->
       _.each model.indexes, (indexOptions) ->
         schema.index indexOptions
     modelDict[name] = client.model name, schema
+    return
+  return
 
 ###*
  * [model 获取mongoose的model]
@@ -87,3 +90,5 @@ module.exports.getCollectionNames = (cbf) ->
         name = infos.join '.'
         result.push name if _.first(infos) != 'system'
       cbf null, result
+    return
+  return

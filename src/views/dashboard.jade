@@ -20,5 +20,4 @@ block bodyContainer
 
     .chartListContainer
       .chart(ng-repeat='config in configs', jt-chart='config', ng-class='{"col-xs-4" : config.area == 0, "col-xs-6" : config.area == 1, "col-xs-8" : config.area == 2, "col-xs-12" : config.area == 3}')
-  - fileImporter.import('/directives/chart.js');
   - fileImporter.import('/javascripts/dashboard.js', '/stylesheets/dashboard.css');

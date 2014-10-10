@@ -28,6 +28,8 @@ module.exports = (req, res, cbf) ->
   interval = query.point?.interval
   if interval && interval > 0
     maxAge = Math.min interval, 1800
+  else
+    maxAge = 0
 
   if config.env == 'development'
     res.header 'Cache-Control', 'no-cache, no-store'
