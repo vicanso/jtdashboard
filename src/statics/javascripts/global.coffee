@@ -44,7 +44,7 @@ app.run ['$http', '$timeout', ($http, $timeout) ->
     }
 
 
-  checkInterval = 5 * 1000
+  checkInterval = 10 * 1000
   checkWatchers = ->
     watchers = []
 

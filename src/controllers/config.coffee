@@ -6,20 +6,19 @@ _ = require 'underscore'
 logger = require('../helpers/logger') __filename
 
 module.exports = (req, res, cbf) ->
-  Config = mongodb.model 'stats_config'
+  StatsConfig = mongodb.model 'stats_config'
   method = req.method
-  console.dir method
 
   save = (data, cbf) ->
     async.waterfall [
       (cbf) ->
-        Config.findOne {name : data.name}, cbf
+        StatsConfig.findOne {name : data.name}, cbf
       (doc, cbf) ->
         if doc
           err = new Error 'the name has exists'
           cbf err
         else
-          new Config(data).save (err, doc) ->
+          new StatsConfig(data).save (err, doc) ->
             cbf err, doc
     ], cbf
 
@@ -29,7 +28,7 @@ module.exports = (req, res, cbf) ->
       return
     async.waterfall [
       (cbf) ->
-        Config.findOne query, cbf
+        StatsConfig.findOne query, cbf
       (data, cbf) ->
         cbf null, data
     ], cbf

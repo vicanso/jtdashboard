@@ -73,7 +73,7 @@ routeInfos = [
     template : 'dashboard'
   }
   {
-    route : '/add'
+    route : ['/add', '/add/:id']
     handler : controllers.add
     middleware : [
       getCacheController 600

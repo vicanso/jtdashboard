@@ -33,13 +33,6 @@ fn = ($scope, $http, $element, jtDebug) ->
 
 
 
-  tmpOptions = `{"name":"PV分类统计","desc":"PV页面分类统计（间隔为1分钟）","type":"line","point":{"interval":-1}, "refreshInterval" : 10 * 1000, "date":{"start":"2014-08-05","end":"2014-08-05"},"stats":[{"chart":"line","category":"haproxy","keys":[{"value":"pv.category"},{"value":"pv.doc"},{"value":"pv.home"},{"value":"pv.item"}]}],"cache":false}`
-
-  setTimeout ->
-    $scope.$apply ->
-      $scope.statsOptions = tmpOptions
-  , 1000
-
   # loading = false
   showChart = (item) ->
     
@@ -83,6 +76,9 @@ fn = ($scope, $http, $element, jtDebug) ->
       $scope.selectedItems.push item
     item.selected = !item.selected
     return
+
+  $scope.edit = (config) ->
+    window.location.href = "/add/#{config._id}"
 
 
   $scope.save = ->

@@ -2,12 +2,17 @@ mongodb = require '../helpers/mongodb'
 config = require '../config'
 async = require 'async'
 _ = require 'underscore'
+StatsConfig = mongodb.model 'stats_config'
 debug = require('debug') 'jt.controller.add'
 module.exports = (req, res, cbf) ->
-  async.parallel {
+  options = 
     collections : (cbf) ->
       mongodb.getCollectionNames cbf
-  }, (err, result) ->
+  id = req.param 'id'
+  if id
+    options.config = (cbf) ->
+      StatsConfig.findById id, cbf
+  async.parallel options, (err, result) ->
     if err
       debug 'err: %s', err.stack
       cbf err
@@ -39,6 +44,10 @@ module.exports = (req, res, cbf) ->
         {
           name : '堆积条形图'
           type : 'stackBarHorizontal'
+        }
+        {
+          name : '环形图'
+          type : 'ring'
         }
         {
           name : '标准饼图'
@@ -75,5 +84,6 @@ module.exports = (req, res, cbf) ->
           globalVariable :
             collections : collections
             chartTypes : chartTypes
+            config : result.config
             
       }

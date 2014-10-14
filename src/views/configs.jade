@@ -28,6 +28,8 @@ block bodyContainer
                 i.fa.fa-code
               a(href='javascript:;', title='添加', ng-click='toggleSelected(config)')
                 i.fa.fa-check(ng-class='{selected : config.selected}')
+              a(href='javascript:;', title='修改', ng-click='edit(config)')
+                i.fa.fa-edit
       .alert.alert-warning.hidden(ng-class='{hidden : !error.preview}', ng-bind='error.preview')
     .previewContainer.panel.panel-default.hidden
       .panel-heading

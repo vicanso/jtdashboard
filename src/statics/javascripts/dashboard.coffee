@@ -26,6 +26,8 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
   $scope.selectedSetList = []
 
 
+
+
   $scope.add = (index) ->
     set = $scope.setList[index]
     index = $scope.selectedSetList.indexOf set

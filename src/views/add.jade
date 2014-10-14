@@ -21,6 +21,7 @@ block bodyContainer
           .uiSelect(jt-select='dateList' placeholder='请选择日期', ng-model='config.date')
           input.form-control(type='text', placeholder='开始日期(yyyy-mm-dd)', ng-model='config.startDate', require)
           input.form-control(type='text', placeholder='结束日期(yyyy-mm-dd)', ng-model='config.endDate', require)
+          input.form-control(type='number', placeholder='刷新间隔(默认不刷新，单位秒)', ng-model='config.refreshInterval')
 
 
     

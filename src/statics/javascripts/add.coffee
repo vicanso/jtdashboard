@@ -3,6 +3,7 @@ module = angular.module 'jt.addPage', []
 module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
   debug = jtDebug 'jt.jtStats'
   intervalConvertInfos = 
+    '最近' : -1
     '1分钟' : 60
     '5分钟' : 300
     '10分钟' : 600
@@ -29,9 +30,15 @@ module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
         debug 'getKeys err:%j', err
         cbf err
     getIntervalList : ->
-      '1分钟 5分钟 10分钟 30分钟 1小时 2小时 6小时 12小时 1天'.split ' '
+      '最近 1分钟 5分钟 10分钟 30分钟 1小时 2小时 6小时 12小时 1天'.split ' '
     convertInterval : (interval) ->
       intervalConvertInfos[interval]
+
+    getIntervalName : (interval) ->
+      name = ''
+      angular.forEach intervalConvertInfos, (v, k) ->
+        name = k if interval == v
+      name
 
     getDateList : ->
       '当天 7天 15天 30天 当月'.split ' '
@@ -44,13 +51,14 @@ module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
   stats
 ]
 
-fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
+fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) ->
   debug = jtDebug 'jt.addPage'
 
-  
+  console.dir JT_GLOBAL.config
 
   $scope.intervalList = jtStats.getIntervalList()
   $scope.chartTypes = jtStats.getChartTypes()
+
 
   $scope.config = 
     stats : [
@@ -59,6 +67,19 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
       }
     ]
     chartType : $scope.chartTypes[0].type
+
+  JT_GLOBAL.config && $timeout ->
+    $scope.config = 
+      stats : [
+        {
+          chart : 'line'
+        }
+      ]
+      interval : jtStats.getIntervalName JT_GLOBAL.config.point.interval
+      startDate : JT_GLOBAL.config.date.start
+      endDate : JT_GLOBAL.config.date.end
+      chartType : JT_GLOBAL.config.type
+  , 100
   # $scope.chartTypeStatusDict = {
   #   line : true
   #   bar : true
@@ -88,7 +109,8 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
     if msgList.length
       $scope.error.save = msgList.join ','
       return
-
+    refreshInterval = config.refreshInterval
+    refreshInterval = refreshInterval * 1000 if refreshInterval
     options =
       name : $scope.name
       desc : $scope.desc
@@ -98,6 +120,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
       date :
         start : config.startDate
         end : config.endDate
+      refreshInterval : refreshInterval
       stats : []
 
     angular.forEach config.stats, (tmp) ->
@@ -218,7 +241,7 @@ fn = ($scope, $http, $element, jtDebug, $log, jtUtils, user, jtStats) ->
   return
 
 
-fn.$inject = ['$scope', '$http', '$element', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats']
+fn.$inject = ['$scope', '$http', '$element', '$timeout', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats']
 angular.module('jtApp')
   .addRequires(['jt.addPage', 'jt.chart'])
   .controller 'AddPageController', fn

@@ -48,9 +48,13 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       angular.forEach options.stats, (statOptions) ->
         defer = $q.defer()
         statOptions = angular.extend {}, baseQuery, statOptions
+        url = "/stats?conditions=#{JSON.stringify(statOptions)}"
+        options = 
+          cache : true
         if statOptions.point?.interval < 0
-          statOptions.cache = false
-        $http.get("/stats?conditions=#{JSON.stringify(statOptions)}").success((res)->
+          url += '&cache=false'
+          options.cache = false
+        $http.get(url, options).success((res)->
           if angular.isArray res
             angular.forEach res, (item) ->
               item.chart = statOptions.chart
@@ -304,7 +308,10 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       ]
       series : series
     }, options
-    myChart = echarts.init dom, defaultTheme
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
     myChart.setOption currentOptions, true
     myChart
 
@@ -350,7 +357,10 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       ]
       series : series
     }, options
-    myChart = echarts.init dom, defaultTheme
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
     myChart.setOption currentOptions, true
     myChart
 
@@ -402,7 +412,10 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       ]
       series : series
     }, options
-    myChart = echarts.init dom, defaultTheme
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
     myChart.setOption currentOptions, true
     myChart
 
@@ -453,9 +466,86 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       ]
       animation : false
     }, options
-    myChart = echarts.init dom, defaultTheme
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
     myChart.setOption options, true
     myChart
+
+  jtChart.ring = (dom, data, options) ->
+    dataStyle = 
+      normal : 
+        label : 
+          show : false
+        labelLine :
+          show : false
+    placeHolderStyle = 
+      normal : 
+        color : 'rgba(0,0,0,0)'
+        label :
+          show : false
+        labelLine :
+          show : false
+      emphasis : 
+        color : 'rgba(0,0,0,0)'
+
+
+    result = []
+    data.length = 1 if data.length > 1
+    currentValueList = []
+    angular.forEach data, (item) ->
+      values = jtUtils.pluck item.values, 'v'
+      switch item.type
+        when 'counter' then value = sum values
+        when 'average' then value = average values
+        when 'gauge' then value = values[values.length - 1] || 0
+      currentValueList.push value
+      result.push {
+        name : options?.title?.text
+        type : 'pie'
+        clockWise : false
+        radius : ['65%', '80%']
+        itemStyle : dataStyle
+        data : [
+          {
+            value : value
+            name : item.key
+            # itemStyle : 
+            #   normal : 
+            #     color : 'red'
+          }
+          {
+            value : 100 - value
+            name : 'invisible'
+            itemStyle : placeHolderStyle
+          }
+        ]
+      }
+      return
+    options = angular.extend {}, defaultPieOption, {
+      title : 
+        text : currentValueList.join ','
+        subtext : options?.title?.text
+        x : 'center'
+        y : 'center'
+        itemGap : 20
+        textStyle :
+          color : 'rgba(30,144,255,0.8)'
+          fontFamily : '微软雅黑'
+          fontSize : 48
+          fontWeight : 'bolder'
+      series : result
+      animation : false
+    }
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
+    myChart.setOption options, true
+    myChart
+                    
+
   ###*
    * [nestedPie 嵌套饼图]
    * @param  {[type]} dom     [description]
@@ -499,7 +589,10 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       }
       return
     currentOptions.series = series
-    myChart = echarts.init dom, defaultTheme
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
     myChart.setOption currentOptions
     myChart
 
@@ -559,7 +652,10 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       ]
     }         
 
-    myChart = echarts.init dom, defaultTheme
+    if angular.isElement dom
+      myChart = echarts.init dom, defaultTheme
+    else
+      myChart = dom
     myChart.setOption currentOptions, true
     myChart
 
@@ -859,33 +955,42 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
     link : (scope, element, attr, ctrl) ->
       model = attr.jtChart
       config = scope[model]
+      echartObj = null
+      timeoutPromise = null
       show = (options) ->
         type = options.type
         refreshInterval = options.refreshInterval
-        element.empty()
         jtChart.getData options, (err, data) ->
           if err
             element.html err.msg
           else if !data?.length
             element.html '没有相关统计数据'
           else
-            tmpObj = angular.element '<div style="height:100%"></div>'
-            element.append tmpObj
-            jtChart[type] tmpObj[0], data, {
+            if echartObj
+              tmpObj = echartObj
+            else
+              element.empty()
+              tmpObj = angular.element '<div style="height:100%"></div>'
+              element.append tmpObj
+              tmpObj = tmpObj[0]
+            echartObj = jtChart[type] tmpObj, data, {
               title : 
                 text : options.name || '未定义'
               interval : options.point?.interval
             }
           if refreshInterval
-            $timeout ->
+            timeoutPromise = $timeout ->
               show options
             , refreshInterval
           return
         return
       show config if config
       scope.$watch model, (v) ->
+        $timeout.cancel timeoutPromise if timeoutPromise
         show v if v
         return
+      scope.$on '$destroy', ->
+        $timeout.cancel timeoutPromise if timeoutPromise
       return
   }
 

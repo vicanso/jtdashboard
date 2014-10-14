@@ -2,6 +2,7 @@
   "except" : [
     "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
     "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
+    "//cdn.staticfile.org/jquery/2.1.1/jquery.min.js",
     "/components/debug/dist/debug.js",
     "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
     "/stylesheets/bootstrap.css"
