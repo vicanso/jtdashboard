@@ -42,7 +42,7 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
       
 
       
-      appendList = (items) ->
+      appendList = (items, clear) ->
         htmlArr = []
         keyList = model.split '.'
         lastKey = keyList.pop()
@@ -50,10 +50,11 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
         angular.forEach keyList, (key) ->
           result = scope[key]
           return
-        if multiple
-          result[lastKey] = {}
-        else
-          result[lastKey] = ''
+        if clear
+          if multiple
+            result[lastKey] = {}
+          else
+            result[lastKey] = ''
         angular.forEach items, (item, i) ->
           if multiple
             ngClick = "#{model}['#{item}'] = !#{model}['#{item}']"
@@ -71,11 +72,11 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
         $compile(dom) scope
         return
 
-      appendList scope[jtSelect] if scope[jtSelect]
+      appendList scope[jtSelect], false if scope[jtSelect]
 
       scope.$watch jtSelect, (newValues, oldValues) ->
         return if newValues == oldValues
-        appendList newValues
+        appendList newValues, true
         return
       
       scope.$watch model, (v) ->

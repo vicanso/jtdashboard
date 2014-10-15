@@ -189,7 +189,7 @@ initServer = ->
     }
 
   timeout = require 'connect-timeout'
-  app.use timeout 5000
+  app.use timeout 30000
 
 
   staticHandler app, '/static', path.join "#{__dirname}/statics"

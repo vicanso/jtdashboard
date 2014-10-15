@@ -54,7 +54,6 @@ module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
 fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) ->
   debug = jtDebug 'jt.addPage'
 
-  console.dir JT_GLOBAL.config
 
   $scope.intervalList = jtStats.getIntervalList()
   $scope.chartTypes = jtStats.getChartTypes()
@@ -69,16 +68,32 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
     chartType : $scope.chartTypes[0].type
 
   JT_GLOBAL.config && $timeout ->
+    tmpStats = []
+    keysList = []
+    angular.forEach JT_GLOBAL.config.stats, (statConfig) ->
+      keys = {}
+      angular.forEach statConfig.keys, (keyInfo) ->
+        keys[keyInfo.value] = true
+        return
+      tmpStats.push {
+        category : statConfig.category
+        chart : statConfig.chart
+      }
+      keysList.push keys
+      return
     $scope.config = 
-      stats : [
-        {
-          chart : 'line'
-        }
-      ]
+      stats : tmpStats
       interval : jtStats.getIntervalName JT_GLOBAL.config.point.interval
       startDate : JT_GLOBAL.config.date.start
       endDate : JT_GLOBAL.config.date.end
       chartType : JT_GLOBAL.config.type
+      refreshInterval : JT_GLOBAL.config.refreshInterval
+    $timeout ->
+      angular.forEach $scope.config.stats, (statsConfig, i) ->
+        statsConfig.keys = keysList[i]
+        return
+    , 100
+    return
   , 100
   # $scope.chartTypeStatusDict = {
   #   line : true
@@ -122,7 +137,7 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
         end : config.endDate
       refreshInterval : refreshInterval
       stats : []
-
+    console.dir config.stats
     angular.forEach config.stats, (tmp) ->
       statConfig =
         chart : tmp.chart
