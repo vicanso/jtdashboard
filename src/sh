@@ -1,1 +1,0 @@
-DEBUG=jt.* node-dev app.coffee --mongodb mongodb://vicanso:MY_MONGODB_JENNY_TREE@vicanso.com:5000/stats
