@@ -21,6 +21,8 @@ module.exports = (req, res, cbf) ->
           new StatsConfig(data).save (err, doc) ->
             cbf err, doc
     ], cbf
+  update = (id, data, cbf) ->
+    StatsConfig.findByIdAndUpdate id, data, cbf
 
   get = (query, cbf) ->
     if !query
@@ -32,9 +34,12 @@ module.exports = (req, res, cbf) ->
       (data, cbf) ->
         cbf null, data
     ], cbf
-
+  id = req.param 'id'
   switch method
     when 'POST'
-      save req.body, cbf
+      if id
+        update id, req.body, cbf
+      else
+        save req.body, cbf
     when 'GET'
       get req.query, cbf

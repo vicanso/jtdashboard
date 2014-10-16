@@ -82,12 +82,15 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       keysList.push keys
       return
     $scope.config = 
+      name : JT_GLOBAL.config.name
+      desc : JT_GLOBAL.config.desc
       stats : tmpStats
       interval : jtStats.getIntervalName JT_GLOBAL.config.point.interval
       startDate : JT_GLOBAL.config.date.start
       endDate : JT_GLOBAL.config.date.end
       chartType : JT_GLOBAL.config.type
       refreshInterval : JT_GLOBAL.config.refreshInterval
+    console.dir $scope.config
     $timeout ->
       angular.forEach $scope.config.stats, (statsConfig, i) ->
         statsConfig.keys = keysList[i]
@@ -125,10 +128,9 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       $scope.error.save = msgList.join ','
       return
     refreshInterval = config.refreshInterval
-    refreshInterval = refreshInterval * 1000 if refreshInterval
     options =
-      name : $scope.name
-      desc : $scope.desc
+      name : config.name
+      desc : config.desc
       type : config.chartType
       point :
         interval : jtStats.convertInterval config.interval
@@ -137,7 +139,6 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
         end : config.endDate
       refreshInterval : refreshInterval
       stats : []
-    console.dir config.stats
     angular.forEach config.stats, (tmp) ->
       statConfig =
         chart : tmp.chart
@@ -184,13 +185,18 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       $scope.error.save = errMsgs.join ','
       return
     success = (res, status) ->
-      $scope.success.save = '已成功保存配置，3秒后将刷新！'
-      window.location.reload()
+      $scope.success.save = '已成功保存配置，3秒后刷新页面'
+      $timeout ->
+        window.location.reload()
+      , 3000
       return
     error = (err, status) ->
       $scope.error.save = '保存配置失败，' + err.msg
       return
-    $http.post('/config', options).success(success).error error
+    url = '/config'
+    if JT_GLOBAL.config
+      url += "/#{JT_GLOBAL.config._id}"
+    $http.post(url, options).success(success).error error
     return
 
 
@@ -201,7 +207,7 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       category = newValue.category
 
       # 判断该category对应的key是否有获取
-      if category && category != oldValue.category
+      if category && category != oldValue?.category
         if !$scope.keys[category]
           getKeys category, (err, keys) ->
             if keys

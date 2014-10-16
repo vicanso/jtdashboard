@@ -981,7 +981,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
           if refreshInterval
             timeoutPromise = $timeout ->
               show options
-            , refreshInterval
+            , refreshInterval * 1000
           return
         return
       show config if config

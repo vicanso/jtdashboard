@@ -45,10 +45,10 @@ block bodyContainer
         .content.resultContainer
           .input-group
             .input-group-addon 统计名称
-            input.form-control(type='text', placeholder='请输入该统计的名称', ng-model='name')
+            input.form-control(type='text', placeholder='请输入该统计的名称', ng-model='config.name')
           .input-group
             .input-group-addon 统计描述
-            input.form-control(type='text', placeholder='请输入该统计的描述', ng-model='desc')
+            input.form-control(type='text', placeholder='请输入该统计的描述', ng-model='config.desc')
           a.btn.btn-primary(href='javascript:;', ng-click='preview()') 预览
           a.btn.btn-success(href='javascript:;', ng-click='save()') 保存
     .alert.alert-warning.hidden(ng-class='{hidden : !error.save}', ng-bind='error.save')

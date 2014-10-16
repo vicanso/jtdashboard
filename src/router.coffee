@@ -106,7 +106,7 @@ routeInfos = [
     handler : controllers.stats
   }
   {
-    route : '/config'
+    route : ['/config', '/config/:id']
     type : 'post'
     middleware : [setNoCache]
     handler : controllers.config
