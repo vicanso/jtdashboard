@@ -79,6 +79,7 @@ fn = ($scope, $http, $element, jtDebug) ->
 
   $scope.edit = (config) ->
     window.location.href = "/add/#{config._id}"
+    return
 
 
   $scope.save = ->

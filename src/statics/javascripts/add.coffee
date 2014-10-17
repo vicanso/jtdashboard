@@ -38,6 +38,7 @@ module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
       name = ''
       angular.forEach intervalConvertInfos, (v, k) ->
         name = k if interval == v
+        return
       name
 
     getDateList : ->
@@ -67,7 +68,8 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
     ]
     chartType : $scope.chartTypes[0].type
 
-  JT_GLOBAL.config && $timeout ->
+   $timeout ->
+    return if !JT_GLOBAL.config
     tmpStats = []
     keysList = []
     angular.forEach JT_GLOBAL.config.stats, (statConfig) ->
@@ -90,7 +92,6 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       endDate : JT_GLOBAL.config.date.end
       chartType : JT_GLOBAL.config.type
       refreshInterval : JT_GLOBAL.config.refreshInterval
-    console.dir $scope.config
     $timeout ->
       angular.forEach $scope.config.stats, (statsConfig, i) ->
         statsConfig.keys = keysList[i]

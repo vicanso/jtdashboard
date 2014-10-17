@@ -1,0 +1,21 @@
+- fileImporter.import('/stylesheets/menu.css');
+- var page = viewData.page || 'dashboard';
+.menuContainer
+  .logo JTStats
+  ul.functions
+    li: a(href='/dashboard', class='#{page == "dashboard"? "active" : ""}') 
+      i.fa.fa-bar-chart
+      | Dashboard
+    li: a(href='/add', class='#{page == "add"? "active" : ""}')
+      i.fa.fa-plus
+      | Add
+    li: a(href='/configs', class='#{page == "configs"? "active" : ""}')
+      i.fa.fa-bars
+      | Configs
+    li: a(href='/readme', class='#{page == "readme"? "active" : ""}')
+      i.fa.fa-file-o
+      | ReadMe
+  .logIn.hidden: a(href='javascript:;')
+    span.glyphicon.glyphicon-log-in
+  .hidden.logOut: a(href='javascript:;')
+    span.glyphicon.glyphicon-off

@@ -1,0 +1,1 @@
+var debug=require("../"),log=debug("app:log");log("goes to stdout!");var error=debug("app:error");error.log=console.error.bind(console),error("goes to stderr"),log("still goes to stdout!"),debug.log=console.warn.bind(console),log("now goes to stderr via console.warn"),error("still goes to stderr, but via console.warn now");

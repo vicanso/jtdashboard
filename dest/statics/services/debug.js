@@ -1,0 +1,1 @@
+(function(){var a,b;a=angular.module("jt.debug",[]),b=function(){},a.factory("jtDebug",["$http","$rootScope",function(){var a,c,d;return a=window.debug,a?(c=null!=(d=window.CONFIG)?d.pattern:void 0,c?a.enable(c):a.disable(),a):function(){return b}}])}).call(this);

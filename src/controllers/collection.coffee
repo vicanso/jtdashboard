@@ -25,7 +25,6 @@ module.exports.getKeys = (req, res, cbf) ->
         cbf err, result
     (result, cbf) ->
       value = result?[0]?.value
-      debug
       if !value
         keys = []
       else if !value.keys

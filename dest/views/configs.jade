@@ -1,0 +1,58 @@
+extends ./layout
+block bodyContainer
+  include ./menu
+  include ./header
+  .configsPage.hidden(ng-controller='ConfigsPageController')
+    .panel.panel-default.configs(ng-class='{shorter : selectedItems.length}')
+      .panel-heading 可以通过各种配置的组合，生成自定义的统计分析
+      table.table
+        thead: tr
+          th 名称
+          th 类型
+          th 开始日期
+          th 结束日期
+          th 统计间隔
+          th 操作
+          //- th 显示区域
+        tbody
+          tr(ng-repeat='config in configs')
+            td.name(ng-bind='config.name')
+            td(ng-bind='config.type')
+            td(ng-bind='config.date.start')
+            td(ng-bind='config.date.end')
+            td(ng-bind='config.point.interval')
+            td.op
+              a(href='javascript:;', title='预览', ng-click='preview(config, "chart")')
+                i.fa.fa-play
+              a(href='javascript:;', title='参数', ng-click='preview(config, "stats")')
+                i.fa.fa-code
+              a(href='javascript:;', title='添加', ng-click='toggleSelected(config)')
+                i.fa.fa-check(ng-class='{selected : config.selected}')
+              a(href='javascript:;', title='修改', ng-click='edit(config)')
+                i.fa.fa-edit
+      .alert.alert-warning.hidden(ng-class='{hidden : !error.preview}', ng-bind='error.preview')
+    .previewContainer.panel.panel-default.hidden
+      .panel-heading
+        i.fa.fa-close(ng-click='closePreview()')
+        span(ng-bind='preview.type == "stats"? "配置参数" : "图表预览"')
+      .content
+        .chart(jt-chart='statsOptions')
+    .selectedItemsContainer.panel.panel-default.hidden(ng-class='{hidden : !selectedItems.length}')
+      .panel-heading
+        .input-group.save
+          input.form-control(type='text', placeholder='请输入配置名称', ng-model='set.name', required)
+          span.input-group-addon: a(href='javascript:;', ng-click='save()')
+            i.fa.fa-floppy-o
+        | 已选择统计：
+        span.success(ng-bind='success.save', ng-show='success.save')
+        span.error(ng-bind='error.save', ng-show='error.save')
+      .content: .row
+        div(ng-repeat='item in selectedItems', ng-class='{"col-xs-4" : item.area == 0, "col-xs-6" : item.area == 1, "col-xs-8" : item.area == 2, "col-xs-12" : item.area == 3}'): .config
+          .name(ng-bind='item.name')
+          p.desc(ng-bind='item.desc')
+          - var area
+          .btn-group.area
+            each config, i in viewData.areaConfigs
+              button.btn.btn-default(title='#{config.title}', ng-class='{selected : item.area == #{i}}', ng-click='item.area = #{i}')
+                i.fa(class='#{config.cssClass}')
+  - fileImporter.import('/stylesheets/configs.css', '/javascripts/configs.js');

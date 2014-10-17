@@ -1,0 +1,1 @@
+function work(){a("doing lots of uninteresting work"),setTimeout(work,1e3*Math.random())}function workb(){b("doing some work"),setTimeout(workb,2e3*Math.random())}var a=require("../")("worker:a"),b=require("../")("worker:b");work(),workb(),setTimeout(function(){b(new Error("fail"))},5e3);
