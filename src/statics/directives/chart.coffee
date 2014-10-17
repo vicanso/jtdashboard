@@ -49,12 +49,14 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
         defer = $q.defer()
         statOptions = angular.extend {}, baseQuery, statOptions
         url = "/stats?conditions=#{JSON.stringify(statOptions)}"
-        options = 
+        httpOptions =
           cache : true
-        if statOptions.point?.interval < 0
+        if options.point?.interval < 0
           url += '&cache=false'
-          options.cache = false
-        $http.get(url, options).success((res)->
+          httpOptions.cache = false
+        httpOptions.cache = false if options.refreshInterval
+        
+        $http.get(url, httpOptions).success((res)->
           if angular.isArray res
             angular.forEach res, (item) ->
               item.chart = statOptions.chart
