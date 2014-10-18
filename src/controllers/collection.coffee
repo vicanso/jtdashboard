@@ -12,25 +12,16 @@ module.exports.getKeys = (req, res, cbf) ->
 
   mapOptions = 
     map : ->
-      emit 'key', this.key
+      emit this.key, 1
     reduce : (k, vals) ->
-      {
-        keys : Array.unique vals
-      }
+      Array.sum vals
 
-  async.waterfall [
-    (cbf) ->
-      mongodb.model(collection).mapReduce mapOptions, (err, result) ->
-        debug 'map reduce: %j', result
-        cbf err, result
-    (result, cbf) ->
-      value = result?[0]?.value
-      if !value
-        keys = []
-      else if !value.keys
-        keys = [value]
-      else
-        keys = _.sortBy value.keys, (key) ->
-          key
-      cbf null, keys
-  ], cbf
+  mongodb.model(collection).mapReduce mapOptions, (err, result) ->
+    if err
+      cbf err
+    else
+      keys = _.pluck result, '_id'
+      _.sortBy keys, (key) ->
+        key
+      debug 'keys: %j', keys
+      cbf err, keys

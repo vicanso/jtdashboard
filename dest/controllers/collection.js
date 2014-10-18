@@ -20,35 +20,25 @@
     collection = req.param('collection');
     mapOptions = {
       map: function() {
-        return emit('key', this.key);
+        return emit(this.key, 1);
       },
       reduce: function(k, vals) {
-        return {
-          keys: Array.unique(vals)
-        };
+        return Array.sum(vals);
       }
     };
-    return async.waterfall([
-      function(cbf) {
-        return mongodb.model(collection).mapReduce(mapOptions, function(err, result) {
-          debug('map reduce: %j', result);
-          return cbf(err, result);
+    return mongodb.model(collection).mapReduce(mapOptions, function(err, result) {
+      var keys;
+      if (err) {
+        return cbf(err);
+      } else {
+        keys = _.pluck(result, '_id');
+        _.sortBy(keys, function(key) {
+          return key;
         });
-      }, function(result, cbf) {
-        var keys, value, _ref;
-        value = result != null ? (_ref = result[0]) != null ? _ref.value : void 0 : void 0;
-        if (!value) {
-          keys = [];
-        } else if (!value.keys) {
-          keys = [value];
-        } else {
-          keys = _.sortBy(value.keys, function(key) {
-            return key;
-          });
-        }
-        return cbf(null, keys);
+        debug('keys: %j', keys);
+        return cbf(err, keys);
       }
-    ], cbf);
+    });
   };
 
 }).call(this);
