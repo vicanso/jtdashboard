@@ -128,7 +128,7 @@ adminHandler = (app) ->
     codeVersion = fs.readFileSync path.join(__dirname, 'version')
     res.send {
       running : appVersion
-      code : codeVersion?.toString()
+      version : codeVersion?.toString()
     }
 
 

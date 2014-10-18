@@ -56,7 +56,7 @@
     "grunt-contrib-uglify": "0.6.0",
     "buffer-crc32": "0.2.3",
     "coffee-script": "1.8.0",
-    "stylus": "0.49.1",
+    "stylus": "0.42.1",
     "nib": "1.0.4"
   }
 }

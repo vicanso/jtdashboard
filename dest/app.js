@@ -177,7 +177,7 @@
       codeVersion = fs.readFileSync(path.join(__dirname, 'version'));
       return res.send({
         running: appVersion,
-        code: codeVersion != null ? codeVersion.toString() : void 0
+        version: codeVersion != null ? codeVersion.toString() : void 0
       });
     });
   };

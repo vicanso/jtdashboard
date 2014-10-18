@@ -970,7 +970,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
           else if !data?.length
             element.html '<div style="margin:15px"><div class="alert alert-danger">没有相关统计数据</div></div>'
           else
-            if echartObj
+            if update && echartObj
               tmpObj = echartObj
             else
               element.empty()
