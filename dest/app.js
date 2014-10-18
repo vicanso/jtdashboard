@@ -166,14 +166,19 @@
         });
       }
     });
-    appVersion = 'no version';
+    appVersion = '';
     fs.readFile(path.join(__dirname, 'version'), function(err, buf) {
       if (buf) {
         appVersion = buf.toString();
       }
     });
     return app.get('/jt/version', function(req, res) {
-      return res.send(appVersion);
+      var codeVersion;
+      codeVersion = fs.readFileSync(path.join(__dirname, 'version'));
+      return res.send({
+        running: appVersion,
+        code: codeVersion != null ? codeVersion.toString() : void 0
+      });
     });
   };
 
@@ -269,7 +274,7 @@
   } else {
     JTCluster = require('jtcluster');
     options = {
-      slaveTotal: 2,
+      slaveTotal: 1,
       slaveHandler: initServer
     };
     jtCluster = new JTCluster(options);

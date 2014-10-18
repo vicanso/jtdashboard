@@ -120,12 +120,16 @@ adminHandler = (app) ->
         res.status(500).json {msg : 'fail, the key is wrong'}
     else
       res.status(500).json {msg : 'fail, the key is null'}
-  appVersion = 'no version'
+  appVersion = ''
   fs.readFile path.join(__dirname, 'version'), (err, buf) ->
     appVersion = buf.toString() if buf
     return
   app.get '/jt/version', (req, res) ->
-    res.send appVersion
+    codeVersion = fs.readFileSync path.join(__dirname, 'version')
+    res.send {
+      running : appVersion
+      code : codeVersion?.toString()
+    }
 
 
 staticHandler = do ->
@@ -220,7 +224,7 @@ if config.env == 'development'
 else
   JTCluster = require 'jtcluster'
   options = 
-    slaveTotal : 2
+    slaveTotal : 1
     slaveHandler : initServer
   jtCluster = new JTCluster options
   jtCluster.on 'log', (msg) ->
