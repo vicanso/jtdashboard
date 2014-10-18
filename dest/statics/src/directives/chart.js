@@ -1019,16 +1019,22 @@
           config = scope[model];
           echartObj = null;
           timeoutPromise = null;
-          show = function(options) {
+          show = function(options, update) {
             var refreshInterval, type;
+            if (update == null) {
+              update = false;
+            }
             type = options.type;
             refreshInterval = options.refreshInterval;
+            if (!update) {
+              element.html('<div style="margin:15px"><div class="alert alert-info">正在加载数据，请稍候...</div></div>');
+            }
             jtChart.getData(options, function(err, data) {
               var tmpObj, _ref;
               if (err) {
                 element.html(err.msg);
               } else if (!(data != null ? data.length : void 0)) {
-                element.html('没有相关统计数据');
+                element.html('<div style="margin:15px"><div class="alert alert-danger">没有相关统计数据</div></div>');
               } else {
                 if (echartObj) {
                   tmpObj = echartObj;
@@ -1047,7 +1053,7 @@
               }
               if (refreshInterval) {
                 timeoutPromise = $timeout(function() {
-                  return show(options);
+                  return show(options, true);
                 }, refreshInterval * 1000);
               }
             });
@@ -1064,6 +1070,7 @@
             }
           });
           scope.$on('$destroy', function() {
+            element.empty();
             if (timeoutPromise) {
               return $timeout.cancel(timeoutPromise);
             }

@@ -959,14 +959,16 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       config = scope[model]
       echartObj = null
       timeoutPromise = null
-      show = (options) ->
+      show = (options, update = false) ->
         type = options.type
         refreshInterval = options.refreshInterval
+        if !update
+          element.html '<div style="margin:15px"><div class="alert alert-info">正在加载数据，请稍候...</div></div>'
         jtChart.getData options, (err, data) ->
           if err
             element.html err.msg
           else if !data?.length
-            element.html '没有相关统计数据'
+            element.html '<div style="margin:15px"><div class="alert alert-danger">没有相关统计数据</div></div>'
           else
             if echartObj
               tmpObj = echartObj
@@ -982,7 +984,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
             }
           if refreshInterval
             timeoutPromise = $timeout ->
-              show options
+              show options, true
             , refreshInterval * 1000
           return
         return
@@ -992,6 +994,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
         show v if v
         return
       scope.$on '$destroy', ->
+        element.empty()
         $timeout.cancel timeoutPromise if timeoutPromise
       return
   }

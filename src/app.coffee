@@ -174,7 +174,7 @@ initServer = ->
   app = express()
   initAppSetting app
 
-  app.use '/healthchecks', (req, res) ->
+  app.use '/ping', (req, res) ->
     res.send 'success'
 
     

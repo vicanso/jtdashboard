@@ -233,7 +233,7 @@
     initMonitor();
     app = express();
     initAppSetting(app);
-    app.use('/healthchecks', function(req, res) {
+    app.use('/ping', function(req, res) {
       return res.send('success');
     });
     if (config.env !== 'development') {

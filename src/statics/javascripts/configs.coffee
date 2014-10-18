@@ -35,7 +35,6 @@ fn = ($scope, $http, $element, jtDebug) ->
 
   # loading = false
   showChart = (item) ->
-    
 
     $scope.error.preview = ''
     options = angular.copy item
