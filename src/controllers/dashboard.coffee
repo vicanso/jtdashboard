@@ -1,19 +1,20 @@
 mongodb = require '../helpers/mongodb'
 config = require '../config'
 async = require 'async'
-Set = mongodb.model 'stats_set'
+StatsSet = mongodb.model 'stats_set'
 _ = require 'underscore'
 module.exports = (req, res, cbf) ->
   async.waterfall [
     (cbf) ->
-      Set.find {}, cbf
+      StatsSet.find {}, cbf
     (docs, cbf) ->
-      docs = _.map docs, (doc) ->
-        doc.toObject()
+      # docs = _.map docs, (doc) ->
+      #   doc.toObject()
       cbf null, {
         viewData :
           page : 'dashboard'
           globalVariable :
+            selectedSetId : req.param 'id'
             setList : docs
       }
   ], cbf

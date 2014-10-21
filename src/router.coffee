@@ -52,10 +52,10 @@ routeInfos = [
     handler : controllers.import_files
   }
   {
-    route : '/timeline'
+    route : '/statistics'
     type : 'post'
     middleware : [setNoCache]
-    handler : controllers.timeline
+    handler : controllers.statistics
   }
   {
     route : '/httplog'
@@ -64,7 +64,7 @@ routeInfos = [
     handler : controllers.http_log
   }
   {
-    route : ['/', '/dashboard']
+    route : ['/', '/dashboard', '/dashboard/:id']
     handler : controllers.dashboard
     middleware : [
       getCacheController 600

@@ -16,6 +16,7 @@ fn = ($scope, $http, $element, jtDebug) ->
     return
 
   $scope.configs = JT_GLOBAL.configs
+  $scope.sets = JT_GLOBAL.sets
 
   $scope.error = {}
 
@@ -30,6 +31,8 @@ fn = ($scope, $http, $element, jtDebug) ->
   $element.removeClass 'hidden'
 
   $scope.set = {}
+
+  $scope.showType = 'config'
 
 
 
@@ -76,9 +79,25 @@ fn = ($scope, $http, $element, jtDebug) ->
     item.selected = !item.selected
     return
 
-  $scope.edit = (config) ->
-    window.location.href = "/add/#{config._id}"
+  $scope.edit = (setConfig) ->
+    console.dir setConfig
+    findConfig = (id) ->
+      result = null
+      angular.forEach $scope.configs, (config) ->
+        result = config if config._id == id
+      result
+    angular.forEach $scope.selectedItems, (tmp) ->
+      tmp.selected = false
+    $scope.selectedItems = []
+    angular.forEach setConfig.configs, (config) ->
+      tmp = findConfig config.id
+      tmp.area = config.area
+      tmp.selected = true
+      $scope.selectedItems.push tmp
+    $scope.set.name = setConfig.name
+    # console.dir $scope.configs
     return
+
 
 
   $scope.save = ->

@@ -15,14 +15,14 @@
       "/javascripts/dashboard.js"
     ],
     "css": [
-      "/stylesheets/bootstrap.css",
+      "//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css",
       "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
       "/stylesheets/dashboard.css"
     ],
-    "modifiedAt": "2014-10-14 22:31:54"
+    "modifiedAt": "2014-10-20 15:18:09"
   },
   "add": {
     "js": [
@@ -40,7 +40,7 @@
       "/javascripts/add.js"
     ],
     "css": [
-      "/stylesheets/bootstrap.css",
+      "//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css",
       "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
@@ -48,7 +48,7 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-10-13 20:25:27"
+    "modifiedAt": "2014-10-20 15:42:00"
   },
   "configs": {
     "js": [
@@ -66,7 +66,7 @@
       "/javascripts/configs.js"
     ],
     "css": [
-      "/stylesheets/bootstrap.css",
+      "//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css",
       "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
@@ -74,7 +74,7 @@
       "/stylesheets/header.css",
       "/stylesheets/configs.css"
     ],
-    "modifiedAt": "2014-09-30 17:47:10"
+    "modifiedAt": "2014-10-21 19:20:29"
   },
   "readme": {
     "js": [

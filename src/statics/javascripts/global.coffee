@@ -33,9 +33,12 @@ app.config(['localStorageServiceProvider', (localStorageServiceProvider) ->
 
 app.run ['$http', '$timeout', ($http, $timeout) ->
   timeline = window.TIME_LINE
-  if timeline
-    # 往服务器post timeline的时间统计
-    $http.post '/timeline', timeline.getLogs()
+  # 统计数据
+  statisticsData = angular.extend {}, timeline.getLogs()
+  statisticsData.view = 
+    width : window.screen.width
+    height : window.screen.height
+  $http.post '/statistics', statisticsData
   if CONFIG.env == 'development' && window.IMPORT_FILES?.length
     # 向服务器提交当前template所使用到的静态文件（方便服务器预先做文件打包等操作）
     $http.post '/import/files', {

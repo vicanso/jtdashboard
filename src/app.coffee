@@ -157,7 +157,7 @@ staticHandler = do ->
     if config.env == 'development'
       jtDev = require 'jtdev'
       app.use mount, jtDev.ext.converter staticPath
-      app.use mount, jtDev.stylus.parser staticPath
+      app.use mount, jtDev.stylus.parser staticPath, {linenos : true}
       app.use mount, jtDev.coffee.parser staticPath
     app.use mount, (req, res, next) ->
       res.header 'Expires', expires if expires
@@ -170,7 +170,7 @@ staticHandler = do ->
 
 initServer = ->
   initMongod()
-  initMonitor()
+  
   app = express()
   initAppSetting app
 
@@ -179,6 +179,8 @@ initServer = ->
 
     
   if config.env != 'development'
+    initMonitor()
+    
     hostName = require('os').hostname()
     app.use (req, res, next) ->
       res.header 'JT-Info', "#{hostName},#{process.pid},#{process._jtPid}"

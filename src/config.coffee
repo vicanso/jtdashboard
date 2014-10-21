@@ -13,7 +13,7 @@ exports.port = program.port || 10000
 
 exports.env = process.env.NODE_ENV || 'development'
 
-exports.app = 'JT_DASHBOARD'
+exports.app = 'jt-dashboard'
 
 ###*
  * [staticUrlPrefix 静态文件url前缀]
