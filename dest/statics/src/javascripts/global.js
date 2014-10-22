@@ -48,11 +48,16 @@
 
   app.run([
     '$http', '$timeout', function($http, $timeout) {
-      var checkInterval, checkWatchers, timeline, _ref;
+      var checkInterval, checkWatchers, statisticsData, timeline, _ref;
       timeline = window.TIME_LINE;
-      if (timeline) {
-        $http.post('/timeline', timeline.getLogs());
-      }
+      statisticsData = {
+        timeline: timeline.getLogs(),
+        view: {
+          width: window.screen.width,
+          height: window.screen.height
+        }
+      };
+      $http.post('/statistics', statisticsData);
       if (CONFIG.env === 'development' && ((_ref = window.IMPORT_FILES) != null ? _ref.length : void 0)) {
         $http.post('/import/files', {
           template: CONFIG.template,

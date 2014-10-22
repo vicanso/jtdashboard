@@ -80,21 +80,24 @@ fn = ($scope, $http, $element, jtDebug) ->
     return
 
   $scope.edit = (setConfig) ->
-    console.dir setConfig
     findConfig = (id) ->
       result = null
       angular.forEach $scope.configs, (config) ->
         result = config if config._id == id
+        return
       result
     angular.forEach $scope.selectedItems, (tmp) ->
       tmp.selected = false
+      return
     $scope.selectedItems = []
     angular.forEach setConfig.configs, (config) ->
       tmp = findConfig config.id
       tmp.area = config.area
       tmp.selected = true
       $scope.selectedItems.push tmp
+      return
     $scope.set.name = setConfig.name
+    $scope.set.id = setConfig._id
     # console.dir $scope.configs
     return
 
@@ -112,7 +115,11 @@ fn = ($scope, $http, $element, jtDebug) ->
         area : item.area
       }
     data.configs = configs
-    $http.post('/set', data).then (res)->
+    url = '/set'
+    id = $scope.set.id
+    if id
+      url += "/#{id}"
+    $http.post(url, data).then (res)->
       $scope.error.save = ''
       $scope.success.save = '已成功保存该配置'
       return

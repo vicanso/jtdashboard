@@ -74,17 +74,17 @@
       middleware: [setNoCache],
       handler: controllers.import_files
     }, {
-      route: '/timeline',
+      route: '/statistics',
       type: 'post',
       middleware: [setNoCache],
-      handler: controllers.timeline
+      handler: controllers.statistics
     }, {
       route: '/httplog',
       type: 'post',
       middleware: [setNoCache],
       handler: controllers.http_log
     }, {
-      route: ['/', '/dashboard'],
+      route: ['/', '/dashboard', '/dashboard/:id'],
       handler: controllers.dashboard,
       middleware: [getCacheController(600), addImporter],
       template: 'dashboard'
@@ -120,7 +120,7 @@
       middleware: [getCacheController(600)],
       handler: controllers.config
     }, {
-      route: '/set',
+      route: ['/set', '/set/:id'],
       type: 'post',
       middleware: [setNoCache],
       handler: controllers.set

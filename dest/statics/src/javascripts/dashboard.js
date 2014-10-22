@@ -60,6 +60,20 @@
         }
       });
     };
+    if (JT_GLOBAL.selectedSetId) {
+      (function() {
+        var index;
+        index = -1;
+        angular.forEach($scope.setList, function(set, i) {
+          if (JT_GLOBAL.selectedSetId === set._id) {
+            index = i;
+          }
+        });
+        if (~index) {
+          $scope.add(index);
+        }
+      })();
+    }
   };
 
   fn.$inject = ['$scope', '$http', 'jtDebug', '$log', 'user', 'jtSet'];

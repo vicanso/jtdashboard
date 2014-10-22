@@ -22,6 +22,7 @@
       }
     });
     $scope.configs = JT_GLOBAL.configs;
+    $scope.sets = JT_GLOBAL.sets;
     $scope.error = {};
     $scope.success = {};
     $scope.preview = {};
@@ -29,6 +30,7 @@
     $scope.selectedTotal = 0;
     $element.removeClass('hidden');
     $scope.set = {};
+    $scope.showType = 'config';
     showChart = function(item) {
       var options;
       $scope.error.preview = '';
@@ -70,11 +72,34 @@
       }
       item.selected = !item.selected;
     };
-    $scope.edit = function(config) {
-      window.location.href = "/add/" + config._id;
+    $scope.edit = function(setConfig) {
+      var findConfig;
+      findConfig = function(id) {
+        var result;
+        result = null;
+        angular.forEach($scope.configs, function(config) {
+          if (config._id === id) {
+            result = config;
+          }
+        });
+        return result;
+      };
+      angular.forEach($scope.selectedItems, function(tmp) {
+        tmp.selected = false;
+      });
+      $scope.selectedItems = [];
+      angular.forEach(setConfig.configs, function(config) {
+        var tmp;
+        tmp = findConfig(config.id);
+        tmp.area = config.area;
+        tmp.selected = true;
+        $scope.selectedItems.push(tmp);
+      });
+      $scope.set.name = setConfig.name;
+      $scope.set.id = setConfig._id;
     };
     $scope.save = function() {
-      var configs, data;
+      var configs, data, id, url;
       if (!$scope.set.name) {
         return;
       }
@@ -89,7 +114,12 @@
         });
       });
       data.configs = configs;
-      $http.post('/set', data).then(function(res) {
+      url = '/set';
+      id = $scope.set.id;
+      if (id) {
+        url += "/" + id;
+      }
+      $http.post(url, data).then(function(res) {
         $scope.error.save = '';
         $scope.success.save = '已成功保存该配置';
       }, function(res) {

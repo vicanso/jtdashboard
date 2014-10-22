@@ -12,7 +12,7 @@ html(lang='zh-CN', ng-app='jtApp')
     title #{title}
     include ./inlinejs
     //CSS_FILES_CONTAINER
-    - fileImporter.import(['/stylesheets/bootstrap.css', '//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css', '/stylesheets/ui.css', '/stylesheets/global.css']);
+    - fileImporter.import(['//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css', '//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css', '/stylesheets/ui.css', '/stylesheets/global.css']);
     - fileImporter.import(['//cdn.staticfile.org/angular.js/1.2.20/angular.min.js', '/components/angular-local-storage/angular-local-storage.js', '//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js']);
 
     - fileImporter.import('/services/utils.js');

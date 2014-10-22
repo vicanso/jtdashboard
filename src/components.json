@@ -91,13 +91,13 @@
       "/javascripts/global.js"
     ],
     "css": [
-      "/stylesheets/bootstrap.css",
+      "//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css",
       "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
       "/stylesheets/header.css"
     ],
-    "modifiedAt": "2014-09-30 17:46:25"
+    "modifiedAt": "2014-10-22 18:05:55"
   }
 }

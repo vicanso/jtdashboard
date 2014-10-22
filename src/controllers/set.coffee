@@ -29,6 +29,10 @@ get = (id, cbf) ->
       cbf null, doc
   ], cbf
 
+
+update = (id, data, cbf) ->
+  Set.findByIdAndUpdate id, data, cbf
+
 add = (data, cbf) ->
   async.waterfall [
     (cbf) ->
@@ -41,7 +45,12 @@ add = (data, cbf) ->
   ], cbf
 
 module.exports = (req, res, cbf) ->
+  id = req.param 'id'
   switch req.method
-    when 'POST' then add req.body, cbf
-    else get req.param('id'), cbf
+    when 'POST'
+      if id
+        update id, req.body, cbf
+      else
+        add req.body, cbf
+    else get id, cbf
   return

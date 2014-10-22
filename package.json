@@ -32,7 +32,7 @@
     "jtcluster": "0.0.3",
     "jtdev": "0.0.4",
     "jtfileimporter": "0.0.7",
-    "jtmerger": "0.0.2",
+    "jtmerger": "0.0.5",
     "jtstats_client": "0.0.8",
     "method-override": "2.2.0",
     "moment": "2.8.3",
@@ -41,6 +41,7 @@
     "redis": "0.12.1",
     "require-tree": "0.3.3",
     "toobusy": "0.2.4",
+    "ua-parser-js": "^0.7.1",
     "underscore": "1.7.0"
   },
   "devDependencies": {

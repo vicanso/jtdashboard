@@ -208,7 +208,9 @@
       if (config.env === 'development') {
         jtDev = require('jtdev');
         app.use(mount, jtDev.ext.converter(staticPath));
-        app.use(mount, jtDev.stylus.parser(staticPath));
+        app.use(mount, jtDev.stylus.parser(staticPath, {
+          linenos: true
+        }));
         app.use(mount, jtDev.coffee.parser(staticPath));
       }
       return app.use(mount, function(req, res, next) {
@@ -230,13 +232,13 @@
   initServer = function() {
     var app, bodyParser, hostName, httpLogger, timeout;
     initMongod();
-    initMonitor();
     app = express();
     initAppSetting(app);
     app.use('/ping', function(req, res) {
       return res.send('success');
     });
     if (config.env !== 'development') {
+      initMonitor();
       hostName = require('os').hostname();
       app.use(function(req, res, next) {
         res.header('JT-Info', "" + hostName + "," + process.pid + "," + process._jtPid);

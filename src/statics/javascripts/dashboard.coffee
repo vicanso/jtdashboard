@@ -55,13 +55,14 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
         $scope.configs = data.configs
       return
     return
-  JT_GLOBAL.selectedSetId && do ->
-    index = -1
-    angular.forEach $scope.setList, (set, i) ->
-      index = i if JT_GLOBAL.selectedSetId == set._id
+  if JT_GLOBAL.selectedSetId
+    do ->
+      index = -1
+      angular.forEach $scope.setList, (set, i) ->
+        index = i if JT_GLOBAL.selectedSetId == set._id
+        return
+      $scope.add index if ~index
       return
-    $scope.add index if ~index
-
   return
 
 fn.$inject = ['$scope', '$http', 'jtDebug', '$log', 'user', 'jtSet']

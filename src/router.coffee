@@ -120,7 +120,7 @@ routeInfos = [
     handler : controllers.config
   }
   {
-    route : '/set'
+    route : ['/set', '/set/:id']
     type : 'post'
     middleware : [setNoCache]
     handler : controllers.set

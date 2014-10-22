@@ -7,11 +7,8 @@ block bodyContainer
         a(href='javascript:;') 配置列表
           span.caret
         ul.dropdown-menu
-          - var items = viewData.globalVariable.setList;
-          each item, i in items
-            li: a(href='javascript:;', ng-click='add(#{i})') #{item.name}
-          if !items.length
-            li: a(href='javascript:;') 没有配置统计数据
+          li(ng-repeat='item in setList')
+            a(href='javascript:;', ng-click='add($index)', ng-bind='item.name')
       ul.tabs(ng-switch='selectedSetList.length')
         li(ng-repeat='set in selectedSetList', ng-class='{selected : set.selected}')
           i.fa.fa-close(ng-click='remove(set)')

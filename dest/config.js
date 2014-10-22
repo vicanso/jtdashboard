@@ -11,7 +11,7 @@
 
   exports.env = process.env.NODE_ENV || 'development';
 
-  exports.app = 'JT_DASHBOARD';
+  exports.app = 'jt-dashboard';
 
 
   /**

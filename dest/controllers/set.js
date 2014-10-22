@@ -1,5 +1,5 @@
 (function() {
-  var Config, Set, add, async, config, get, mongodb, _;
+  var Config, Set, add, async, config, get, mongodb, update, _;
 
   mongodb = require('../helpers/mongodb');
 
@@ -42,6 +42,10 @@
     ], cbf);
   };
 
+  update = function(id, data, cbf) {
+    return Set.findByIdAndUpdate(id, data, cbf);
+  };
+
   add = function(data, cbf) {
     return async.waterfall([
       function(cbf) {
@@ -59,12 +63,18 @@
   };
 
   module.exports = function(req, res, cbf) {
+    var id;
+    id = req.param('id');
     switch (req.method) {
       case 'POST':
-        add(req.body, cbf);
+        if (id) {
+          update(id, req.body, cbf);
+        } else {
+          add(req.body, cbf);
+        }
         break;
       default:
-        get(req.param('id'), cbf);
+        get(id, cbf);
     }
   };
 
