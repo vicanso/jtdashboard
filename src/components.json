@@ -61,9 +61,11 @@
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
       "/services/utils.js",
       "/services/http_log.js",
+      "/services/stats.js",
       "/services/user.js",
       "/directives/common.js",
       "/directives/chart.js",
+      "/directives/table.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
@@ -78,7 +80,7 @@
       "/stylesheets/header.css",
       "/stylesheets/configs.css"
     ],
-    "modifiedAt": "2014-10-21 19:20:29"
+    "modifiedAt": "2014-10-23 21:01:23"
   },
   "readme": {
     "js": [
