@@ -1,6 +1,6 @@
 
 
-app = angular.module 'jtApp', ['LocalStorageModule', 'jt.debug', 'jt.utils', 'jt.httpLog', 'jt.user', 'jt.directive.common']
+app = angular.module 'jtApp', ['LocalStorageModule', 'jt.service.debug', 'jt.service.utils', 'jt.service.httpLog', 'jt.service.stats', 'jt.service.user', 'jt.directive.common', 'jt.directive.chart', 'jt.directive.table']
 alert 'addRequires is defined' if app.addRequires
 
 app.addRequires = (arr) ->

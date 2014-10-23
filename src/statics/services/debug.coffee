@@ -2,7 +2,7 @@
  * debug模块，用于开发时的log输出
 ###
 
-module = angular.module 'jt.debug', []
+module = angular.module 'jt.service.debug', []
 noop = ->
 
 module.factory 'jtDebug', ['$http', '$rootScope', ($http, $rootScope) ->

@@ -73,10 +73,10 @@ module.exports = (req, res, cbf) ->
         #   name : '多漏斗图'
         #   type : 'multiFunnel'
         # }
-        # {
-        #   name : '表格'
-        #   type : 'table'
-        # }
+        {
+          name : '表格'
+          type : 'table'
+        }
       ]
       cbf null, {
         viewData :

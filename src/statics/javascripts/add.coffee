@@ -1,7 +1,7 @@
 module = angular.module 'jt.addPage', []
 
-module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
-  debug = jtDebug 'jt.jtStats'
+module.factory 'jtStatsConfig', ['$http', 'jtDebug', ($http, jtDebug) ->
+  debug = jtDebug 'jt.jtStatsConfig'
   intervalConvertInfos = 
     '最近' : -1
     '1分钟' : 60
@@ -52,12 +52,12 @@ module.factory 'jtStats', ['$http', 'jtDebug', ($http, jtDebug) ->
   stats
 ]
 
-fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) ->
+fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStatsConfig) ->
   debug = jtDebug 'jt.addPage'
 
 
-  $scope.intervalList = jtStats.getIntervalList()
-  $scope.chartTypes = jtStats.getChartTypes()
+  $scope.intervalList = jtStatsConfig.getIntervalList()
+  $scope.chartTypes = jtStatsConfig.getChartTypes()
 
 
   $scope.config = 
@@ -87,7 +87,7 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       name : JT_GLOBAL.config.name
       desc : JT_GLOBAL.config.desc
       stats : tmpStats
-      interval : jtStats.getIntervalName JT_GLOBAL.config.point.interval
+      interval : jtStatsConfig.getIntervalName JT_GLOBAL.config.point.interval
       startDate : JT_GLOBAL.config.date.start
       endDate : JT_GLOBAL.config.date.end
       chartType : JT_GLOBAL.config.type
@@ -106,14 +106,14 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
   # }
   $scope.error = {}
   $scope.success = {}
-  $scope.dateList = jtStats.getDateList()
+  $scope.dateList = jtStatsConfig.getDateList()
 
   $scope.categoryList = JT_GLOBAL.collections
   $scope.keys = {}
 
 
 
-  getKeys = jtUtils.memoize jtStats.getKeys
+  getKeys = jtUtils.memoize jtStatsConfig.getKeys
 
 
   getStatsOptions = ->
@@ -134,7 +134,7 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
       desc : config.desc
       type : config.chartType
       point :
-        interval : jtStats.convertInterval config.interval
+        interval : jtStatsConfig.convertInterval config.interval
       date :
         start : config.startDate
         end : config.endDate
@@ -173,7 +173,13 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
   $scope.preview = ->
     $scope.error.save = ''
     options = getStatsOptions()
-    $scope.statsOptions = options
+    console.dir options
+    if options.type == 'table'
+      $scope.chartOptions = null
+      $scope.tableOptions = options
+    else
+      $scope.tableOptions = null
+      $scope.chartOptions = options
     return
 
   $scope.save = ->
@@ -252,7 +258,7 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
     return
 
   $scope.$watch 'config.date', (v)->
-    dateRange = jtStats.getDateRange v
+    dateRange = jtStatsConfig.getDateRange v
     if dateRange
       $scope.config.startDate = dateRange[0]
       $scope.config.endDate = dateRange[1]
@@ -263,9 +269,9 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) 
   return
 
 
-fn.$inject = ['$scope', '$http', '$element', '$timeout', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats']
+fn.$inject = ['$scope', '$http', '$element', '$timeout', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStatsConfig']
 angular.module('jtApp')
-  .addRequires(['jt.addPage', 'jt.chart'])
+  .addRequires(['jt.addPage'])
   .controller 'AddPageController', fn
 
 

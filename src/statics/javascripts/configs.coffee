@@ -136,5 +136,5 @@ fn = ($scope, $http, $element, jtDebug) ->
 fn.$inject = ['$scope', '$http', '$element', 'jtDebug']
 
 angular.module('jtApp')
-  .addRequires(['jt.configsPage', 'jt.chart'])
+  .addRequires(['jt.configsPage'])
   .controller 'ConfigsPageController', fn

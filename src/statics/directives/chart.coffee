@@ -1,4 +1,4 @@
-module = angular.module 'jt.chart', ['jt.utils', 'jt.debug']
+module = angular.module 'jt.directive.chart', ['jt.service.utils', 'jt.service.debug']
 
 module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($http, $timeout, $q, jtUtils, jtDebug) ->
   debug = jtDebug 'jt.chart'

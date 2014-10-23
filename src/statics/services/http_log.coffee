@@ -2,7 +2,7 @@
  * $http相关的数据记录（请求使用时间，出错等）
 ###
 
-module = angular.module 'jt.httpLog', ['LocalStorageModule']
+module = angular.module 'jt.service.httpLog', ['LocalStorageModule']
 
 now = Date.now || ->
   new Date().getTime()

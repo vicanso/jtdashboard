@@ -17,9 +17,11 @@ html(lang='zh-CN', ng-app='jtApp')
 
     - fileImporter.import('/services/utils.js');
     - fileImporter.import('/services/http_log.js');
+    - fileImporter.import('/services/stats.js');
     - fileImporter.import('/services/user.js');
     - fileImporter.import('/directives/common.js');
     - fileImporter.import('/directives/chart.js');
+    - fileImporter.import('/directives/table.js');
     
     if PATTERN
       - fileImporter.import('/components/debug/dist/debug.js');

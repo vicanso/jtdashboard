@@ -26,8 +26,6 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
   $scope.selectedSetList = []
 
 
-
-
   $scope.add = (index) ->
     set = $scope.setList[index]
     index = $scope.selectedSetList.indexOf set
@@ -68,7 +66,7 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
 fn.$inject = ['$scope', '$http', 'jtDebug', '$log', 'user', 'jtSet']
 
 angular.module('jtApp')
-  .addRequires(['jt.dashboardPage', 'jt.chart'])
+  .addRequires(['jt.dashboardPage'])
   .controller 'DashboardController', fn
 
 

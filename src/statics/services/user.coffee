@@ -1,4 +1,4 @@
-module = angular.module 'jt.user', []
+module = angular.module 'jt.service.user', []
 
 module.factory 'user', ['$http', '$document', 'localStorageService', 'jtUtils', ($http, $document, localStorageService, utils) ->
 

@@ -6,9 +6,11 @@
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
       "/services/utils.js",
       "/services/http_log.js",
+      "/services/stats.js",
       "/services/user.js",
       "/directives/common.js",
       "/directives/chart.js",
+      "/directives/table.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
@@ -22,7 +24,7 @@
       "/stylesheets/menu.css",
       "/stylesheets/dashboard.css"
     ],
-    "modifiedAt": "2014-10-20 15:18:09"
+    "modifiedAt": "2014-10-23 19:54:55"
   },
   "add": {
     "js": [
@@ -31,9 +33,11 @@
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
       "/services/utils.js",
       "/services/http_log.js",
+      "/services/stats.js",
       "/services/user.js",
       "/directives/common.js",
       "/directives/chart.js",
+      "/directives/table.js",
       "/components/debug/dist/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
@@ -48,7 +52,7 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-10-20 15:42:00"
+    "modifiedAt": "2014-10-23 13:48:25"
   },
   "configs": {
     "js": [
