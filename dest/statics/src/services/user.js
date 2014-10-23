@@ -1,7 +1,7 @@
 (function() {
   var module;
 
-  module = angular.module('jt.user', []);
+  module = angular.module('jt.service.user', []);
 
   module.factory('user', [
     '$http', '$document', 'localStorageService', 'jtUtils', function($http, $document, localStorageService, utils) {

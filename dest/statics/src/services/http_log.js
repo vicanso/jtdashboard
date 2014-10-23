@@ -6,7 +6,7 @@
 (function() {
   var module, now;
 
-  module = angular.module('jt.httpLog', ['LocalStorageModule']);
+  module = angular.module('jt.service.httpLog', ['LocalStorageModule']);
 
   now = Date.now || function() {
     return new Date().getTime();

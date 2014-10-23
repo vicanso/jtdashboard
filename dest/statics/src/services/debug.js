@@ -6,7 +6,7 @@
 (function() {
   var module, noop;
 
-  module = angular.module('jt.debug', []);
+  module = angular.module('jt.service.debug', []);
 
   noop = function() {};
 

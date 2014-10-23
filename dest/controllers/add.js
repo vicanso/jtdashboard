@@ -70,6 +70,9 @@
           }, {
             name: '漏斗图',
             type: 'funnel'
+          }, {
+            name: '表格',
+            type: 'table'
           }
         ];
         return cbf(null, {

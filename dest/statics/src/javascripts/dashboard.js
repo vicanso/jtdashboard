@@ -78,6 +78,6 @@
 
   fn.$inject = ['$scope', '$http', 'jtDebug', '$log', 'user', 'jtSet'];
 
-  angular.module('jtApp').addRequires(['jt.dashboardPage', 'jt.chart']).controller('DashboardController', fn);
+  angular.module('jtApp').addRequires(['jt.dashboardPage']).controller('DashboardController', fn);
 
 }).call(this);

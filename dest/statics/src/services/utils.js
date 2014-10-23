@@ -1,7 +1,7 @@
 (function() {
   var module;
 
-  module = angular.module('jt.utils', []);
+  module = angular.module('jt.service.utils', []);
 
   module.factory('jtUtils', [
     '$http', '$rootScope', function($http, $rootScope) {

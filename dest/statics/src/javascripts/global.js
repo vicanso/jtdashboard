@@ -1,7 +1,7 @@
 (function() {
   var app;
 
-  app = angular.module('jtApp', ['LocalStorageModule', 'jt.debug', 'jt.utils', 'jt.httpLog', 'jt.user', 'jt.directive.common']);
+  app = angular.module('jtApp', ['LocalStorageModule', 'jt.service.debug', 'jt.service.utils', 'jt.service.httpLog', 'jt.service.stats', 'jt.service.user', 'jt.directive.common', 'jt.directive.chart', 'jt.directive.table']);
 
   if (app.addRequires) {
     alert('addRequires is defined');

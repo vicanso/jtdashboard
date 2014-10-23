@@ -91,42 +91,47 @@ module.directive 'jtTable', ['$compile', '$http','jtDebug', 'jtStats', ($compile
         jtStats.getData options, (err, res) ->
           if err
             console.dir error
-          else
-            interval = options.point?.interval || 60
-            result = {}
-            dateList = []
-            keyList = []
-            angular.forEach res, (statsData) ->
-              key = statsData.key
-              keyList.push key
-              angular.forEach statsData.values, (tmp) ->
-                t = Math.floor(tmp.t / interval) * interval * 1000
-                dateStr = formatDate new Date(t), interval
-                if !result[dateStr]
-                  dateList.push dateStr
-                  result[dateStr] = {} 
-                result[dateStr][key] = tmp.v
-            dateList.sort()
+            return
+          interval = options.point?.interval || 60
+          result = {}
+          dateList = []
+          keyList = []
+          angular.forEach res, (statsData) ->
+            key = statsData.key
+            keyList.push key
+            angular.forEach statsData.values, (tmp) ->
+              t = Math.floor(tmp.t / interval) * interval * 1000
+              dateStr = formatDate new Date(t), interval
+              if !result[dateStr]
+                dateList.push dateStr
+                result[dateStr] = {} 
+              result[dateStr][key] = tmp.v
+              return
+          dateList.sort()
 
-            theadData = ['日期'].concat keyList
-            tableData = []
+          theadData = ['日期'].concat keyList
+          tableData = []
 
-            angular.forEach dateList, (date) ->
-              tmpData = [date]
-              angular.forEach keyList, (key, i) ->
-                tmpData[i + 1] = result[date][key]
-              tableData.push tmpData
+          angular.forEach dateList, (date) ->
+            tmpData = [date]
+            angular.forEach keyList, (key, i) ->
+              tmpData[i + 1] = result[date][key]
+              return
+            tableData.push tmpData
+            return
 
-            sortData sortOptions, tableData if sortOptions
-            subScope.theadData = theadData
-            subScope.tableData = tableData
+          sortData sortOptions, tableData if sortOptions
+          subScope.theadData = theadData
+          subScope.tableData = tableData
 
-            showTable subScope
-
+          showTable subScope
+          return
       scope.$watch model, (v) ->
         show v if v
+        return
 
       subScope.$watchCollection 'sort', (v) ->
         sortData v, subScope.tableData if v && subScope.tableData
+        return
   }
 ]

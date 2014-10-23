@@ -3,10 +3,10 @@
 
   module = angular.module('jt.addPage', []);
 
-  module.factory('jtStats', [
+  module.factory('jtStatsConfig', [
     '$http', 'jtDebug', function($http, jtDebug) {
       var dateRangeConfigs, debug, intervalConvertInfos, stats;
-      debug = jtDebug('jt.jtStats');
+      debug = jtDebug('jt.jtStatsConfig');
       intervalConvertInfos = {
         '最近': -1,
         '1分钟': 60,
@@ -66,11 +66,11 @@
     }
   ]);
 
-  fn = function($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStats) {
+  fn = function($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStatsConfig) {
     var debug, getKeys, getStatsOptions;
     debug = jtDebug('jt.addPage');
-    $scope.intervalList = jtStats.getIntervalList();
-    $scope.chartTypes = jtStats.getChartTypes();
+    $scope.intervalList = jtStatsConfig.getIntervalList();
+    $scope.chartTypes = jtStatsConfig.getChartTypes();
     $scope.config = {
       stats: [
         {
@@ -102,7 +102,7 @@
         name: JT_GLOBAL.config.name,
         desc: JT_GLOBAL.config.desc,
         stats: tmpStats,
-        interval: jtStats.getIntervalName(JT_GLOBAL.config.point.interval),
+        interval: jtStatsConfig.getIntervalName(JT_GLOBAL.config.point.interval),
         startDate: JT_GLOBAL.config.date.start,
         endDate: JT_GLOBAL.config.date.end,
         chartType: JT_GLOBAL.config.type,
@@ -116,10 +116,10 @@
     }, 100);
     $scope.error = {};
     $scope.success = {};
-    $scope.dateList = jtStats.getDateList();
+    $scope.dateList = jtStatsConfig.getDateList();
     $scope.categoryList = JT_GLOBAL.collections;
     $scope.keys = {};
-    getKeys = jtUtils.memoize(jtStats.getKeys);
+    getKeys = jtUtils.memoize(jtStatsConfig.getKeys);
     getStatsOptions = function() {
       var config, msgList, options, refreshInterval;
       config = $scope.config;
@@ -143,7 +143,7 @@
         desc: config.desc,
         type: config.chartType,
         point: {
-          interval: jtStats.convertInterval(config.interval)
+          interval: jtStatsConfig.convertInterval(config.interval)
         },
         date: {
           start: config.startDate,
@@ -186,7 +186,14 @@
       var options;
       $scope.error.save = '';
       options = getStatsOptions();
-      $scope.statsOptions = options;
+      console.dir(options);
+      if (options.type === 'table') {
+        $scope.chartOptions = null;
+        $scope.tableOptions = options;
+      } else {
+        $scope.tableOptions = null;
+        $scope.chartOptions = options;
+      }
     };
     $scope.save = function() {
       var errMsgs, error, options, success, url;
@@ -272,7 +279,7 @@
     });
     $scope.$watch('config.date', function(v) {
       var dateRange;
-      dateRange = jtStats.getDateRange(v);
+      dateRange = jtStatsConfig.getDateRange(v);
       if (dateRange) {
         $scope.config.startDate = dateRange[0];
         $scope.config.endDate = dateRange[1];
@@ -281,8 +288,8 @@
     $element.removeClass('hidden');
   };
 
-  fn.$inject = ['$scope', '$http', '$element', '$timeout', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStats'];
+  fn.$inject = ['$scope', '$http', '$element', '$timeout', 'jtDebug', '$log', 'jtUtils', 'user', 'jtStatsConfig'];
 
-  angular.module('jtApp').addRequires(['jt.addPage', 'jt.chart']).controller('AddPageController', fn);
+  angular.module('jtApp').addRequires(['jt.addPage']).controller('AddPageController', fn);
 
 }).call(this);
