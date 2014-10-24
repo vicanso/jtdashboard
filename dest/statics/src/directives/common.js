@@ -30,7 +30,7 @@
   ]);
 
   module.directive('jtSelect', [
-    '$compile', function($compile) {
+    '$compile', '$parse', function($compile, $parse) {
       return {
         restrict: 'A',
         require: 'ngModel',
@@ -45,19 +45,14 @@
           }
           multiple = attr.multiple === 'multiple';
           appendList = function(items, clear) {
-            var dom, htmlArr, keyList, lastKey, result;
+            var dom, getter, htmlArr;
             htmlArr = [];
-            keyList = model.split('.');
-            lastKey = keyList.pop();
-            result = scope;
-            angular.forEach(keyList, function(key) {
-              result = scope[key];
-            });
+            getter = $parse(model);
             if (clear) {
               if (multiple) {
-                result[lastKey] = {};
+                getter.assign(scope, {});
               } else {
-                result[lastKey] = '';
+                getter.assign(scope, '');
               }
             }
             angular.forEach(items, function(item, i) {

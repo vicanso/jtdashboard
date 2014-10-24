@@ -87,10 +87,13 @@ module.directive 'jtTable', ['$compile', '$http','jtDebug', 'jtStats', ($compile
         return
 
       show = (options) ->
+
         subScope.name = options.name || '未定义'
+        obj = element.children('div')
+        obj.html '<div style="margin:15px"><div class="alert alert-info">正在加载数据，请稍候...</div></div>'
         jtStats.getData options, (err, res) ->
           if err
-            console.dir error
+            obj.html err.msg
             return
           interval = options.point?.interval || 60
           result = {}

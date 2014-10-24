@@ -1,5 +1,7 @@
 (function() {
-  var FileImporter, JTMerger, addImporter, config, controllers, crc32Config, getCacheController, merger, requireTree, routeInfos, router, setNoCache;
+  var FileImporter, JTMerger, addImporter, config, controllers, cookieParser, crc32Config, getCacheController, merger, requireTree, routeInfos, router, setNoCache;
+
+  cookieParser = require('cookie-parser');
 
   router = require('./helpers/router');
 
@@ -76,7 +78,7 @@
     }, {
       route: '/statistics',
       type: 'post',
-      middleware: [setNoCache],
+      middleware: [setNoCache, cookieParser()],
       handler: controllers.statistics
     }, {
       route: '/httplog',

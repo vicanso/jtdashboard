@@ -32,9 +32,11 @@ app.config(['localStorageServiceProvider', (localStorageServiceProvider) ->
 
 
 app.run ['$http', '$timeout', ($http, $timeout) ->
-  timeline = window.TIME_LINE
+  
   
   # 统计数据
+  timeline = window.TIME_LINE
+  timeline.timeEnd('js');
   statisticsData = 
     timeline :timeline.getLogs()
     view :

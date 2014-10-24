@@ -89,11 +89,14 @@
             $compile(dom)(subScope);
           };
           show = function(options) {
+            var obj;
             subScope.name = options.name || '未定义';
+            obj = element.children('div');
+            obj.html('<div style="margin:15px"><div class="alert alert-info">正在加载数据，请稍候...</div></div>');
             return jtStats.getData(options, function(err, res) {
               var dateList, interval, keyList, result, tableData, theadData, _ref;
               if (err) {
-                console.dir(error);
+                obj.html(err.msg);
                 return;
               }
               interval = ((_ref = options.point) != null ? _ref.interval : void 0) || 60;

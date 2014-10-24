@@ -24,7 +24,7 @@ module.directive 'jtFocus', [ ->
 ]
 
 
-module.directive 'jtSelect', ['$compile', ($compile) ->
+module.directive 'jtSelect', ['$compile', '$parse', ($compile, $parse) ->
   {
     restrict : 'A'
     require : 'ngModel'
@@ -44,17 +44,26 @@ module.directive 'jtSelect', ['$compile', ($compile) ->
       
       appendList = (items, clear) ->
         htmlArr = []
-        keyList = model.split '.'
-        lastKey = keyList.pop()
-        result = scope
-        angular.forEach keyList, (key) ->
-          result = scope[key]
-          return
+        
+        # keyList = model.split '.'
+        # lastKey = keyList.pop()
+        # result = scope
+        # angular.forEach keyList, (key) ->
+        #   result = scope[key]
+        #   return
+        # if clear
+        #   if multiple
+        #     result[lastKey] = {}
+        #   else
+        #     result[lastKey] = ''
+          
+        getter = $parse model
         if clear
           if multiple
-            result[lastKey] = {}
+            getter.assign scope, {}
           else
-            result[lastKey] = ''
+            getter.assign scope, ''
+
         angular.forEach items, (item, i) ->
           if multiple
             ngClick = "#{model}['#{item}'] = !#{model}['#{item}']"

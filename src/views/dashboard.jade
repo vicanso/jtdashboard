@@ -15,7 +15,8 @@ block bodyContainer
           a(href='javascript:;', ng-bind='set.name', ng-click='show(set)')
     
 
-    div(jt-table='jtTableTest')
     .chartListContainer
-      .chart(ng-repeat='config in configs', jt-chart='config', ng-class='{"col-xs-4" : config.area == 0, "col-xs-6" : config.area == 1, "col-xs-8" : config.area == 2, "col-xs-12" : config.area == 3}')
+      div(ng-repeat='config in configs', ng-class='{"col-xs-4" : config.area == 0, "col-xs-6" : config.area == 1, "col-xs-8" : config.area == 2, "col-xs-12" : config.area == 3}', ng-switch='statsOptions.type')
+        div(ng-switch-when='table', jt-table='config')
+        .chart(ng-switch-default, jt-chart='config')
   - fileImporter.import('/javascripts/dashboard.js', '/stylesheets/dashboard.css');

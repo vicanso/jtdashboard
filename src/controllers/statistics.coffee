@@ -9,13 +9,14 @@ module.exports = (req, res, cbf) ->
   referer = req.header 'referer'
   ip = req.ip
   data = req.body
+  console.dir req.cookies
   if data
     timeline = data.timeline
     view = data.view
     logger.info "ip:#{ip}, html use #{timeline.html}ms, js use #{timeline.js}ms, ua:#{ua}, referer:#{referer}, width:#{view.width}, height:#{view.height}"
     usResult = new UserAgentParser(ua).getResult()
-    JTStats.count "#{usResult.os.name}.#{usResult.os.version}"
-    JTStats.count "#{usResult.browser.name}.#{usResult.browser.major}"
+    JTStats.count "os.#{usResult.os.name}.#{usResult.os.version}"
+    JTStats.count "browser.#{usResult.browser.name}.#{usResult.browser.major}"
 
     width = view.width
     if width < 1000
@@ -24,6 +25,10 @@ module.exports = (req, res, cbf) ->
       unitWidth = 200
       width = Math.floor(width / unitWidth) * unitWidth
       JTStats.count "width.#{width}-#{width + unitWidth}"
+
+    if !req.cocookies.JT_Dashboard
+      JTStats.count 'uv'
+      res.cookie 'JT_Dashboard', 'vicanso'
       
 
     JTStats.average 'usetime.html', timeline.html

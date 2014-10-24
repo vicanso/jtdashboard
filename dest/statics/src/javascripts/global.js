@@ -50,6 +50,7 @@
     '$http', '$timeout', function($http, $timeout) {
       var checkInterval, checkWatchers, statisticsData, timeline, _ref;
       timeline = window.TIME_LINE;
+      timeline.timeEnd('js');
       statisticsData = {
         timeline: timeline.getLogs(),
         view: {

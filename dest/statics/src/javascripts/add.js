@@ -186,14 +186,7 @@
       var options;
       $scope.error.save = '';
       options = getStatsOptions();
-      console.dir(options);
-      if (options.type === 'table') {
-        $scope.chartOptions = null;
-        $scope.tableOptions = options;
-      } else {
-        $scope.tableOptions = null;
-        $scope.chartOptions = options;
-      }
+      $scope.statsOptions = options;
     };
     $scope.save = function() {
       var errMsgs, error, options, success, url;

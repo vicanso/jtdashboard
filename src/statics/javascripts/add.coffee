@@ -173,13 +173,14 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStatsCo
   $scope.preview = ->
     $scope.error.save = ''
     options = getStatsOptions()
-    console.dir options
-    if options.type == 'table'
-      $scope.chartOptions = null
-      $scope.tableOptions = options
-    else
-      $scope.tableOptions = null
-      $scope.chartOptions = options
+    $scope.statsOptions = options
+    # console.dir options
+    # if options.type == 'table'
+    #   $scope.chartOptions = null
+    #   $scope.tableOptions = options
+    # else
+    #   $scope.tableOptions = null
+    #   $scope.chartOptions = options
     return
 
   $scope.save = ->

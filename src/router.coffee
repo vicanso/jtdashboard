@@ -1,3 +1,4 @@
+cookieParser = require('cookie-parser') 
 router = require './helpers/router'
 config = require './config'
 requireTree = require 'require-tree'
@@ -54,7 +55,7 @@ routeInfos = [
   {
     route : '/statistics'
     type : 'post'
-    middleware : [setNoCache]
+    middleware : [setNoCache, cookieParser()]
     handler : controllers.statistics
   }
   {
