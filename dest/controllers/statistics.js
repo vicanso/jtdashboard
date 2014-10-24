@@ -35,7 +35,7 @@
         width = Math.floor(width / unitWidth) * unitWidth;
         JTStats.count("width." + width + "-" + (width + unitWidth));
       }
-      if (!req.cocookies.JT_Dashboard) {
+      if (!req.cookies.JT_Dashboard) {
         JTStats.count('uv');
         res.cookie('JT_Dashboard', 'vicanso');
       }

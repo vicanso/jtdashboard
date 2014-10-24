@@ -151,6 +151,7 @@
       if (key) {
         shasum = crypto.createHash('sha1');
         if ('6a3f4389a53c889b623e67f385f28ab8e84e5029' === shasum.update(key).digest('hex')) {
+          res.header('Cache-Control', 'no-cache, no-store');
           res.status(200).json({
             msg: 'success'
           });
