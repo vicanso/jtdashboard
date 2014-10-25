@@ -1,5 +1,5 @@
 (function() {
-  var JTCluster, JTStats, adminHandler, config, crypto, debugParamsHandler, express, fs, initAppSetting, initMongod, initMonitor, initServer, jtCluster, logger, moment, options, path, requestStatistics, staticHandler, _;
+  var JTStats, adminHandler, config, crypto, d, debugParamsHandler, express, fs, initAppSetting, initMongod, initMonitor, initServer, logger, moment, path, requestStatistics, staticHandler, _;
 
   path = require('path');
 
@@ -63,7 +63,7 @@
       var startAt, stat;
       startAt = process.hrtime();
       handlingReqTotal++;
-      JTStats.gauge("handlingReqTotal." + (process._jtPid || 0), handlingReqTotal);
+      JTStats.gauge("handlingReqTotal." + config.nodeName, handlingReqTotal);
       stat = _.once(function() {
         var data, diff, ms;
         diff = process.hrtime(startAt);
@@ -99,9 +99,9 @@
       rss = Math.floor(memoryUsage.rss / MB);
       heapTotal = Math.floor(memoryUsage.heapTotal / MB);
       heapUsed = Math.floor(memoryUsage.heapUsed / MB);
-      JTStats.gauge("memory.rss." + (process._jtPid || 0), rss);
-      JTStats.gauge("memory.heapTotal." + (process._jtPid || 0), heapTotal);
-      JTStats.gauge("memory.heapUsed." + (process._jtPid || 0), heapUsed);
+      JTStats.gauge("memory.rss." + config.nodeName, rss);
+      JTStats.gauge("memory.heapTotal." + config.nodeName, heapTotal);
+      JTStats.gauge("memory.heapUsed." + config.nodeName, heapUsed);
       return setTimeout(memoryLog, 10 * 1000);
     };
     lagTotal = 0;
@@ -115,7 +115,7 @@
         lag = Math.ceil(lagTotal / lagCount);
         lagCount = 0;
         lagTotal = 0;
-        JTStats.average("lag." + (process._jtPid || 0), lag);
+        JTStats.average("lag." + config.nodeName, lag);
       }
       return setTimeout(lagLog, 1000);
     };
@@ -155,7 +155,9 @@
           res.status(200).json({
             msg: 'success'
           });
-          return typeof jtCluster !== "undefined" && jtCluster !== null ? jtCluster.restartAll() : void 0;
+          return setTimeout(function() {
+            return process.exit();
+          }, 1000);
         } else {
           return res.status(500).json({
             msg: 'fail, the key is wrong'
@@ -236,13 +238,13 @@
     app = express();
     initAppSetting(app);
     app.use('/ping', function(req, res) {
-      return res.send('success');
+      res.send('success');
     });
     if (config.env !== 'development') {
       initMonitor();
       hostName = require('os').hostname();
       app.use(function(req, res, next) {
-        res.header('JT-Info', "" + hostName + "," + process.pid + "," + process._jtPid);
+        res.header('JT-Info', "" + hostName + "," + process.pid + "," + config.nodeName);
         return next();
       });
       app.use(requestStatistics());
@@ -272,18 +274,19 @@
     return logger.info("server listen on: " + config.port);
   };
 
+  process.on('exit', function(code) {
+    return logger.error("process " + config.nodeName + " exit with code:" + code);
+  });
+
   if (config.env === 'development') {
     initServer();
   } else {
-    JTCluster = require('jtcluster');
-    options = {
-      slaveTotal: 1,
-      slaveHandler: initServer
-    };
-    jtCluster = new JTCluster(options);
-    jtCluster.on('log', function(msg) {
-      return logger.info(msg);
+    d = require('domain').create();
+    d.on('error', function(err) {
+      logger.error(err.stack);
+      return logger.error(err.message);
     });
+    d.run(initServer);
   }
 
 }).call(this);

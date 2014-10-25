@@ -54,8 +54,9 @@ mixin Preview
     .panel-heading
       i.fa.fa-close(ng-click='closePreview()')
       span(ng-bind='preview.type == "stats"? "配置参数" : "图表预览"')
-    .content
-      .chart(jt-chart='statsOptions')
+    .content(ng-switch='statsOptions.type')
+      div(ng-switch-when='table', jt-table='statsOptions')
+      .chart(ng-switch-default, jt-chart='statsOptions')
 
 //- 选中的统计展示
 mixin SelectedItems

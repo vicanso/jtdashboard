@@ -2,6 +2,7 @@ program = require 'commander'
 do ->
   program.version('0.0.1')
   .option('-p, --port <n>', 'listen port', parseInt)
+  .option('--node <n>', 'the name for running process')
   # .option('--log <n>', 'the log file')
   .option('--mongodb <n>', 'mongodb uri eg.mongodb://localhost:10020/test, mongodb://user:pwd@localhost:10020/test')
   .option('--redis <n>', 'redis uri eg.redis://localhost:10010, redis://pwd@localhost:10010')
@@ -12,6 +13,8 @@ do ->
 exports.port = program.port || 10000
 
 exports.env = process.env.NODE_ENV || 'development'
+
+exports.nodeName = program.node || 'vicanso'
 
 exports.app = 'jt-dashboard'
 

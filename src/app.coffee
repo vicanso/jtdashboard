@@ -5,6 +5,7 @@ express = require 'express'
 fs = require 'fs'
 crypto = require 'crypto'
 _ = require 'underscore'
+
 JTStats = require './helpers/stats'
 logger = require('./helpers/logger') __filename
 
@@ -43,7 +44,7 @@ requestStatistics = ->
     startAt = process.hrtime()
     handlingReqTotal++
 
-    JTStats.gauge "handlingReqTotal.#{process._jtPid || 0}", handlingReqTotal
+    JTStats.gauge "handlingReqTotal.#{config.nodeName}", handlingReqTotal
       
     stat = _.once ->
       diff = process.hrtime startAt
@@ -73,9 +74,9 @@ initMonitor = ->
     rss = Math.floor memoryUsage.rss / MB
     heapTotal = Math.floor memoryUsage.heapTotal / MB
     heapUsed = Math.floor memoryUsage.heapUsed / MB
-    JTStats.gauge "memory.rss.#{process._jtPid || 0}", rss
-    JTStats.gauge "memory.heapTotal.#{process._jtPid || 0}", heapTotal
-    JTStats.gauge "memory.heapUsed.#{process._jtPid || 0}", heapUsed
+    JTStats.gauge "memory.rss.#{config.nodeName}", rss
+    JTStats.gauge "memory.heapTotal.#{config.nodeName}", heapTotal
+    JTStats.gauge "memory.heapUsed.#{config.nodeName}", heapUsed
     setTimeout memoryLog, 10 * 1000
   
 
@@ -89,7 +90,7 @@ initMonitor = ->
       lag = Math.ceil lagTotal / lagCount
       lagCount = 0
       lagTotal = 0
-      JTStats.average "lag.#{process._jtPid || 0}", lag
+      JTStats.average "lag.#{config.nodeName}", lag
     setTimeout lagLog, 1000
 
   lagLog()
@@ -116,7 +117,10 @@ adminHandler = (app) ->
       if '6a3f4389a53c889b623e67f385f28ab8e84e5029' == shasum.update(key).digest 'hex'
         res.header 'Cache-Control', 'no-cache, no-store'
         res.status(200).json {msg : 'success'}
-        jtCluster?.restartAll()
+        setTimeout ->
+          process.exit();
+        , 1000
+        # jtCluster?.restartAll()
       else
         res.status(500).json {msg : 'fail, the key is wrong'}
     else
@@ -174,9 +178,9 @@ initServer = ->
   
   app = express()
   initAppSetting app
-
   app.use '/ping', (req, res) ->
     res.send 'success'
+    return
 
     
   if config.env != 'development'
@@ -184,7 +188,7 @@ initServer = ->
     
     hostName = require('os').hostname()
     app.use (req, res, next) ->
-      res.header 'JT-Info', "#{hostName},#{process.pid},#{process._jtPid}"
+      res.header 'JT-Info', "#{hostName},#{process.pid},#{config.nodeName}"
       next()
     
     app.use requestStatistics() 
@@ -222,15 +226,18 @@ initServer = ->
 
   logger.info "server listen on: #{config.port}"
 
+process.on 'exit', (code) ->
+  logger.error "process #{config.nodeName} exit with code:#{code}"
+
+
+# console.dir process.disconnect()
+
 if config.env == 'development'
   initServer()
 else
-  JTCluster = require 'jtcluster'
-  options = 
-    slaveTotal : 1
-    slaveHandler : initServer
-  jtCluster = new JTCluster options
-  jtCluster.on 'log', (msg) ->
-    logger.info msg
-
+  d = require('domain').create()
+  d.on 'error', (err) ->
+    logger.error err.stack
+    logger.error err.message
+  d.run initServer
 
