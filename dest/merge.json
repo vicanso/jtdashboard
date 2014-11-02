@@ -2,13 +2,13 @@
   "except" : [
     "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
     "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
-    "/components/debug/dist/debug.js",
+    "/components/debug.js",
     "//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css",
     "//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css"
   ],
   "files" : [
     [
-      "/components/angular-local-storage/angular-local-storage.js",
+      "/components/angular-local-storage.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/user.js",

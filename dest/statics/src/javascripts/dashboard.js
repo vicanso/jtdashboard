@@ -44,6 +44,10 @@
       if (~index) {
         $scope.selectedSetList.splice(index, 1);
       }
+      if (set.selected) {
+        $scope.configs = null;
+        set.selected = false;
+      }
     };
     $scope.show = function(set) {
       if (set.selected) {

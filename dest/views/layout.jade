@@ -13,8 +13,9 @@ html(lang='zh-CN', ng-app='jtApp')
     include ./inlinejs
     //CSS_FILES_CONTAINER
     - fileImporter.import(['//cdn.staticfile.org/twitter-bootstrap/3.2.0/css/bootstrap.min.css', '//cdn.staticfile.org/font-awesome/4.2.0/css/font-awesome.css', '/stylesheets/ui.css', '/stylesheets/global.css']);
-    - fileImporter.import(['//cdn.staticfile.org/angular.js/1.2.20/angular.min.js', '/components/angular-local-storage/angular-local-storage.js', '//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js']);
-
+    - fileImporter.import(['//cdn.staticfile.org/angular.js/1.2.20/angular.min.js', '//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js']);
+    
+    - fileImporter.import('/components/angular-local-storage.js');
     - fileImporter.import('/services/utils.js');
     - fileImporter.import('/services/http_log.js');
     - fileImporter.import('/services/stats.js');
@@ -24,7 +25,7 @@ html(lang='zh-CN', ng-app='jtApp')
     - fileImporter.import('/directives/table.js');
     
     if PATTERN
-      - fileImporter.import('/components/debug/dist/debug.js');
+      - fileImporter.import('/components/debug.js');
     - fileImporter.import('/services/debug.js');
     
 

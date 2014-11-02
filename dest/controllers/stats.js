@@ -103,9 +103,12 @@
     if (key) {
       value = key.value;
       if (key.type === 'reg') {
-        value = new RegExp(value, 'gi');
+        conditions.key = {
+          '$regex': value
+        };
+      } else {
+        conditions.key = value;
       }
-      conditions.key = value;
     }
     return async.waterfall([
       function(cbf) {

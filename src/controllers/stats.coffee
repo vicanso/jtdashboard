@@ -83,8 +83,11 @@ getStatsData = (query, key, cbf) ->
   debug 'conditions:%j', conditions
   if key
     value = key.value
-    value = new RegExp value, 'gi' if key.type == 'reg'
-    conditions.key = value
+    if key.type == 'reg'
+      conditions.key = 
+        '$regex' : value
+    else
+      conditions.key = value
   async.waterfall [
     (cbf) ->
       mongodb.model(collection).find conditions, cbf
@@ -100,6 +103,7 @@ getStatsData = (query, key, cbf) ->
       else
         cbf null, docs
   ], cbf
+
 
 ###*
  * [sum description]

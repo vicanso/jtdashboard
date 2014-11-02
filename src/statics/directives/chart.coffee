@@ -100,7 +100,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       trigger : 'axis'
     calculable : true
     toolbox :
-      show : true
+      show : false
       feature :
         mark :
           show : false
@@ -126,7 +126,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       trigger : 'item'
       formatter : "{a} <br/>{b} : {c} ({d}%)"
     toolbox :
-      show : true
+      show : false
       feature :
         mark :
           show : false
@@ -955,6 +955,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
   return {
     restrict : 'A'
     link : (scope, element, attr, ctrl) ->
+      destroyed = false
       model = attr.jtChart
       config = scope[model]
       echartObj = null
@@ -965,6 +966,8 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
         if !update
           element.html '<div style="margin:15px"><div class="alert alert-info">正在加载数据，请稍候...</div></div>'
         jtChart.getData options, (err, data) ->
+          if destroyed
+            return
           if err
             element.html err.msg
           else if !data?.length
@@ -986,6 +989,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
             timeoutPromise = $timeout ->
               show options, true
             , refreshInterval * 1000
+            console.dir timeoutPromise.$$timeoutId
           return
         return
       show config if config
@@ -994,6 +998,7 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
         show v if v
         return
       scope.$on '$destroy', ->
+        destroyed = true
         element.empty()
         $timeout.cancel timeoutPromise if timeoutPromise
       return

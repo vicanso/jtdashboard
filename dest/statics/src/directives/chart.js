@@ -107,20 +107,20 @@
         },
         calculable: true,
         toolbox: {
-          show: true,
+          show: false,
           feature: {
             mark: {
-              show: true
+              show: false
             },
             dataView: {
-              show: true
+              show: false
             },
             magicType: {
-              show: true,
+              show: false,
               type: ['line', 'bar']
             },
             restore: {
-              show: true
+              show: false
             },
             saveAsImage: {
               show: true
@@ -140,16 +140,16 @@
           formatter: "{a} <br/>{b} : {c} ({d}%)"
         },
         toolbox: {
-          show: true,
+          show: false,
           feature: {
             mark: {
-              show: true
+              show: false
             },
             dataView: {
-              show: true
+              show: false
             },
             restore: {
-              show: true
+              show: false
             },
             saveAsImage: {
               show: true
@@ -1014,7 +1014,8 @@
       return {
         restrict: 'A',
         link: function(scope, element, attr, ctrl) {
-          var config, echartObj, model, show, timeoutPromise;
+          var config, destroyed, echartObj, model, show, timeoutPromise;
+          destroyed = false;
           model = attr.jtChart;
           config = scope[model];
           echartObj = null;
@@ -1031,6 +1032,9 @@
             }
             jtChart.getData(options, function(err, data) {
               var tmpObj, _ref;
+              if (destroyed) {
+                return;
+              }
               if (err) {
                 element.html(err.msg);
               } else if (!(data != null ? data.length : void 0)) {
@@ -1055,6 +1059,7 @@
                 timeoutPromise = $timeout(function() {
                   return show(options, true);
                 }, refreshInterval * 1000);
+                console.dir(timeoutPromise.$$timeoutId);
               }
             });
           };
@@ -1070,6 +1075,7 @@
             }
           });
           scope.$on('$destroy', function() {
+            destroyed = true;
             element.empty();
             if (timeoutPromise) {
               return $timeout.cancel(timeoutPromise);

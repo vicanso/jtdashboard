@@ -48,7 +48,7 @@
             var dom, getter, htmlArr;
             htmlArr = [];
             getter = $parse(model);
-            if (clear) {
+            if (clear || !getter(scope)) {
               if (multiple) {
                 getter.assign(scope, {});
               } else {
@@ -77,7 +77,7 @@
             if (newValues === oldValues) {
               return;
             }
-            appendList(newValues, true);
+            appendList(newValues, !!oldValues);
           });
           scope.$watch(model, function(v) {
             var values;

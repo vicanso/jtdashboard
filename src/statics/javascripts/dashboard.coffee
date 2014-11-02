@@ -38,6 +38,9 @@ fn = ($scope, $http, jtDebug, $log, user, jtSet) ->
     index = $scope.selectedSetList.indexOf set
     if ~index
       $scope.selectedSetList.splice index, 1
+    if set.selected
+      $scope.configs = null
+      set.selected = false
     return
 
   $scope.show = (set) ->

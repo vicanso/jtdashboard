@@ -42,7 +42,8 @@
       JTStats.average('usetime.html', timeline.html);
       JTStats.average('usetime.js', timeline.js);
       urlInfo = url.parse(referer);
-      JTStats.count("pv." + urlInfo.path, 1);
+      JTStats.count('pv');
+      JTStats.count("pv." + urlInfo.path);
     }
     return cbf(null, {
       msg: 'success'

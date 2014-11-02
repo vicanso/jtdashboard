@@ -44,21 +44,10 @@ module.directive 'jtSelect', ['$compile', '$parse', ($compile, $parse) ->
       
       appendList = (items, clear) ->
         htmlArr = []
-        
-        # keyList = model.split '.'
-        # lastKey = keyList.pop()
-        # result = scope
-        # angular.forEach keyList, (key) ->
-        #   result = scope[key]
-        #   return
-        # if clear
-        #   if multiple
-        #     result[lastKey] = {}
-        #   else
-        #     result[lastKey] = ''
           
         getter = $parse model
-        if clear
+
+        if clear || !getter(scope)
           if multiple
             getter.assign scope, {}
           else

@@ -1,5 +1,6 @@
 (function() {
-  var JTStats, adminHandler, config, crypto, d, debugParamsHandler, express, fs, initAppSetting, initMongod, initMonitor, initServer, logger, moment, path, requestStatistics, staticHandler, _;
+  var JTCluster, JTStats, adminHandler, config, crypto, debugParamsHandler, express, fs, initAppSetting, initMongod, initMonitor, initServer, logger, moment, path, requestStatistics, staticHandler, _,
+    __slice = [].slice;
 
   path = require('path');
 
@@ -14,6 +15,8 @@
   crypto = require('crypto');
 
   _ = require('underscore');
+
+  JTCluster = require('jtcluster');
 
   JTStats = require('./helpers/stats');
 
@@ -156,7 +159,7 @@
             msg: 'success'
           });
           return setTimeout(function() {
-            return process.exit();
+            return JTCluster.restartAll();
           }, 1000);
         } else {
           return res.status(500).json({
@@ -281,12 +284,24 @@
   if (config.env === 'development') {
     initServer();
   } else {
-    d = require('domain').create();
-    d.on('error', function(err) {
-      logger.error(err.stack);
-      return logger.error(err.message);
+    new JTCluster({
+      handler: initServer,
+      envs: [
+        {
+          jtProcessName: 'tiger'
+        }
+      ],
+      error: function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return logger.error.apply(logger, args);
+      },
+      log: function() {
+        var args;
+        args = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
+        return logger.log.apply(logger, args);
+      }
     });
-    d.run(initServer);
   }
 
 }).call(this);

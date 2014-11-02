@@ -166,6 +166,12 @@
             });
           }
         });
+        if (tmp.regKey) {
+          statConfig.keys.push({
+            value: tmp.regKey,
+            type: 'reg'
+          });
+        }
         return options.stats.push(statConfig);
       });
       debug("options:%j", options);

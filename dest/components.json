@@ -2,8 +2,8 @@
   "dashboard": {
     "js": [
       "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
-      "/components/angular-local-storage/angular-local-storage.js",
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
+      "/components/angular-local-storage.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/stats.js",
@@ -11,7 +11,7 @@
       "/directives/common.js",
       "/directives/chart.js",
       "/directives/table.js",
-      "/components/debug/dist/debug.js",
+      "/components/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
       "/javascripts/dashboard.js"
@@ -24,13 +24,13 @@
       "/stylesheets/menu.css",
       "/stylesheets/dashboard.css"
     ],
-    "modifiedAt": "2014-10-23 19:54:55"
+    "modifiedAt": "2014-11-02 11:42:28"
   },
   "add": {
     "js": [
       "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
-      "/components/angular-local-storage/angular-local-storage.js",
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
+      "/components/angular-local-storage.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/stats.js",
@@ -38,7 +38,7 @@
       "/directives/common.js",
       "/directives/chart.js",
       "/directives/table.js",
-      "/components/debug/dist/debug.js",
+      "/components/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
       "/javascripts/add.js"
@@ -52,13 +52,13 @@
       "/stylesheets/header.css",
       "/stylesheets/add.css"
     ],
-    "modifiedAt": "2014-10-24 21:13:17"
+    "modifiedAt": "2014-11-02 11:42:53"
   },
   "configs": {
     "js": [
       "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
-      "/components/angular-local-storage/angular-local-storage.js",
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
+      "/components/angular-local-storage.js",
       "/services/utils.js",
       "/services/http_log.js",
       "/services/stats.js",
@@ -66,7 +66,7 @@
       "/directives/common.js",
       "/directives/chart.js",
       "/directives/table.js",
-      "/components/debug/dist/debug.js",
+      "/components/debug.js",
       "/services/debug.js",
       "/javascripts/global.js",
       "/javascripts/configs.js"
@@ -80,19 +80,21 @@
       "/stylesheets/header.css",
       "/stylesheets/configs.css"
     ],
-    "modifiedAt": "2014-10-23 21:01:23"
+    "modifiedAt": "2014-11-02 11:43:20"
   },
   "readme": {
     "js": [
       "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
-      "/components/angular-local-storage/angular-local-storage.js",
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
+      "/components/angular-local-storage.js",
       "/services/utils.js",
       "/services/http_log.js",
+      "/services/stats.js",
       "/services/user.js",
       "/directives/common.js",
       "/directives/chart.js",
-      "/components/debug/dist/debug.js",
+      "/directives/table.js",
+      "/components/debug.js",
       "/services/debug.js",
       "/javascripts/global.js"
     ],
@@ -104,6 +106,6 @@
       "/stylesheets/menu.css",
       "/stylesheets/header.css"
     ],
-    "modifiedAt": "2014-10-22 18:05:55"
+    "modifiedAt": "2014-11-02 19:12:10"
   }
 }

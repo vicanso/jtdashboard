@@ -32,6 +32,9 @@ block bodyContainer
         .content.paramSelector
           .uiSelect(jt-select='categoryList' placeholder='请选择统计类别', ng-model='stat.category')
           .uiSelect(jt-select='$parent.keys[stat.category]' placeholder='请选择分类', ng-model='stat.keys', multiple='multiple')
+          .input-group
+            .input-group-addon 分类：
+            input.form-control(type='text', placeholder='请输入正则匹配', ng-model='stat.regKey')
           .btn-group
             a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "line"', ng-class='{"btn-success" : stat.chart == "line", disabled : !chartTypeStatusDict.line}') 折线图
             a.btn.btn-default(href='javascript:;', ng-click='stat.chart = "bar"', ng-class='{"btn-success" : stat.chart == "bar", disabled : !chartTypeStatusDict.bar}') 柱状图

@@ -119,7 +119,7 @@ adminHandler = (app) ->
         res.header 'Cache-Control', 'no-cache, no-store'
         res.status(200).json {msg : 'success'}
         setTimeout ->
-          process.exit();
+          JTCluster.restartAll();
         , 1000
         # jtCluster?.restartAll()
       else
@@ -241,9 +241,6 @@ else
     envs : [
       {
         jtProcessName : 'tiger'
-      }
-      {
-        jtProcessName : 'cuttlefish'
       }
     ]
     error : (args...) ->
