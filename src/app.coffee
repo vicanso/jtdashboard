@@ -5,6 +5,7 @@ express = require 'express'
 fs = require 'fs'
 crypto = require 'crypto'
 _ = require 'underscore'
+JTCluster = require 'jtcluster'
 
 JTStats = require './helpers/stats'
 logger = require('./helpers/logger') __filename
@@ -235,9 +236,18 @@ process.on 'exit', (code) ->
 if config.env == 'development'
   initServer()
 else
-  d = require('domain').create()
-  d.on 'error', (err) ->
-    logger.error err.stack
-    logger.error err.message
-  d.run initServer
-
+  new JTCluster {
+    handler : initServer
+    envs : [
+      {
+        jtProcessName : 'tiger'
+      }
+      {
+        jtProcessName : 'cuttlefish'
+      }
+    ]
+    error : (args...) ->
+      logger.error.apply logger, args
+    log : (args...) ->
+      logger.log.apply logger, args
+  }
