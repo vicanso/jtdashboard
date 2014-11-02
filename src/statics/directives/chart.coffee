@@ -103,14 +103,14 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       show : true
       feature :
         mark :
-          show : true
+          show : false
         dataView : 
-          show : true
+          show : false
         magicType : 
-          show :true
+          show : false
           type : ['line', 'bar']
         restore : 
-          show : true
+          show : false
         saveAsImage : 
           show : true
     yAxis : [
@@ -129,11 +129,11 @@ module.directive 'jtChart', ['$http', '$timeout', '$q', 'jtUtils', 'jtDebug', ($
       show : true
       feature :
         mark :
-          show : true
+          show : false
         dataView :
-          show : true
+          show : false
         restore :
-          show : true
+          show : false
         saveAsImage :
           show : true
       calculable : true

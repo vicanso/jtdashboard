@@ -85,7 +85,7 @@ module.directive 'jtSelect', ['$compile', '$parse', ($compile, $parse) ->
 
       scope.$watch jtSelect, (newValues, oldValues) ->
         return if newValues == oldValues
-        appendList newValues, true
+        appendList newValues, !!oldValues
         return
       
       scope.$watch model, (v) ->

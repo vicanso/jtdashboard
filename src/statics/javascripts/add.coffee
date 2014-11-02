@@ -150,6 +150,11 @@ fn = ($scope, $http, $element, $timeout, jtDebug, $log, jtUtils, user, jtStatsCo
           statConfig.keys.push {
             value : k
           }
+      if tmp.regKey
+        statConfig.keys.push {
+          value : tmp.regKey
+          type : 'reg'
+        }
       options.stats.push statConfig
     debug "options:%j", options
     options
