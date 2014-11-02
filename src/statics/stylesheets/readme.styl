@@ -1,0 +1,22 @@
+@import 'nib'
+@import './common'
+
+.readMePage
+  position absolute
+  left $MENU_WIDTH + 20
+  top $HEADER_HEIGHT
+  right 20px
+  bottom 0
+  overflow-y scroll
+  .readMe
+    padding 20px
+    margin 20px 0
+    border 1px solid $BORDER_COLOR
+    border-left 5px solid #d9534f
+    border-radius 3px
+    h4 a, h5
+      color #d9534f
+    img
+      display block
+      max-width 100%
+      margin auto

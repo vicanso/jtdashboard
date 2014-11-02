@@ -9,6 +9,7 @@ JTCluster = require 'jtcluster'
 
 JTStats = require './helpers/stats'
 logger = require('./helpers/logger') __filename
+fileHash = require './helpers/hash'
 
 ###*
  * [initAppSetting 初始化app的配置]
@@ -22,6 +23,15 @@ initAppSetting = (app) ->
 
   app.locals.ENV = config.env
   app.locals.STATIC_URL_PREFIX = config.staticUrlPrefix
+
+  app.locals.convertImgSrc = (src) ->
+    newSrc = config.staticUrlPrefix + src
+    if config.env == 'development'
+      newSrc
+    else
+      file = path.join config.staticPath, src
+      key = fileHash.createSync file
+      "#{newSrc}?v=#{key}"
   return
 
 ###*
@@ -121,7 +131,6 @@ adminHandler = (app) ->
         setTimeout ->
           JTCluster.restartAll();
         , 1000
-        # jtCluster?.restartAll()
       else
         res.status(500).json {msg : 'fail, the key is wrong'}
     else
@@ -204,7 +213,7 @@ initServer = ->
   app.use timeout 60 * 1000
 
 
-  staticHandler app, '/static', path.join "#{__dirname}/statics"
+  staticHandler app, '/static', config.staticPath
 
   
 
