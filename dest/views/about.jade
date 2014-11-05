@@ -2,13 +2,13 @@ extends ./layout
 block bodyContainer
   include ./menu
   include ./header
-  .readMePage
-    .readMe
+  .aboutPage
+    .contentContainer
       h4 
         a(href='#JTDashboard') JTDashboard简介
       p 主要是展示JTStats收集的各种数据图表，可以以折线图、柱状图、环形图和表格等。
 
-    .readMe
+    .contentContainer
       h4
         a(href='#addConfig') 添加统计配置
       p 通过选择图表类型、时间选择和参数选择来配置不同的统计图表，下面我们来选择最近7天TCP、UDP连接数的统计示例。
@@ -26,5 +26,14 @@ block bodyContainer
         li 保存结果：这只要填上统计名称和统计描述就可以了，很简单。
 
       img(src='#{convertImgSrc("/pics/002.png")}')
+
+    .contentContainer
+      h4
+        a(href='#configs') 统计配置的组合
+      p 通过将前面配置的统计组合起来，方便分析各种数据之间的关系。如下图所示，选择需要一齐展示的统计配置，输入名称之后就可以生成统计配置组合，在首页中选择展示。
+      img(src='#{convertImgSrc("/pics/003.png")}')
+
       
-  - fileImporter.import('/stylesheets/readme.css');
+
+      
+  - fileImporter.import('/stylesheets/about.css');

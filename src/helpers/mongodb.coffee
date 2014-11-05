@@ -40,6 +40,8 @@ module.exports.initModels = (modelPath) ->
   models = requireTree modelPath
   _.each models, (model, name) ->
     name = name.charAt(0).toUpperCase() + name.substring 1
+    if model.name
+      name = model.name
     schema = new Schema model.schema, model.options
     if model.indexes
       _.each model.indexes, (indexOptions) ->

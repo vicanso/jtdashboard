@@ -16,6 +16,7 @@ block bodyContainer
     
 
     .chartListContainer
+      .alert.alert-success(ng-show='!configs') 请先从右上角配置列表中选择要展示的统计配置，若第一次使用请先查看About
       div(ng-repeat='config in configs', ng-class='{"col-xs-4" : config.area == 0, "col-xs-6" : config.area == 1, "col-xs-8" : config.area == 2, "col-xs-12" : config.area == 3}', ng-switch='statsOptions.type')
         div(ng-switch-when='table', jt-table='config')
         .chart(ng-switch-default, jt-chart='config')

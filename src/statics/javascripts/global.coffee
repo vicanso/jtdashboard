@@ -67,7 +67,7 @@ app.run ['$http', '$timeout', ($http, $timeout) ->
     fn angular.element document.getElementsByTagName('body')
     
 
-    console.dir "watcher total:#{watchers.length}"
+    console.log "watcher total:#{watchers.length}"
     $timeout ->
       checkWatchers()
     , checkInterval

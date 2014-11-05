@@ -82,7 +82,7 @@
     ],
     "modifiedAt": "2014-11-02 11:43:20"
   },
-  "readme": {
+  "about": {
     "js": [
       "//cdn.staticfile.org/angular.js/1.2.20/angular.min.js",
       "//cdn.staticfile.org/echarts/2.0.2/echarts-plain.js",
@@ -104,8 +104,9 @@
       "/stylesheets/ui.css",
       "/stylesheets/global.css",
       "/stylesheets/menu.css",
-      "/stylesheets/header.css"
+      "/stylesheets/header.css",
+      "/stylesheets/about.css"
     ],
-    "modifiedAt": "2014-11-02 19:12:10"
+    "modifiedAt": "2014-11-05 19:24:18"
   }
 }

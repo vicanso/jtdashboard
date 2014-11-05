@@ -1,17 +1,23 @@
 (function() {
-  var program;
+  var JTCluster, path, program;
 
   program = require('commander');
 
+  JTCluster = require('jtcluster');
+
+  path = require('path');
+
   (function() {
-    return program.version('0.0.1').option('-p, --port <n>', 'listen port', parseInt).option('--node <n>', 'the name for running process').option('--mongodb <n>', 'mongodb uri eg.mongodb://localhost:10020/test, mongodb://user:pwd@localhost:10020/test').option('--redis <n>', 'redis uri eg.redis://localhost:10010, redis://pwd@localhost:10010').option('--stats <n>', 'stats uri eg.stats://localhost:6000').parse(process.argv);
+    return program.version('0.0.1').option('-p, --port <n>', 'listen port', parseInt).option('--mongodb <n>', 'mongodb uri eg.mongodb://localhost:10020/test, mongodb://user:pwd@localhost:10020/test').option('--redis <n>', 'redis uri eg.redis://localhost:10010, redis://pwd@localhost:10010').option('--stats <n>', 'stats uri eg.stats://localhost:6000').parse(process.argv);
   })();
 
   exports.port = program.port || 10000;
 
   exports.env = process.env.NODE_ENV || 'development';
 
-  exports.nodeName = program.node || 'vicanso';
+  exports.staticPath = path.join(__dirname, 'statics');
+
+  exports.nodeName = process.env.jtProcessName || 'vicanso';
 
   exports.app = 'jt-dashboard';
 

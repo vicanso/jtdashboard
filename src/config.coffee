@@ -18,7 +18,7 @@ exports.env = process.env.NODE_ENV || 'development'
 
 exports.staticPath = path.join __dirname, 'statics'
 
-exports.nodeName = JTCluster.name || 'vicanso'
+exports.nodeName = process.env.jtProcessName || 'vicanso'
 
 exports.app = 'jt-dashboard'
 

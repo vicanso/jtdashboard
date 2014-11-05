@@ -249,7 +249,10 @@ else
     handler : initServer
     envs : [
       {
-        jtProcessName : 'tiger'
+        jtProcessName : 'tg'
+      }
+      {
+        jtProcessName : 'cf'
       }
     ]
     error : (args...) ->

@@ -9,12 +9,12 @@
 
   _ = require('underscore');
 
-  debug = require('debug')('jt.controller.readme');
+  debug = require('debug')('jt.controller.about');
 
   module.exports = function(req, res, cbf) {
     return cbf(null, {
       viewData: {
-        page: 'readme'
+        page: 'about'
       }
     });
   };

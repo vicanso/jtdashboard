@@ -1,5 +1,5 @@
 (function() {
-  var JTCluster, JTStats, adminHandler, config, crypto, debugParamsHandler, express, fs, initAppSetting, initMongod, initMonitor, initServer, logger, moment, path, requestStatistics, staticHandler, _,
+  var JTCluster, JTStats, adminHandler, config, crypto, debugParamsHandler, express, fileHash, fs, initAppSetting, initMongod, initMonitor, initServer, logger, moment, path, requestStatistics, staticHandler, _,
     __slice = [].slice;
 
   path = require('path');
@@ -22,6 +22,8 @@
 
   logger = require('./helpers/logger')(__filename);
 
+  fileHash = require('./helpers/hash');
+
 
   /**
    * [initAppSetting 初始化app的配置]
@@ -35,6 +37,17 @@
     app.set('views', "" + __dirname + "/views");
     app.locals.ENV = config.env;
     app.locals.STATIC_URL_PREFIX = config.staticUrlPrefix;
+    app.locals.convertImgSrc = function(src) {
+      var file, key, newSrc;
+      newSrc = config.staticUrlPrefix + src;
+      if (config.env === 'development') {
+        return newSrc;
+      } else {
+        file = path.join(config.staticPath, src);
+        key = fileHash.createSync(file);
+        return "" + newSrc + "?v=" + key;
+      }
+    };
   };
 
 
@@ -262,7 +275,7 @@
     }
     timeout = require('connect-timeout');
     app.use(timeout(60 * 1000));
-    staticHandler(app, '/static', path.join("" + __dirname + "/statics"));
+    staticHandler(app, '/static', config.staticPath);
     app.use(require('method-override')());
     bodyParser = require('body-parser');
     app.use(bodyParser.urlencoded({
@@ -288,7 +301,9 @@
       handler: initServer,
       envs: [
         {
-          jtProcessName: 'tiger'
+          jtProcessName: 'tg'
+        }, {
+          jtProcessName: 'cf'
         }
       ],
       error: function() {

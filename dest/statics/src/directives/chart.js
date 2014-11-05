@@ -1059,7 +1059,6 @@
                 timeoutPromise = $timeout(function() {
                   return show(options, true);
                 }, refreshInterval * 1000);
-                console.dir(timeoutPromise.$$timeoutId);
               }
             });
           };

@@ -65,6 +65,9 @@
     _.each(models, function(model, name) {
       var schema;
       name = name.charAt(0).toUpperCase() + name.substring(1);
+      if (model.name) {
+        name = model.name;
+      }
       schema = new Schema(model.schema, model.options);
       if (model.indexes) {
         _.each(model.indexes, function(indexOptions) {

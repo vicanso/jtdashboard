@@ -20,10 +20,7 @@ module.factory 'jtHttpLog', ['$q', '$injector', 'localStorageService', ($q, $inj
   postHttpLog = ->
     $http = $injector.get '$http'
     if httpLogStorage.success.length || httpLogStorage.error.length
-      $http.post('/httplog', httpLogStorage).success((res) ->
-        console.dir res
-      ).error (res) ->
-        console.dir res
+      $http.post('/httplog', httpLogStorage)
       httpLogStorage =
         success : []
         error : []

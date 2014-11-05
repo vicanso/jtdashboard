@@ -28,11 +28,7 @@
         var $http;
         $http = $injector.get('$http');
         if (httpLogStorage.success.length || httpLogStorage.error.length) {
-          $http.post('/httplog', httpLogStorage).success(function(res) {
-            return console.dir(res);
-          }).error(function(res) {
-            return console.dir(res);
-          });
+          $http.post('/httplog', httpLogStorage);
           httpLogStorage = {
             success: [],
             error: []

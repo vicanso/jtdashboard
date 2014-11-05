@@ -80,7 +80,7 @@
           });
         };
         fn(angular.element(document.getElementsByTagName('body')));
-        console.dir("watcher total:" + watchers.length);
+        console.log("watcher total:" + watchers.length);
         $timeout(function() {
           return checkWatchers();
         }, checkInterval);
