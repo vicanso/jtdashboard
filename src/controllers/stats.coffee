@@ -135,12 +135,11 @@ mergeDocs = (docs) ->
     key = doc.key
     result[key] = [] if !result[key]
     startOfSeconds = Math.floor moment(doc.date, 'YYYY-MM-DD').valueOf() / 1000
-    doc.values = _.map doc.values, (value) ->
-      tmp = {}
-      _.each value, (v, t) ->
-        tmp.t = GLOBAL.parseInt(t) + startOfSeconds
-        tmp.v = v
-        return
+    doc.values = _.map doc.seconds, (v, t) ->
+      tmp = {
+        t : GLOBAL.parseInt(t) + startOfSeconds
+        v : v
+      }
       tmp
     result[key].push doc
   _.map result, (values, key) ->
