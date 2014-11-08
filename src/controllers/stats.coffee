@@ -90,7 +90,7 @@ getStatsData = (query, key, cbf) ->
       conditions.key = value
   async.waterfall [
     (cbf) ->
-      mongodb.model(collection).find conditions, cbf
+      getData collection, conditions, interval, cbf
     (docs, cbf) ->
       docs = mergeDocs docs
       if interval < 0
@@ -103,6 +103,31 @@ getStatsData = (query, key, cbf) ->
       else
         cbf null, docs
   ], cbf
+
+
+getData = (collection, conditions, interval, cbf) ->
+  mapOptions =
+    query : conditions,
+    scope :
+      interval : interval
+    map : ->
+      if interval >= 60 * 10 && @tenMinutes
+        # 使用10分钟间隔的统计数据
+        delete @minutes
+        delete @seconds
+      else if interval >= 60 && @minutes
+        # 使用1分钟间隔的统计数据
+        delete @seconds
+        delete @tenMinutes
+      else
+        # 使用10秒间隔的统计数据
+        delete @minutes
+        delete @tenMinutes
+      emit @_id, @
+  mongodb.model(collection).mapReduce mapOptions, (err, docs) ->
+    return cbf err if err
+    cbf null, _.map docs, (doc) ->
+      doc.value
 
 
 ###*
@@ -131,16 +156,27 @@ average = (data) ->
 mergeDocs = (docs) ->
   result = {}
   _.each docs, (doc) ->
-    doc = doc.toObject()
     key = doc.key
     result[key] = [] if !result[key]
     startOfSeconds = Math.floor moment(doc.date, 'YYYY-MM-DD').valueOf() / 1000
-    doc.values = _.map doc.seconds, (v, t) ->
-      tmp = {
-        t : GLOBAL.parseInt(t) + startOfSeconds
-        v : v
-      }
-      tmp
+    _.each ['seconds', 'minutes', 'tenMinutes'], (k) ->
+      return if !doc[k]
+      switch k
+        when 'tenMinutes'
+          interval = 600
+        when 'minutes'
+          interval = 60
+        else
+          interval = 1
+      doc.values = _.map doc[k], (v, t) ->
+        {
+          t : GLOBAL.parseInt(t) * interval + startOfSeconds
+          v : v
+        }
+
+    delete doc.seconds
+    delete doc.minutes
+    delete doc.tenMinutes
     result[key].push doc
   _.map result, (values, key) ->
     firstItem = _.first values
