@@ -9,13 +9,25 @@ JTDashboard
 
 
 很早之前，一直想对自己写的代码做性能优化，包括前端与后端，但是一直不知道怎么下手，没有衡量的指标，只能靠自己认为，优化了也不知道有什么作用，后来有了解到 [StatsD](https://github.com/etsy/statsd)，发现统计原来也可以很简单，大部的统计都是和数字相关，因此自己试用了StatsD。感觉很不错，不过不太喜欢 [graphite](http://graphite.readthedocs.org/en/latest/)，因此自己就另外尝试了写了另外一套方案。
+
 注：如果是在产品线上，我建议使用StatsD
 
 
 相关模块：
 ======
 
-[JTStats](https://github.com/vicanso/jtstats) 数据收集的后端。
+[JTStats](https://github.com/vicanso/jtstats) 数据收集的后端服务
 
 [JTStats_client](https://github.com/vicanso/jtstats_client) JTStats Client
+
+
+示例：
+
+![配置](https://raw.githubusercontent.com/vicanso/jtdashboard/master/dest/statics/pics/001.png)
+
+
+![折线图](https://raw.githubusercontent.com/vicanso/jtdashboard/master/dest/statics/pics/002.png)
+
+
+![配置组合](https://raw.githubusercontent.com/vicanso/jtdashboard/master/dest/statics/pics/003.png)
 
