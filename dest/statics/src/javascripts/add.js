@@ -9,6 +9,7 @@
       debug = jtDebug('jt.jtStatsConfig');
       intervalConvertInfos = {
         '最近': -1,
+        '10秒': 10,
         '1分钟': 60,
         '5分钟': 300,
         '10分钟': 600,
@@ -37,7 +38,7 @@
           });
         },
         getIntervalList: function() {
-          return '最近 1分钟 5分钟 10分钟 30分钟 1小时 2小时 6小时 12小时 1天'.split(' ');
+          return '最近 10秒 1分钟 5分钟 10分钟 30分钟 1小时 2小时 6小时 12小时 1天'.split(' ');
         },
         convertInterval: function(interval) {
           return intervalConvertInfos[interval];

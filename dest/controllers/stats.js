@@ -1,5 +1,5 @@
 (function() {
-  var arrangePoints, async, average, config, debug, getStatsData, logger, mergeDocs, moment, mongodb, sum, _;
+  var arrangePoints, async, average, config, debug, getData, getStatsData, logger, mergeDocs, moment, mongodb, sum, _;
 
   mongodb = require('../helpers/mongodb');
 
@@ -112,7 +112,7 @@
     }
     return async.waterfall([
       function(cbf) {
-        return mongodb.model(collection).find(conditions, cbf);
+        return getData(collection, conditions, interval, cbf);
       }, function(docs, cbf) {
         docs = mergeDocs(docs);
         if (interval < 0) {
@@ -127,6 +127,37 @@
         }
       }
     ], cbf);
+  };
+
+  getData = function(collection, conditions, interval, cbf) {
+    var mapOptions;
+    mapOptions = {
+      query: conditions,
+      scope: {
+        interval: interval
+      },
+      map: function() {
+        if (interval >= 60 * 10 && this.tenMinutes) {
+          delete this.minutes;
+          delete this.seconds;
+        } else if (interval >= 60 && this.minutes) {
+          delete this.seconds;
+          delete this.tenMinutes;
+        } else {
+          delete this.minutes;
+          delete this.tenMinutes;
+        }
+        return emit(this._id, this);
+      }
+    };
+    return mongodb.model(collection).mapReduce(mapOptions, function(err, docs) {
+      if (err) {
+        return cbf(err);
+      }
+      return cbf(null, _.map(docs, function(doc) {
+        return doc.value;
+      }));
+    });
   };
 
 
@@ -167,21 +198,36 @@
     result = {};
     _.each(docs, function(doc) {
       var key, startOfSeconds;
-      doc = doc.toObject();
       key = doc.key;
       if (!result[key]) {
         result[key] = [];
       }
       startOfSeconds = Math.floor(moment(doc.date, 'YYYY-MM-DD').valueOf() / 1000);
-      doc.values = _.map(doc.values, function(value) {
-        var tmp;
-        tmp = {};
-        _.each(value, function(v, t) {
-          tmp.t = GLOBAL.parseInt(t) + startOfSeconds;
-          tmp.v = v;
+      _.each(['seconds', 'minutes', 'tenMinutes'], function(k) {
+        var interval;
+        if (!doc[k]) {
+          return;
+        }
+        switch (k) {
+          case 'tenMinutes':
+            interval = 600;
+            break;
+          case 'minutes':
+            interval = 60;
+            break;
+          default:
+            interval = 1;
+        }
+        doc.values = _.map(doc[k], function(v, t) {
+          return {
+            t: GLOBAL.parseInt(t) * interval + startOfSeconds,
+            v: v
+          };
         });
-        return tmp;
       });
+      delete doc.seconds;
+      delete doc.minutes;
+      delete doc.tenMinutes;
       return result[key].push(doc);
     });
     return _.map(result, function(values, key) {

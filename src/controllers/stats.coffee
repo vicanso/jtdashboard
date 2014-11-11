@@ -173,6 +173,7 @@ mergeDocs = (docs) ->
           t : GLOBAL.parseInt(t) * interval + startOfSeconds
           v : v
         }
+      return
 
     delete doc.seconds
     delete doc.minutes
