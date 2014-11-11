@@ -33,7 +33,7 @@
     "jtdev": "0.0.4",
     "jtfileimporter": "0.0.7",
     "jtmerger": "0.0.5",
-    "jtstats_client": "0.0.8",
+    "jtstats_client": "0.1.1",
     "method-override": "2.2.0",
     "moment": "2.8.3",
     "mongoose": "3.8.17",
