@@ -14,19 +14,22 @@
   JTStats = require('../helpers/stats');
 
   module.exports = function(req, res, cbf) {
-    var data, ip, referer, timeline, ua, unitWidth, urlInfo, usResult, view, width;
+    var data, ip, maxAge, referer, timeline, ua, unitWidth, urlInfo, usResult, view, width;
     ua = req.header('user-agent');
     referer = req.header('referer');
     ip = req.ip;
     data = req.body;
-    console.dir(req.cookies);
     if (data) {
       timeline = data.timeline;
       view = data.view;
       logger.info("ip:" + ip + ", html use " + timeline.html + "ms, js use " + timeline.js + "ms, ua:" + ua + ", referer:" + referer + ", width:" + view.width + ", height:" + view.height);
       usResult = new UserAgentParser(ua).getResult();
-      JTStats.count("os." + usResult.os.name + "." + usResult.os.version);
-      JTStats.count("browser." + usResult.browser.name + "." + usResult.browser.major);
+      if (usResult.os.name) {
+        JTStats.count("os." + usResult.os.name);
+      }
+      if (usResult.browser.name) {
+        JTStats.count("browser." + usResult.browser.name);
+      }
       width = view.width;
       if (width < 1000) {
         JTStats.count('width.0-1000');
@@ -37,7 +40,11 @@
       }
       if (!req.cookies.JT_Dashboard) {
         JTStats.count('uv');
-        res.cookie('JT_Dashboard', 'vicanso');
+        maxAge = 24 * 3600 * 1000;
+        res.cookie('JT_Dashboard', 'vicanso', {
+          maxAge: maxAge,
+          httpOnly: true
+        });
       }
       JTStats.average('usetime.html', timeline.html);
       JTStats.average('usetime.js', timeline.js);
