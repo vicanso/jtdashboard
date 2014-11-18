@@ -3,6 +3,8 @@ JTDashboard
 
 通过UDP的方式将统计数据发送到统计后台，在特定的时间段（默认10秒）内整理数据之后，存储到数据库。能支持三种类型的统计数据：累加、均值和数值型。
 
+我的统计站点：[dashboard.vicanso.com](http://dashboard.vicanso.com/)
+
 
 背景
 ======
