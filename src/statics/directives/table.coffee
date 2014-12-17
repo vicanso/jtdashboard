@@ -77,7 +77,7 @@ module.directive 'jtTable', ['$compile', '$http','jtDebug', 'jtStats', ($compile
             '</tr></thead>' +
             '<tbody>' +
               '<tr ng-repeat="data in tableData">' +
-                '<td ng-repeat="td in data track by $index" ng-bind="td"></td>' +
+                '<td ng-repeat="td in data track by $index" ng-bind="td || 0 "></td>' +
               '</tr>' +
             '</tbody>' +
           '</table>' +

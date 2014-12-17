@@ -84,7 +84,7 @@
           };
           showTable = function(subScope) {
             var dom, html;
-            html = '<div class="panel panel-default">' + '<div class="panel-heading" ng-bind="name"></div>' + '<table class="table">' + '<thead><tr>' + '<th ng-repeat="th in theadData" ng-click="sortByIndex($index)">' + '<span ng-bind="th"></span>' + '<i class="fa" ng-class="{\'fa-sort\' : sort.index != $index, \'fa-sort-desc\' : sort.index == $index && sort.order == 0, \'fa-sort-asc\' : sort.index == $index && sort.order == 1}"></i>' + '</th>' + '</tr></thead>' + '<tbody>' + '<tr ng-repeat="data in tableData">' + '<td ng-repeat="td in data track by $index" ng-bind="td"></td>' + '</tr>' + '</tbody>' + '</table>' + '</div>';
+            html = '<div class="panel panel-default">' + '<div class="panel-heading" ng-bind="name"></div>' + '<table class="table">' + '<thead><tr>' + '<th ng-repeat="th in theadData" ng-click="sortByIndex($index)">' + '<span ng-bind="th"></span>' + '<i class="fa" ng-class="{\'fa-sort\' : sort.index != $index, \'fa-sort-desc\' : sort.index == $index && sort.order == 0, \'fa-sort-asc\' : sort.index == $index && sort.order == 1}"></i>' + '</th>' + '</tr></thead>' + '<tbody>' + '<tr ng-repeat="data in tableData">' + '<td ng-repeat="td in data track by $index" ng-bind="td || 0 "></td>' + '</tr>' + '</tbody>' + '</table>' + '</div>';
             dom = element.children('div').html(html);
             $compile(dom)(subScope);
           };
