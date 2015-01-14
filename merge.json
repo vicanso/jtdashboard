@@ -1,0 +1,15 @@
+{
+  "path" : "/merge",
+  "except" : [
+    "/component/debug.js",
+    "/component/angular.js"
+  ],
+  "files" : [
+    [
+      "/component/angular-local-storage.js",
+      "/service/utils.js",
+      "/service/http_log.js",
+      "/service/debug.js"
+    ]
+  ]
+}

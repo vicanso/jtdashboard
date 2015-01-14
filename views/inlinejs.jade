@@ -1,0 +1,39 @@
+script.
+  (function(global){
+    global.CONFIG = {
+      debug : #{DEBUG || 0},
+      env : '#{ENV}',
+      pattern : '#{PATTERN || ""}',
+      staticUrlPrefix : '#{STATIC_URL_PREFIX}',
+      template : '#{TEMPLATE}'
+    };
+    global.TIMING = {
+      logs : {},
+      startTimes : {},
+      start : function(tag){
+        this.startTimes[tag] = new Date().getTime();
+        return this;
+      },
+      end : function(tag, startTag){
+        var startTimes = this.startTimes;
+        var start = startTimes[tag] || startTimes[startTag];
+        if(start){
+          this.logs[tag] = new Date().getTime() - start;
+        }
+        return this;
+      },
+      getLogs : function(){
+        return this.logs;
+      }
+    };
+    global.TIMING.start('html');
+    global.onerror = function(msg, url , line, row, err){
+      var stack = '';
+      if(err){
+        stack = err.stack;
+      }
+      if(CONFIG.env === 'development'){
+        alert('msg:' + msg + ', url:' + url + ', line:' + line + ', row:' + row + ', stack:' + stack);
+      }
+    };
+  })(this);

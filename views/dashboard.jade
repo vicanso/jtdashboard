@@ -1,0 +1,22 @@
+extends ./layout
+block bodyContainer
+  .dashboardPage(ng-controller='DashboardController as dashboard')
+    header.header
+      input.search(type='search', placeholder='search by keyword')
+      .functions.pull-right
+        a(href='javascript:;'): i.glyphicon.glyphicon-bell
+        a(href='javascript:;'): i.glyphicon.glyphicon-fullscreen
+        a(href='javascript:;'): i.glyphicon.glyphicon-cog
+
+    .logo
+
+    nav.nav: ul
+      li 
+        i.glyphicons.glyphicons-macbook
+        | GOSI
+      li TEST
+      li ABC
+
+
+  - importer.import('/dashboard/controller.js');
+  - importer.import('/css/dashboard.css');

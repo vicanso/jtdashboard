@@ -1,0 +1,24 @@
+extends ./layout
+block bodyContainer
+  .homePage(ng-controller='HomePageController')
+    p 测试页
+    input(type='text', ng-model='user.name', jt-focus)
+    p 「全球最大的开源公司」这一名号，在数易其主之后，最终归属了 Facebook。这家非典型的开源公司不依靠出售软件盈利，反而走上了开源的道路—提供开源代码，经营开源社区。
+
+    p Red Hat 最终还是碰上竞争对手了。随着Hortonworks 以十亿美元的市值公开上市，「全球最大的开源公司」这一名号的归属眼看就要引发一番竞争。
+
+    p 但现在，不论是 Red Hat 还是 Hortonworks，都用不着再去争这个头衔了。
+  
+    p 几年前，我（本文作者：Matt Asay）在一次论辩中说，Google 是世界上最大的开源公司。但今天，Facebook 拿走的这一荣衔。Google、Twitter、Netflix 等其他的网络巨头，都推出了大量的开源软件，但只有 Facebook 走的是大规模提供开源代码和开源社区的道路。
+
+    p 在开源的模式上越做越大
+
+    p Facebook 将开源的模式推向极致。Facebook 将所有事物都向用户开放：软件、硬件和技术诀窍。一定程度上，这是 Facebook 吸引开发商的方式之一。但「分享一切」的原则，也正是 Facebook 成功之钥。
+
+    p 至于软件方面，没有哪一家公司能比 Facebook 开放更多的开源代码、提供更多的技术支持。
+
+    p 基于 2013 年的 90 个源代码存储数据库，仅 2014 年一年，Facebook 就设立了 107 项开源项目，这就让 Facebook 的开源项目总数达到了 225 项。
+
+    p Apache Cassandra（一种 NoSQL 数据库）、Thrift（为扩展性跨语言服务提供框架）、Apache Hive（建立在 Hadoop 顶端的数据仓库基础结构）及其他很多项目，都属于 Facebook 自己的开源项目。而除此之外，Facebook 还积极地帮助大量外部项目发展，包括 Apache Hadoop 和 MySQL。
+  - importer.import('/js/home.js');
+  - importer.import('/css/home.css');

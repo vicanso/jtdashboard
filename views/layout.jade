@@ -1,0 +1,44 @@
+doctype html
+html(lang='zh-CN', ng-app='jtApp')
+  head
+    meta(http-equiv='Content-Type', content='text/html; charset=UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name="HandheldFriendly", content="True")
+    meta(name="viewport", content="width=device-width, initial-scale=1, user-scalable=no")
+    meta(http-equiv="cleartype", content="on")
+    meta(name='keywords', content='')
+    meta(name='description', content='')
+    meta(name='author',content='小墨鱼 vicanso 腻味 tree')
+    link(rel='icon', href='#{STATIC_URL_PREFIX}/img/favicon.ico')  
+    title #{title}
+    include ./inlinejs
+    //CSS_FILES_CONTAINER
+    if PATTERN
+      - importer.import('/component/debug.js');
+    - importer.import('/component/bootstrap.css', '/component/angular.js', '/component/angular-local-storage.js');
+
+    - importer.import('/service/utils.js', '/service/http_log.js', '/service/debug.js');
+    //- - importer.import(['/components/angularjs/angular.js', '/components/script.js/dist/script.js', '/components/angular-local-storage/angular-local-storage.js']);
+
+    //- - importer.import('/services/utils.js');
+    //- - importer.import('/services/http_log.js');
+    //- - importer.import('/services/user.js');
+
+    //- - importer.import('/directives/common.js');
+
+    //- if PATTERN
+    //-   - importer.import('/components/debug/dist/debug.js');
+
+
+
+    - importer.import('/js/global.js');
+
+  body
+    block bodyContainer
+  include ./global_variable
+  script.
+    TIMING.end('html');
+    TIMING.start('js');
+  //JS_FILES_CONTAINER
+  script.
+    TIMING.end('js');
