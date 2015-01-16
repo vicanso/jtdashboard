@@ -1,0 +1,34 @@
+@import 'nib'
+@import './constant'
+.navContainer
+  width $NAV_WIDTH
+  background-color #475e6e
+  position absolute
+  left 0
+  top 0
+  bottom 0
+  ul
+    list-style none
+    margin 0
+    padding 0
+    li
+      height 60px
+      line-height @height
+      &.active
+        background-color #01aac9
+        i
+          color #f6f6f6
+      &.logo
+        color #fff
+        height 100px
+        background #1d3446 no-repeat center
+        background-size contain
+      a
+        display block
+        padding-left 15px
+        color #f6f6f6
+        font-size 18px
+        i
+          margin-top 3px
+          color #808e9b
+          margin-right 15px

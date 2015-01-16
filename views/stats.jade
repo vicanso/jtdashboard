@@ -1,0 +1,9 @@
+extends ./layout
+block bodyContainer
+  include ./header
+  include ./nav
+  .dashboardPage(ng-controller='StatsController as stats')
+
+
+  - importer.import('/stats/controller.js');
+  - importer.import('/css/stats.css');

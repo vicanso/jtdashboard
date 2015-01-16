@@ -47,4 +47,4 @@ exports.session = {
 
 
 // mongodb服务器的连接uri
-exports.mongodbUri = 'mongodb://localhost:10020/test';
+exports.mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost:10020/test';

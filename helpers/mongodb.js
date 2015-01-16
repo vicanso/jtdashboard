@@ -77,3 +77,38 @@ exports.model = function(name){
   }
   return client.model(name);
 };
+
+
+var initializedModels = [];
+/**
+ * [getStatsModel 通过collection name获取对应的model]
+ * @param  {[type]} name [description]
+ * @return {[type]}      [description]
+ */
+exports.getStatsModel = function(name){
+  if(!client){
+    throw new Error('the db is not init!');
+  }
+  var model;
+  if(~_.indexOf(initializedModels, name)){
+    model = client.model(name);
+  }else{
+    var schema = new Schema({}, {
+      safe : false,
+      strict : false,
+      collection : name
+    });
+    schema.index([
+      {
+        key : 1
+      },
+      {
+        key : 1,
+        date : 1
+      }
+    ]);
+    model = client.model(name, schema);
+    initializedModels.push(name);
+  }
+  return model;
+};

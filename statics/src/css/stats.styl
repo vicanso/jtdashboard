@@ -1,0 +1,72 @@
+@import 'nib'
+html, body
+  height 100%
+  overflow hidden
+  
+$headerHeight = 60px;
+$navWidth = 180px;
+$logoHeight = 100px;
+
+HeaderCss()
+  > .header
+    position absolute
+    left $navWidth
+    right 0
+    top 0
+    height $headerHeight
+    line-height @height
+    background-color #1d3446
+    .search
+      text-indent 10px
+      color #fff
+      background-color #32495b
+      border none
+      outline none
+      height 35px
+      width 400px
+      line-height @height
+      margin-top (($headerHeight - @height) / 2)
+      border-radius 3px
+    .functions
+      a
+        margin-right 15px
+        color #82a2b7
+        font-size 20px
+        &:hover
+          color #527289
+
+NavCss()
+  > .nav
+    width $navWidth
+    background-color #475e6e
+    position absolute
+    left 0
+    top $logoHeight
+    bottom 0
+    ul
+      list-style none
+      margin 0
+      padding 0
+      color #fff
+      li
+        padding-left 10px
+        height 50px
+        line-height @height
+LogoCss()
+  > .logo
+    width $navWidth
+    position absolute
+    left 0
+    top 0
+    height $logoHeight
+    background #1d3446 no-repeat center
+    background-size contain
+    
+    
+
+.dashboardPage
+  // HeaderCss()
+  // NavCss()
+  // LogoCss()
+  
+  

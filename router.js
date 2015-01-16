@@ -44,6 +44,12 @@ var routeInfos = [
     handler : controllers.dashboard.view
   },
   {
+    route : '/stats',
+    template : 'stats',
+    middleware : [addImporter],
+    handler : controllers.stats.view,
+  },
+  {
     method : 'post',
     route : '/httplog',
     handler : controllers.http_log
