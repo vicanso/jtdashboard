@@ -48,8 +48,9 @@
       "/service/http_log.js",
       "/service/debug.js",
       "/js/global.js",
+      "/stats/service.js",
       "/stats/controller.js"
     ],
-    "modifiedAt": "2015-01-16 20:01:32"
+    "modifiedAt": "2015-01-18 12:08:40"
   }
 }
