@@ -8,13 +8,13 @@ angular.module('jtApp')
 function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
   debug = debug('homePage');
 
-  setTimeout(function(){
-    stats.get('server-black', {key : 'cpu1.busy', date : '2015-01-16', interval : 700}).then(function(){
+  // setTimeout(function(){
+  //   stats.get('server-black', {key : '/cpu.*/', date : '2015-01-18:2015-01-19', interval : 700}).then(function(){
 
-    }, function(){
+  //   }, function(){
 
-    });
-  }, 1000);
+  //   });
+  // }, 1000);
 }
 
 StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', 'debug', 'stats'];
