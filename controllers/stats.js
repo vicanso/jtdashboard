@@ -36,29 +36,109 @@ exports.get = function(req, res, cbf){
     res.header('Cache-Control', 'public, max-age=' + maxAge);
   }
 
+  // 响应数据的格式
+  var formatType = req.param('format') || 'json';
+  // 用于对返回的结果再做筛选（要大于startTimestamp）
+  var startTimestamp;
   async.waterfall([
     function(cbf){
       var tmp = convertConditions(conditions);
+      startTimestamp = tmp.startTimestamp;
+      delete tmp.startTimestamp;
       getData(collection, tmp, interval, cbf);
+    },
+    function(docs, cbf){
+      // 如果存在startTimestamp,对返回的结果做整理
+      if(startTimestamp){
+        startTimestamp = Math.floor(startTimestamp / 1000);
+        _.forEach(docs, function(doc){
+          doc.values = _.filter(doc.values, function(v){
+            return v.t > startTimestamp;
+          });
+        });
+      }
+      docs = formatData(docs, formatType);
+      cbf(null, docs);
     }
   ], cbf);
-  // debug('conditions:%j', conditions);
-  // model.find(conditions, cbf);
-
 
 };
 
+/**
+ * [formatData 格式化数据]
+ * @param  {[type]} docs [description]
+ * @param  {[type]} type [description]
+ * @return {[type]}      [description]
+ */
+var formatData = function(docs, type){
+  if(type === 'text'){
+    var arr = [];
+    _.forEach(docs, function(doc){
+      arr.push(doc.key + '||');
+      console.dir(doc.values);
+      var tmpArr = [];
+      _.forEach(doc.values, function(value){
+        tmpArr.push(value.t + '|' + value.v);
+      });
+      arr.push(tmpArr.join(',') + '\n');
+    });
+    return arr.join('').trim();
+  }else{
+    return docs;
+  }
+  
+};
+
+/**
+ * [convertConditions 转换conditions]
+ * @param  {[type]} conditions [description]
+ * @return {[type]}            [description]
+ */
 var convertConditions = function(conditions){
   var result = {};
-  var dateList = conditions.date.split(':').sort();
   var key = conditions.key;
-  if(dateList.length == 2){
+  if(_.isArray(conditions.date)){
     result.date = {
-      '$gte' : dateList[0],
-      '$lte' : dateList[1]
+      '$in' : conditions.date
     }
   }else{
-    result.date = dateList[0];
+    var dateList = conditions.date.split(':').sort();
+    if(dateList.length == 2){
+      result.date = {
+        '$gte' : dateList[0],
+        '$lte' : dateList[1]
+      }
+    }else if(dateList[0].length === 10){
+      result.date = dateList[0];
+    }else{
+      // d 天，h 小时， m 分钟， s 秒
+      var str = dateList[0];
+      var keyList = {
+        d : 'days',
+        h : 'hours',
+        m : 'minutes',
+        s : 'seconds'
+      };
+      var date = moment();
+      var end = date.format('YYYY-MM-DD');
+      var unit = keyList[str.charAt(str.length - 1)];
+      if(unit){
+        var v = -parseInt(str);
+        var startDate = date.add(v, unit);
+        result.startTimestamp = startDate.valueOf();
+        var start = startDate.format('YYYY-MM-DD');
+        if(start !== end){
+          result.date = {
+            '$gte' : start,
+            '$lte' : end
+          };
+        }else{
+          result.date = end;
+        }
+      }else{
+        result.date = end;
+      }
+    }
   }
   if(key){
     if(_.isArray(key)){
@@ -85,7 +165,7 @@ var convertConditions = function(conditions){
  * @return {[type]}            [description]
  */
 var getData = function(collection, conditions, interval, cbf){
-  console.dir(JSON.stringify(conditions));
+  debug('collection:%s, conditions:%j', collection, conditions);
   var mapOptions = {
     query : conditions,
     scope : {

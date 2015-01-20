@@ -1,9 +1,11 @@
 extends ./layout
 block bodyContainer
-  include ./header
-  include ./nav
+  //- include ./header
+  //- include ./nav
   .dashboardPage(ng-controller='StatsController as stats')
+    .chart(jt-chart='stats.data')
 
-
-  - importer.import('/stats/service.js', '/stats/controller.js');
+  
+  - importer.import('/component/c3.css', '/component/d3.js', '/component/c3.js');
+  - importer.import('/stats/service.js', '/stats/directive.js', '/stats/controller.js');
   - importer.import('/css/stats.css');

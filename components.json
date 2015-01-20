@@ -36,8 +36,7 @@
   "stats": {
     "css": [
       "/component/bootstrap.css",
-      "/css/header.css",
-      "/css/nav.css",
+      "/component/c3.css",
       "/css/stats.css"
     ],
     "js": [
@@ -48,9 +47,12 @@
       "/service/http_log.js",
       "/service/debug.js",
       "/js/global.js",
+      "/component/d3.js",
+      "/component/c3.js",
       "/stats/service.js",
+      "/stats/directive.js",
       "/stats/controller.js"
     ],
-    "modifiedAt": "2015-01-18 12:08:40"
+    "modifiedAt": "2015-01-20 22:17:52"
   }
 }

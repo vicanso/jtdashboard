@@ -27,13 +27,4 @@ script.
       }
     };
     global.TIMING.start('html');
-    global.onerror = function(msg, url , line, row, err){
-      var stack = '';
-      if(err){
-        stack = err.stack;
-      }
-      if(CONFIG.env === 'development'){
-        alert('msg:' + msg + ', url:' + url + ', line:' + line + ', row:' + row + ', stack:' + stack);
-      }
-    };
   })(this);
