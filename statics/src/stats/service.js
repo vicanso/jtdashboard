@@ -1,11 +1,15 @@
 ;(function(global){
 'use strict';
+var app = angular.module('jtApp');
+
+app.constant('STATS_SETTING', {
+  interval : 60
+});
+
+app.factory('stats', stats);
 
 
-angular.module('jtApp').factory('stats', stats);
-
-
-function stats($http){
+function stats($http, STATS_SETTING){
   var self = {
     getServerStats : getServerStats,
     get : get,
@@ -69,7 +73,7 @@ function stats($http){
     var url = '/stats/' + collection + '?' + params.join('&');
     var promise = $http.get(url);
     promise.then(function(res){
-      if(format === 'text'){
+      if(format === 'text' && res.data){
         res.data = convertTextToJSON(res.data);
       }
       return res;
@@ -79,7 +83,7 @@ function stats($http){
 
   /**
    * [getServerStats 获取服务器的统计数据]
-   * @param  {[type]} server [description]
+   * @param  {[type]} server [服务器名称]
    * @param  {[type]} date   [description]
    * @param  {[type]} interval   [description]
    * @return {[type]}        [description]
@@ -87,9 +91,76 @@ function stats($http){
   function getServerStats(server, date, interval){
     var conditions = {
       date : date,
-      interval : interval || 60
+      interval : interval || STATS_SETTING.interval
     };
-    return get(server, conditions);
+    var promise = get(server, conditions);
+    promise.then(function(res){
+      var cpu = {
+        title : 'CPU监控',
+        data : [],
+        keys : ['cpu.busy', 'cpu.iowait']
+      };
+      var mem = {
+        title : '内存监控',
+        data : [],
+        keys : ['mem.used', 'mem.usageRate']
+      };
+      var process = {
+        title : 'process',
+        data : [],
+        keys : ['procs_blocked', 'procs_running']
+      };
+      var tcpAndUdp = {
+        title : 'tcp/udp',
+        data : [],
+        keys : ['tcp', 'udp']
+      };
+      var network = {
+        title : '网络状况',
+        data : [],
+        keys : function(key){
+          var reg = /\S*?\.(receive|transmit)\.(kbytes|rate|packets|errs|drop)/;
+          return reg.test(key);
+        }
+      };
+
+      var disk = {
+        title : '磁盘状况',
+        data : [],
+        keys : function(key){
+          var reg = /\S*?\.(read\-times|write\-times|ms\-reading|ms\-writing|writeSpeed|available)/;
+          return reg.test(key);
+        }
+      };
+
+      var result = [
+        cpu,
+        mem,
+        process,
+        tcpAndUdp,
+        network,
+        disk
+      ];
+
+
+      angular.forEach(res.data, function(item){
+        var key = item.key;
+        console.dir(key);
+        angular.forEach(result, function(info){
+          if(angular.isFunction(info.keys)){
+            if(info.keys(key)){
+              info.data.push(item);
+            }
+          }else if(info.keys.indexOf(key) !== -1){
+            info.data.push(item);
+          }
+        });
+      });
+      // console.dir(res.data);
+      res.data = result;
+      // console.dir(result);
+    });
+    return promise;
   }
 
 
@@ -97,6 +168,6 @@ function stats($http){
 }
 
 
-stats.$inject = ['$http'];
+stats.$inject = ['$http', 'STATS_SETTING'];
 
 })(this);

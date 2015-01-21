@@ -75,7 +75,6 @@ var formatData = function(docs, type){
     var arr = [];
     _.forEach(docs, function(doc){
       arr.push(doc.key + '||');
-      console.dir(doc.values);
       var tmpArr = [];
       _.forEach(doc.values, function(value){
         tmpArr.push(value.t + '|' + value.v);

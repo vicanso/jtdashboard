@@ -12,16 +12,37 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
 
   stats.format = 'text';
 
-  stats.getServerStats('server-black', '2015-01-20', 1200).success(function(res){
-    var arr = [];
-    angular.forEach(res, function(data){
-      if(data.key.indexOf('mem') === 0){
-        arr.push(data);
-      }
-    })
-    self.data = arr;
-    // console.dir(res);
-  });
+
+
+
+  function showServerStats(server, date, interval){
+    interval = interval || 60;
+
+    stats.getServerStats(server, date, interval).success(function(res){
+      console.dir(res);
+    }).error(function(res){
+
+    });
+  }
+
+  showServerStats('server-black', '2015-01-16', 600);
+
+  // var interval = 600;
+  // stats.getServerStats('server-black', '2015-01-16', interval).success(function(res){
+  //   var arr = [];
+  //   angular.forEach(res, function(data){
+  //     if(data.key.indexOf('cpu.') !== -1){
+  //       arr.push(data);
+  //     }
+  //   });
+  //   console.dir(arr);
+  //   self.mem = {
+  //     data : arr,
+  //     title : 'CPU使用曲线图(server-black)',
+  //     interval : interval
+  //   };
+  //   // console.dir(res);
+  // });
 return;
 var chart = c3.generate({
     data: {
