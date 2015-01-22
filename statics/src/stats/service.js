@@ -89,14 +89,16 @@ function stats($http, STATS_SETTING){
    * @return {[type]}        [description]
    */
   function getServerStats(server, date, interval){
+    interval = interval || STATS_SETTING.interval;
     var conditions = {
       date : date,
-      interval : interval || STATS_SETTING.interval
+      interval : interval
     };
     var promise = get(server, conditions);
     promise.then(function(res){
       var cpu = {
         title : 'CPU监控',
+        type : 'bar',
         data : [],
         keys : ['cpu.busy', 'cpu.iowait']
       };
@@ -134,18 +136,17 @@ function stats($http, STATS_SETTING){
       };
 
       var result = [
-        cpu,
-        mem,
-        process,
-        tcpAndUdp,
-        network,
+        // cpu,
+        // mem,
+        // process,
+        // tcpAndUdp,
+        // network,
         disk
       ];
 
 
       angular.forEach(res.data, function(item){
         var key = item.key;
-        console.dir(key);
         angular.forEach(result, function(info){
           if(angular.isFunction(info.keys)){
             if(info.keys(key)){
@@ -156,9 +157,12 @@ function stats($http, STATS_SETTING){
           }
         });
       });
-      // console.dir(res.data);
+      angular.forEach(result, function(item){
+        item.interval = interval;
+        item.title += '(' + server + ')';
+        delete item.keys;
+      });
       res.data = result;
-      // console.dir(result);
     });
     return promise;
   }

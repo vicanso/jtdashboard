@@ -109,6 +109,7 @@ var initServer = function(){
 
   app.use(require('./router'));
 
+  app.use(require('./controllers/error'));
   app.listen(config.port);
   console.log('server listen on:' + config.port);
 };

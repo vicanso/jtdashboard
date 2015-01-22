@@ -16,6 +16,7 @@ exports.view = function(req, res, cbf){
 };
 
 exports.get = function(req, res, cbf){
+
   var collection = req.param('collection');
   // TODO 判断collection是否允许访问（只允许是性能统计的collection）
   

@@ -7,7 +7,6 @@ app.directive('jtChart', chart);
 function chart(STATS_SETTING){
   return {
     link : function(scope, element, attr){
-      console.dir('.....');
       element.html('<h3 class="title text-center"></h3><div class="chartContainer"></div>');
       var children = element.children();
       // var bindto = element.children().children();
@@ -78,7 +77,11 @@ function chart(STATS_SETTING){
           format = '%Y-%m-%d %H:%M';
         }
         var bindto = children.eq(1);
-        // bindto.css('width', 80 * max + 'px');
+        var removeLegend = function(){
+          var legend = angular.element(d3.select(bindto[0]).selectAll('.c3-legend-item')[0][0]).parent();
+          console.dir(legend.attr('transform'));
+          legend.attr('transform', 'translate(-400,300)');
+        };
         setTimeout(function(){
           c3.generate({
             bindto : bindto[0],
@@ -93,7 +96,11 @@ function chart(STATS_SETTING){
                   format : format
                 }
               }
-            }
+            },
+            legend : {
+              hide : true
+            },
+            onrendered : removeLegend
           });
         }, 0);
         
@@ -102,5 +109,68 @@ function chart(STATS_SETTING){
   };
 }
 chart.$inject = ['STATS_SETTING'];
+
+
+
+app.directive('jtCharts', charts);
+
+
+function charts($compile, $parse){
+  return {
+    link : function(scope, element, attr){
+      var modelName = attr.jtCharts;
+      var getter = $parse(modelName);
+      scope.$watch(modelName + '.status', function(status){
+        switch(status){
+          case 'loading':
+            loading();
+          break;
+          case 'success':
+            success();
+          break;
+          case 'error':
+            error();
+          break;
+        }
+      }, true);
+
+
+      /**
+       * [loading 显示正在加载中的状态]
+       * @return {[type]} [description]
+       */
+      function loading(){
+        element.html('正在加载中，请稍候...');
+      }
+
+      /**
+       * [success 成功时将图表展示出来]
+       * @param  {[type]} v [description]
+       * @return {[type]}   [description]
+       */
+      function success(){
+        var charts = getter(scope);
+        var htmlArr = [];
+        angular.forEach(charts.data, function(item, i){
+          htmlArr.push('<div class="jtChart" jt-chart="stats.charts.data[' + i + ']"></div>')
+        });
+        element.html(htmlArr.join(''));
+        $compile(element.children())(scope);
+      }
+
+      /**
+       * [error 显示出错信息]
+       * @param  {[type]} v [description]
+       * @return {[type]}   [description]
+       */
+      function error(v){
+        var charts = getter(scope);
+        element.html(charts.error);
+      }
+    }
+  };
+}
+
+charts.$inject = ['$compile', '$parse'];
 
 })(this);
