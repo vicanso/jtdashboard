@@ -2,7 +2,7 @@
 html, body
   // height 100%
   // overflow hidden
-  // visibility hidden
+  visibility hidden
   
 $headerHeight = 60px;
 $navWidth = 180px;
@@ -11,16 +11,32 @@ $logoHeight = 100px;
 
 .jtChart
   border-bottom 1px solid #efefef
+  position relative
+  overflow hidden
   &:nth-child(odd)
     background-color #fff
   &:nth-child(even)
     background-color #fcfcfc
   .title
     color #00aac8
-  .chartContainer
-    width 200%
-  
-  // .chartContainer
+  .prev, .next
+    position absolute
+    background-color rgba(0, 0, 0, .5)
+    left 0
+    top 0
+    bottom 0
+    $ctrlWidth = 30px
+    width $ctrlWidth
+    i
+      position absolute
+      font-size 16px
+      top 50%
+      margin-top -(@font-size / 2)
+      color #fff
+      margin 0 (($ctrlWidth - @font-size) / 2)
+  .next
+    left auto
+    right 0
     
 
 .dashboardPage

@@ -9,7 +9,8 @@ function chart(STATS_SETTING){
     link : function(scope, element, attr){
       element.html('<h3 class="title text-center"></h3><div class="chartContainer"></div>');
       var children = element.children();
-      // var bindto = element.children().children();
+      var bindto = children.eq(1);
+      
       
       
       scope.$watch(attr.jtChart, function(v){
@@ -47,12 +48,68 @@ function chart(STATS_SETTING){
         };
       }
 
+      /**
+       * [getMaxPointCount 获取图表各统计最多的是多少个点]
+       * @param  {[type]} columns [description]
+       * @return {[type]}         [description]
+       */
       function getMaxPointCount(columns){
         var max = -1;
         angular.forEach(columns, function(column){
           max = Math.max(column.length, max);
         });
         return max;
+      }
+
+      /**
+       * [prev 图表往前移]
+       * @return {[type]} [description]
+       */
+      function prev(){
+        console.dir('prev');
+      }
+
+      /**
+       * [next 图表往后移]
+       * @return {Function} [description]
+       */
+      function next(){
+        console.dir('next');
+      }
+
+
+      function setChartPosition(){
+        var chartList = d3.select(bindto[0]).selectAll('.c3-chart');
+        var chartDom = angular.element(chartList[0][0]);
+        console.dir(chartDom);
+      }
+
+      /**
+       * [appendCtrls 插入控制图表位置的组件]
+       * @return {[type]} [description]
+       */
+      function appendCtrls(){
+        var prevHtml = '<div class="prev">' +
+            '<i class="glyphicon glyphicon-chevron-left"></i>' +
+          '</div>';
+        var nextHtml = '<div class="next">' +
+            '<i class="glyphicon glyphicon-chevron-right"></i>' +
+          '</div>';
+        var prevObj = angular.element(prevHtml).on('click', prev);
+        var nextObj = angular.element(nextHtml).on('click', next);
+        element.append(prevObj).append(nextObj);
+      }
+
+      /**
+       * [repositionLegend 重新定位]
+       * @return {[type]} [description]
+       */
+      function repositionLegend(){
+        var legend = angular.element(d3.select(bindto[0]).selectAll('.c3-legend-item')[0][0]).parent();
+        var legendWidth = legend[0].getBBox().width;
+        var translateX = -(bindto.prop('clientWidth') - element.prop('clientWidth')) / 2;
+        var legendTransform = legend.attr('transform').replace(/translate\((\d+),(\d+)\)/, 'translate(' + translateX + ',$2)');
+        legend.attr('transform', legendTransform);
       }
 
       /**
@@ -66,6 +123,16 @@ function chart(STATS_SETTING){
         }
         var data = getData(config.data);
         var max = getMaxPointCount(data.columns);
+
+        // 设置图表的宽度
+        var gap = config.gap || STATS_SETTING.gap;
+        var charWidth = max * gap;
+        bindto.css('width', charWidth + 'px');
+
+        if(charWidth > element.prop('clientWidth')){
+         appendCtrls();
+        }
+
         data.type = config.type;
         var interval = config.interval || STATS_SETTING.interval;
         var format = '%Y-%m-%d %H:%M:%S';
@@ -76,12 +143,7 @@ function chart(STATS_SETTING){
         }else if(interval % 60 === 0){
           format = '%Y-%m-%d %H:%M';
         }
-        var bindto = children.eq(1);
-        var removeLegend = function(){
-          var legend = angular.element(d3.select(bindto[0]).selectAll('.c3-legend-item')[0][0]).parent();
-          console.dir(legend.attr('transform'));
-          legend.attr('transform', 'translate(-400,300)');
-        };
+
         setTimeout(function(){
           c3.generate({
             bindto : bindto[0],
@@ -97,10 +159,10 @@ function chart(STATS_SETTING){
                 }
               }
             },
-            legend : {
-              hide : true
-            },
-            onrendered : removeLegend
+            onrendered : function(){
+              repositionLegend();
+              setChartPosition(-1);
+            }
           });
         }, 0);
         

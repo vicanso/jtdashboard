@@ -3,7 +3,10 @@
 var app = angular.module('jtApp');
 
 app.constant('STATS_SETTING', {
-  interval : 60
+  // 服务器返回的数据最小间隔时间
+  interval : 60,
+  // 在图表中每个点之间的间隔，如有50个点，那么图表的宽度则为 50 * 40 px
+  gap : 40
 });
 
 app.factory('stats', stats);
