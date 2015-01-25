@@ -20,7 +20,6 @@ function jtChart(STATS_SETTING, utils){
         maxPage : null,
         // 图表中一次显示的点的数量
         showPointsCount : null
-
       };
       
       
@@ -89,8 +88,18 @@ function jtChart(STATS_SETTING, utils){
       function showPage(offset){
         var page = chartOptions.currentPage + offset;
         if(page === 0 || page === chartOptions.maxPage + 1){
+          if(page === 0){
+            chartOptions.prevBtn.addClass('hidden');
+          }
+          if(page === chartOptions.maxPage + 1){
+            chartOptions.nextBtn.addClass('hidden');
+          }
           return;
         }
+
+        chartOptions.prevBtn.removeClass('hidden');
+        chartOptions.nextBtn.removeClass('hidden');
+
         
         var data = getChartData(page);
         chartOptions.chart.load(data);
@@ -105,16 +114,18 @@ function jtChart(STATS_SETTING, utils){
         var prevHtml = '<div class="prev">' +
             '<i class="glyphicon glyphicon-chevron-left"></i>' +
           '</div>';
-        var nextHtml = '<div class="next">' +
+        var nextHtml = '<div class="next hidden">' +
             '<i class="glyphicon glyphicon-chevron-right"></i>' +
           '</div>';
-        var prevObj = angular.element(prevHtml).on('click', function(){
+        var prevBtn = angular.element(prevHtml).on('click', function(){
           showPage(-1);
         });
-        var nextObj = angular.element(nextHtml).on('click', function(){
+        var nextBtn = angular.element(nextHtml).on('click', function(){
           showPage(1);
         });
-        element.append(prevObj).append(nextObj);
+        element.append(prevBtn).append(nextBtn);
+        chartOptions.prevBtn = prevBtn;
+        chartOptions.nextBtn = nextBtn;
       }
 
       /**
@@ -135,8 +146,11 @@ function jtChart(STATS_SETTING, utils){
         var result = [];
         var showPointsCount = chartOptions.showPointsCount;
         // 由于key在下面都会加到数组最前，所以start最小从1开始
-        var start = Math.max(1, (page - 1) * showPointsCount);
-        var end = start + showPointsCount;
+        var end = -(chartOptions.maxPage - page) * showPointsCount;
+        var start = end - showPointsCount 
+        if(end === 0){
+          end = undefined;
+        }
         angular.forEach(chartOptions.data, function(arr){
           result.push([arr[0]].concat(arr.slice(start, end)));
         });
