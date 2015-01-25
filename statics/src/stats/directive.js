@@ -83,48 +83,19 @@ function jtChart(STATS_SETTING, utils){
       }
 
       /**
-       * [prev 图表往前移]
+       * [showPage 显示第几页图表]
        * @return {[type]} [description]
        */
-      function prev(){
-        var page = chartOptions.currentPage - 1;
-        if(page === 0){
+      function showPage(offset){
+        var page = chartOptions.currentPage + offset;
+        if(page === 0 || page === chartOptions.maxPage + 1){
           return;
         }
         
         var data = getChartData(page);
         chartOptions.chart.load(data);
         chartOptions.currentPage = page;
-        // var pointsCount = getPageShowPointsCount(gap);
-        // var max = chartData[0].length;
-        // var data = getChartData(max - 2 * pointsCount, max - pointsCount);
-        // chart.load(data);
       }
-
-      /**
-       * [next 图表往后移]
-       * @return {Function} [description]
-       */
-      function next(){
-        console.dir('next');
-      }
-
-
-      // function setChartPosition(){
-      //   var axis = angular.element(d3.select(bindto[0]).selectAll('.c3-axis.c3-axis-y')[0][0]);
-      //   console.dir(axis);
-      //   // var chartList = d3.select(bindto[0]).selectAll('.c3-chart');
-      //   // var chartObj = angular.element(chartList[0][0]);
-      //   var elementWidth = element.prop('clientWidth');
-      //   var bindtoWidth = bindto.prop('clientWidth');
-      //   var translateX = elementWidth - bindtoWidth;
-      //   bindto.css('transform', 'translateX(' + translateX + 'px)');
-      //   axis.css('transform', 'translateX(' + (-translateX) + 'px)');
-      //   // chartObj.attr('transform', 'translate(' + translateX + ', 0)');
-      //   // console.dir(chartList);
-      //   // var transform = chartObj.attr('transform').replace(/translate\((\d+),(\d+)\)/, 'translate(' + translateX + ',$2)');
-      //   // console.dir(chartDom);
-      // }
 
       /**
        * [appendCtrls 插入控制图表位置的组件]
@@ -137,22 +108,14 @@ function jtChart(STATS_SETTING, utils){
         var nextHtml = '<div class="next">' +
             '<i class="glyphicon glyphicon-chevron-right"></i>' +
           '</div>';
-        var prevObj = angular.element(prevHtml).on('click', prev);
-        var nextObj = angular.element(nextHtml).on('click', next);
+        var prevObj = angular.element(prevHtml).on('click', function(){
+          showPage(-1);
+        });
+        var nextObj = angular.element(nextHtml).on('click', function(){
+          showPage(1);
+        });
         element.append(prevObj).append(nextObj);
       }
-
-      // /**
-      //  * [repositionLegend 重新定位]
-      //  * @return {[type]} [description]
-      //  */
-      // function repositionLegend(){
-      //   var legend = angular.element(d3.select(bindto[0]).selectAll('.c3-legend-item')[0][0]).parent();
-      //   var legendWidth = legend[0].getBBox().width;
-      //   var translateX = -(bindto.prop('clientWidth') - element.prop('clientWidth')) / 2;
-      //   var legendTransform = legend.attr('transform').replace(/translate\((\d+),(\d+)\)/, 'translate(' + translateX + ',$2)');
-      //   legend.attr('transform', legendTransform);
-      // }
 
       /**
        * [getShowPointsCount 获取图表一页能显示的点总数]
@@ -171,7 +134,8 @@ function jtChart(STATS_SETTING, utils){
       function getChartData(page){
         var result = [];
         var showPointsCount = chartOptions.showPointsCount;
-        var start = Math.max(0, (page - 1) * showPointsCount);
+        // 由于key在下面都会加到数组最前，所以start最小从1开始
+        var start = Math.max(1, (page - 1) * showPointsCount);
         var end = start + showPointsCount;
         angular.forEach(chartOptions.data, function(arr){
           result.push([arr[0]].concat(arr.slice(start, end)));
@@ -220,9 +184,6 @@ function jtChart(STATS_SETTING, utils){
           chartOptions.chart = c3.generate({
             bindto : bindto[0],
             data : data,
-            // subchart : {
-            //   show : true
-            // },
             axis : {
               x : {
                 type : 'timeseries',
@@ -230,10 +191,6 @@ function jtChart(STATS_SETTING, utils){
                   format : format
                 }
               }
-            },
-            onrendered : function(){
-              // repositionLegend();
-              // setChartPosition(-1);
             }
           });
         }, 0);
