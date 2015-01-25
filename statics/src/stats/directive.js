@@ -2,14 +2,26 @@
 'use strict';
 var app = angular.module('jtApp');
 
-app.directive('jtChart', chart);
+app.directive('jtChart', jtChart);
 
-function chart(STATS_SETTING){
+function jtChart(STATS_SETTING, utils){
   return {
     link : function(scope, element, attr){
       element.html('<h3 class="title text-center"></h3><div class="chartContainer"></div>');
       var children = element.children();
       var bindto = children.eq(1);
+      var chartOptions = {
+        // 图表的数据
+        data : null,
+        // 图表中每个点的间隔
+        gap : null,
+        // 保存c3返回的chart对象
+        chart : null,
+        maxPage : null,
+        // 图表中一次显示的点的数量
+        showPointsCount : null
+
+      };
       
       
       
@@ -19,6 +31,29 @@ function chart(STATS_SETTING){
         }
       }, true);
 
+      /**
+       * [getTimeseries 获取时间轴数据]
+       * @param  {[type]} arr [description]
+       * @return {[type]}     [description]
+       */
+      function getTimeseries(arr){
+        var timeseries = [];
+        angular.forEach(arr, function(data){
+          angular.forEach(data.values, function(tmp){
+            timeseries.push(tmp.t);
+          });
+        });
+        timeseries.sort();
+        var current = -1;
+        var result = [];
+        angular.forEach(timeseries, function(time){
+          if(time !== current){
+            result.push(time);
+            current = time;
+          }
+        });
+        return result
+      }
 
       /**
        * [getData 获取c3使用的数据]
@@ -26,39 +61,25 @@ function chart(STATS_SETTING){
        * @return {[type]}     [description]
        */
       function getData(arr){
+        var tmpTimeseries = getTimeseries(arr);
         var columns = [];
-        var index = 1;
-        var xs = {};
         angular.forEach(arr, function(data){
-          var columnData = [data.key];
-          var name = 'x' + index;
-          xs[data.key] = name;
-          var timeColumn = [name];
+          var columnData = [];
           angular.forEach(data.values, function(tmp){
-            columnData.push(tmp.v);
-            timeColumn.push(tmp.t * 1000);
+            var index = utils.binaryIndexOf(tmpTimeseries, tmp.t);
+            if(index !== -1){
+              columnData[index] = tmp.v;
+            }
           });
+          columnData.unshift(data.key);
           columns.push(columnData);
-          columns.push(timeColumn);
-          index++;
         });
-        return {
-          xs : xs,
-          columns : columns
-        };
-      }
-
-      /**
-       * [getMaxPointCount 获取图表各统计最多的是多少个点]
-       * @param  {[type]} columns [description]
-       * @return {[type]}         [description]
-       */
-      function getMaxPointCount(columns){
-        var max = -1;
-        angular.forEach(columns, function(column){
-          max = Math.max(column.length, max);
+        var timeseries = ['x'];
+        angular.forEach(tmpTimeseries, function(t){
+          timeseries.push(t * 1000);
         });
-        return max;
+        columns.unshift(timeseries);
+        return columns;
       }
 
       /**
@@ -66,7 +87,18 @@ function chart(STATS_SETTING){
        * @return {[type]} [description]
        */
       function prev(){
-        console.dir('prev');
+        var page = chartOptions.currentPage - 1;
+        if(page === 0){
+          return;
+        }
+        
+        var data = getChartData(page);
+        chartOptions.chart.load(data);
+        chartOptions.currentPage = page;
+        // var pointsCount = getPageShowPointsCount(gap);
+        // var max = chartData[0].length;
+        // var data = getChartData(max - 2 * pointsCount, max - pointsCount);
+        // chart.load(data);
       }
 
       /**
@@ -78,11 +110,21 @@ function chart(STATS_SETTING){
       }
 
 
-      function setChartPosition(){
-        var chartList = d3.select(bindto[0]).selectAll('.c3-chart');
-        var chartDom = angular.element(chartList[0][0]);
-        console.dir(chartDom);
-      }
+      // function setChartPosition(){
+      //   var axis = angular.element(d3.select(bindto[0]).selectAll('.c3-axis.c3-axis-y')[0][0]);
+      //   console.dir(axis);
+      //   // var chartList = d3.select(bindto[0]).selectAll('.c3-chart');
+      //   // var chartObj = angular.element(chartList[0][0]);
+      //   var elementWidth = element.prop('clientWidth');
+      //   var bindtoWidth = bindto.prop('clientWidth');
+      //   var translateX = elementWidth - bindtoWidth;
+      //   bindto.css('transform', 'translateX(' + translateX + 'px)');
+      //   axis.css('transform', 'translateX(' + (-translateX) + 'px)');
+      //   // chartObj.attr('transform', 'translate(' + translateX + ', 0)');
+      //   // console.dir(chartList);
+      //   // var transform = chartObj.attr('transform').replace(/translate\((\d+),(\d+)\)/, 'translate(' + translateX + ',$2)');
+      //   // console.dir(chartDom);
+      // }
 
       /**
        * [appendCtrls 插入控制图表位置的组件]
@@ -100,16 +142,44 @@ function chart(STATS_SETTING){
         element.append(prevObj).append(nextObj);
       }
 
+      // /**
+      //  * [repositionLegend 重新定位]
+      //  * @return {[type]} [description]
+      //  */
+      // function repositionLegend(){
+      //   var legend = angular.element(d3.select(bindto[0]).selectAll('.c3-legend-item')[0][0]).parent();
+      //   var legendWidth = legend[0].getBBox().width;
+      //   var translateX = -(bindto.prop('clientWidth') - element.prop('clientWidth')) / 2;
+      //   var legendTransform = legend.attr('transform').replace(/translate\((\d+),(\d+)\)/, 'translate(' + translateX + ',$2)');
+      //   legend.attr('transform', legendTransform);
+      // }
+
       /**
-       * [repositionLegend 重新定位]
-       * @return {[type]} [description]
+       * [getShowPointsCount 获取图表一页能显示的点总数]
+       * @param  {[type]} gap [description]
+       * @return {[type]}     [description]
        */
-      function repositionLegend(){
-        var legend = angular.element(d3.select(bindto[0]).selectAll('.c3-legend-item')[0][0]).parent();
-        var legendWidth = legend[0].getBBox().width;
-        var translateX = -(bindto.prop('clientWidth') - element.prop('clientWidth')) / 2;
-        var legendTransform = legend.attr('transform').replace(/translate\((\d+),(\d+)\)/, 'translate(' + translateX + ',$2)');
-        legend.attr('transform', legendTransform);
+      function getShowPointsCount(gap){
+        return Math.floor(element.prop('clientWidth') / gap);
+      }
+
+      /**
+       * [getChartData 获取chart显示的数据]
+       * @param  {[type]} page [description]
+       * @return {[type]}       [description]
+       */
+      function getChartData(page){
+        var result = [];
+        var showPointsCount = chartOptions.showPointsCount;
+        var start = Math.max(0, (page - 1) * showPointsCount);
+        var end = start + showPointsCount;
+        angular.forEach(chartOptions.data, function(arr){
+          result.push([arr[0]].concat(arr.slice(start, end)));
+        });
+        return {
+          x : 'x',
+          columns : result
+        };
       }
 
       /**
@@ -121,20 +191,23 @@ function chart(STATS_SETTING){
         if(config.title){
           children.eq(0).html(config.title);
         }
-        var data = getData(config.data);
-        var max = getMaxPointCount(data.columns);
+        chartOptions.data = getData(config.data);
+        chartOptions.gap = config.gap || STATS_SETTING.gap;
+        chartOptions.showPointsCount = getShowPointsCount(chartOptions.gap);
+        var max = chartOptions.data[0].length;
+        chartOptions.maxPage = Math.ceil(max / chartOptions.showPointsCount);
+        chartOptions.currentPage = chartOptions.maxPage;
 
-        // 设置图表的宽度
-        var gap = config.gap || STATS_SETTING.gap;
-        var charWidth = max * gap;
-        bindto.css('width', charWidth + 'px');
 
-        if(charWidth > element.prop('clientWidth')){
-         appendCtrls();
-        }
-
+        var data = getChartData(chartOptions.maxPage);
         data.type = config.type;
         var interval = config.interval || STATS_SETTING.interval;
+
+        if(max > chartOptions.showPointsCount){
+          appendCtrls();
+        }
+
+
         var format = '%Y-%m-%d %H:%M:%S';
         if(interval % 24 * 3600 === 0){
           format = '%Y-%m-%d';
@@ -143,9 +216,8 @@ function chart(STATS_SETTING){
         }else if(interval % 60 === 0){
           format = '%Y-%m-%d %H:%M';
         }
-
         setTimeout(function(){
-          c3.generate({
+          chartOptions.chart = c3.generate({
             bindto : bindto[0],
             data : data,
             // subchart : {
@@ -160,8 +232,8 @@ function chart(STATS_SETTING){
               }
             },
             onrendered : function(){
-              repositionLegend();
-              setChartPosition(-1);
+              // repositionLegend();
+              // setChartPosition(-1);
             }
           });
         }, 0);
@@ -170,14 +242,14 @@ function chart(STATS_SETTING){
     }
   };
 }
-chart.$inject = ['STATS_SETTING'];
+jtChart.$inject = ['STATS_SETTING', 'utils'];
 
 
 
-app.directive('jtCharts', charts);
+app.directive('jtCharts', jtCharts);
 
 
-function charts($compile, $parse){
+function jtCharts($compile, $parse){
   return {
     link : function(scope, element, attr){
       var modelName = attr.jtCharts;
@@ -233,6 +305,6 @@ function charts($compile, $parse){
   };
 }
 
-charts.$inject = ['$compile', '$parse'];
+jtCharts.$inject = ['$compile', '$parse'];
 
 })(this);

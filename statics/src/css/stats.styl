@@ -2,7 +2,7 @@
 html, body
   // height 100%
   // overflow hidden
-  visibility hidden
+  // visibility hidden
   
 $headerHeight = 60px;
 $navWidth = 180px;
@@ -20,11 +20,14 @@ $logoHeight = 100px;
   .title
     color #00aac8
   .prev, .next
+    // display none
     position absolute
     background-color rgba(0, 0, 0, .5)
     left 0
     top 0
     bottom 0
+    z-index 1
+    cursor pointer
     $ctrlWidth = 30px
     width $ctrlWidth
     i
