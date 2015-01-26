@@ -24,10 +24,9 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
 
 
 
-  function showServerStats(server, date, interval){
-    interval = interval || 60;
+  function showStats(promise){
     ctrl.charts.status = 'loading';
-    stats.getServerStats(server, date, interval).success(function(res){
+    promise.success(function(res){
       ctrl.charts.status = 'success';
       ctrl.charts.data = res;
     }).error(function(res){
@@ -36,7 +35,13 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
     });
   }
 
-  showServerStats('server-black', '2015-01-16', 60);
+
+  // stats.getServerStats(server, date, interval)
+  var serverPromise = stats.getServerStats('server-black', '2015-01-16', 60);
+  showStats(serverPromise);
+
+  // var mongodbPromise = stats.getMongodbStats('mongodb', '2015-01-16', 60);
+  // showStats(mongodbPromise);
 
 
 }

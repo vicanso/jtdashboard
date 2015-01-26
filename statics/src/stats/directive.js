@@ -6,6 +6,7 @@ app.directive('jtChart', jtChart);
 
 function jtChart(STATS_SETTING, utils){
   return {
+    restrict : 'E',
     link : function(scope, element, attr){
       element.html('<h3 class="title text-center"></h3><div class="chartContainer"></div>');
       var children = element.children();
@@ -24,7 +25,7 @@ function jtChart(STATS_SETTING, utils){
       
       
       
-      scope.$watch(attr.jtChart, function(v){
+      scope.$watch(attr.jtData, function(v){
         if(v){
           generate(v);
         }
@@ -160,15 +161,7 @@ function jtChart(STATS_SETTING, utils){
         };
       }
 
-      /**
-       * [generate 生成图表]
-       * @param  {[type]} config [description]
-       * @return {[type]}        [description]
-       */
-      function generate(config){
-        if(config.title){
-          children.eq(0).html(config.title);
-        }
+      function showChart(config){
         chartOptions.data = getData(config.data);
         chartOptions.gap = config.gap || STATS_SETTING.gap;
         chartOptions.showPointsCount = getShowPointsCount(chartOptions.gap);
@@ -208,6 +201,40 @@ function jtChart(STATS_SETTING, utils){
             }
           });
         }, 0);
+      }
+
+      function showPieChart(config){
+        var columns = [];
+        angular.forEach(config.data, function(item){
+          var v = item.values[0].v;
+          columns.push([item.key, v]);
+        });
+        setTimeout(function(){
+          chartOptions.chart = c3.generate({
+            bindto : bindto[0],
+            data : {
+              columns : columns,
+              type : 'pie'
+            }
+          });
+        }, 0);
+      }
+
+      /**
+       * [generate 生成图表]
+       * @param  {[type]} config [description]
+       * @return {[type]}        [description]
+       */
+      function generate(config){
+        if(config.title){
+          children.eq(0).html(config.title);
+        }
+        
+        if(config.type !== 'pie'){
+          showChart(config);
+        }else{
+          showPieChart(config);
+        }
         
       };
     }
@@ -222,8 +249,9 @@ app.directive('jtCharts', jtCharts);
 
 function jtCharts($compile, $parse){
   return {
+    restrict : 'E',
     link : function(scope, element, attr){
-      var modelName = attr.jtCharts;
+      var modelName = attr.jtData;
       var getter = $parse(modelName);
       scope.$watch(modelName + '.status', function(status){
         switch(status){
@@ -257,7 +285,7 @@ function jtCharts($compile, $parse){
         var charts = getter(scope);
         var htmlArr = [];
         angular.forEach(charts.data, function(item, i){
-          htmlArr.push('<div class="jtChart" jt-chart="stats.charts.data[' + i + ']"></div>')
+          htmlArr.push('<jt-chart class="jtChart" jt-data="stats.charts.data[' + i + ']"></jt-chart>')
         });
         element.html(htmlArr.join(''));
         $compile(element.children())(scope);

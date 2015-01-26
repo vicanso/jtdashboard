@@ -25,14 +25,11 @@ app.config(['localStorageServiceProvider', function(localStorageServiceProvider)
 }]).config(['$httpProvider', function($httpProvider){
   $httpProvider.interceptors.push('httpLog');
 }]).config(['$provide', function($provide){
-  var params = ['$delegate', '$injector', function($delegate, $injector){
+  var params = ['$log', '$injector', function($log, $injector){
     return function(exception, cause){
       if(CONFIG.env === 'development'){
-        var str = 'exception:' + exception.message + ', stack:' + exception.stack;
-        if(cause){
-          str += ', cause by ' + cause;
-        }
-        alert(str);
+        alert(exception.message);
+        $log.error.apply($log, arguments);
       }else{
         var $http = $injector.get('$http');
         $http.post('/exception?httplog=false', {
@@ -41,7 +38,6 @@ app.config(['localStorageServiceProvider', function(localStorageServiceProvider)
           cause : cause
         });
       }
-      
     };
   }];
   $provide.decorator('$exceptionHandler', params);

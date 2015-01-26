@@ -15,6 +15,7 @@ app.factory('stats', stats);
 function stats($http, STATS_SETTING){
   var self = {
     getServerStats : getServerStats,
+    getMongodbStats : getMongodbStats,
     get : get,
     // 返回数据以什么格式返回，可以是text和json，若为text，会在获取到数据之后转换为json
     format : 'json'
@@ -34,13 +35,14 @@ function stats($http, STATS_SETTING){
       var values = [];
       var json = {
         key : arr[0],
+        type : arr[1],
         values : values
       };
-      angular.forEach(arr[1].split(','), function(str){
+      angular.forEach(arr.pop().split(','), function(str){
         var arr = str.split('|');
         values.push({
           t : arr[0],
-          v : arr[1]
+          v : parseFloat(arr[1])
         });
       });
       result.push(json);
@@ -84,6 +86,72 @@ function stats($http, STATS_SETTING){
     return promise;
   }
 
+
+  function convertData(result, arr, server, interval){
+    angular.forEach(result, function(item){
+      item.interval = interval;
+      item.title += '(' + server + ')';
+      item.data = [];
+    });
+
+    var sum = function(data){
+      var total = 0;
+      angular.forEach(data, function(item){
+        total += item.v;
+      });
+      var last = data[data.length - 1];
+      return {
+        v : total,
+        t : last.t
+      };
+    };
+
+    var average = function(data){
+      var result = sum(data);
+      result.v = Maht.ceil(result.v / data.length);
+      return result;
+    }
+
+
+    angular.forEach(arr, function(item){
+      var key = item.key;
+      angular.forEach(result, function(info){
+        var valid = false;
+        if(angular.isFunction(info.keys)){
+          if(info.keys(key)){
+            valid = true;
+          }
+        }else if(info.keys.indexOf(key) !== -1){
+          valid = true;
+        }
+        if(valid){
+          if(info.type === 'pie'){
+            switch(item.type){
+              case 'counter':
+                item.values = [sum(item.values)];
+                break;
+              case 'average':
+                item.values = [average(item.values)];
+                break;
+              case 'gauge':
+                var last = item.values[item.values.length - 1];
+                item.values = [last];
+                break;
+            }
+          }
+          info.data.push(item);
+        }
+        
+      });
+    });
+
+    angular.forEach(result, function(item){
+      delete item.keys;
+    });
+
+    return result
+  }
+
   /**
    * [getServerStats 获取服务器的统计数据]
    * @param  {[type]} server [服务器名称]
@@ -102,7 +170,6 @@ function stats($http, STATS_SETTING){
       var cpu = {
         title : 'CPU监控',
         type : 'bar',
-        data : [],
         keys : ['cpu.busy', 'cpu.iowait']
       };
       var mem = {
@@ -112,17 +179,14 @@ function stats($http, STATS_SETTING){
       };
       var process = {
         title : 'process',
-        data : [],
         keys : ['procs_blocked', 'procs_running']
       };
       var tcpAndUdp = {
         title : 'tcp/udp',
-        data : [],
         keys : ['tcp', 'udp']
       };
       var network = {
         title : '网络状况',
-        data : [],
         keys : function(key){
           var reg = /\S*?\.(receive|transmit)\.(kbytes|rate|packets|errs|drop)/;
           return reg.test(key);
@@ -131,7 +195,6 @@ function stats($http, STATS_SETTING){
 
       var disk = {
         title : '磁盘状况',
-        data : [],
         keys : function(key){
           var reg = /\S*?\.(read\-times|write\-times|ms\-reading|ms\-writing|writeSpeed|available)/;
           return reg.test(key);
@@ -147,29 +210,117 @@ function stats($http, STATS_SETTING){
         disk
       ];
 
+      // angular.forEach(result, function(item){
+      //   item.interval = interval;
+      //   item.title += '(' + server + ')';
+      //   item.data = [];
+      // });
 
-      angular.forEach(res.data, function(item){
-        var key = item.key;
-        angular.forEach(result, function(info){
-          if(angular.isFunction(info.keys)){
-            if(info.keys(key)){
-              info.data.push(item);
-            }
-          }else if(info.keys.indexOf(key) !== -1){
-            info.data.push(item);
-          }
-        });
-      });
-      angular.forEach(result, function(item){
-        item.interval = interval;
-        item.title += '(' + server + ')';
-        delete item.keys;
-      });
-      res.data = result;
+
+      // angular.forEach(res.data, function(item){
+      //   var key = item.key;
+      //   angular.forEach(result, function(info){
+      //     if(angular.isFunction(info.keys)){
+      //       if(info.keys(key)){
+      //         info.data.push(item);
+      //       }
+      //     }else if(info.keys.indexOf(key) !== -1){
+      //       info.data.push(item);
+      //     }
+      //   });
+      // });
+
+      // angular.forEach(result, function(item){
+      //   delete item.keys;
+      // });
+      res.data = convertData(result, res.data, server, interval);
     });
     return promise;
   }
 
+  /**
+   * [getMongodbStats 获取mongodb的状态统计]
+   * @param  {[type]} server     [description]
+   * @param  {[type]} date     [description]
+   * @param  {[type]} interval [description]
+   * @return {[type]}          [description]
+   */
+  function getMongodbStats(server, date, interval){
+    interval = interval || STATS_SETTING.interval;
+    var conditions = {
+      date : date,
+      interval : interval
+    };
+    var promise = get(server, conditions);
+    promise.then(function(res){
+      var bgFlushing = {
+        title : 'backgroundFlushing',
+        keys : ['bgFlushing.flushes', 'bgFlushing.average_ms', 'bgFlushing.total_ms']
+      };
+
+      var connections = {
+        title : 'connections',
+        keys : ['connections.current', 'connections.available', 'connections.totalCreated']
+      };
+
+      var globalLock = {
+        title : 'globalLock',
+        keys : ['globalLock.lockTime', 'globalLock.currentQueue.total', 'globalLock.currentQueue.readers', 'globalLock.currentQueue.writers', 'globalLock.activeClients.total', 'globalLock.activeClients.readers', 'globalLock.activeClients.writers', ]
+      };
+
+      var indexCounters = {
+        title : 'indexCounters',
+        // type : 'pie',
+        keys : ['indexCounters.accesses', 'indexCounters.hits', 'indexCounters.misses', 'indexCounters.missRatio']
+      };
+
+      var network = {
+        title : 'network',
+        keys : ['network.outkb', 'network.inkb', 'network.numRequests']
+      };
+
+      var opcounters = {
+        title : 'opcounters',
+        keys : ['opcounters.query', 'opcounters.update', 'opcounters.delete', 'opcounters.insert', 'opcounters.getmore', 'opcounters.command']
+      };
+
+
+      var recordStats = {
+        title : 'recordStats',
+        keys : ['recordStats.accessesNotInMemory', 'recordStats.pageFaultExceptionsThrown']
+      };
+
+      var mem = {
+        title : 'mem',
+        keys : ['mem.virtual', 'mem.resident']
+      };
+
+      var result = [
+        bgFlushing,
+        connections,
+        globalLock,
+        indexCounters,
+        network,
+        opcounters,
+        recordStats,
+        mem
+      ];
+
+      // result = [indexCounters];
+
+      var keysTotal = 0;
+      angular.forEach(result, function(item){
+        keysTotal += item.keys.length;
+      });
+      var total = 0;
+      angular.forEach(res.data, function(item){
+        var key = item.key;
+        total++;
+      });
+      res.data = convertData(result, res.data, server, interval);
+    });
+    return promise;
+  }
 
 
 }

@@ -1,9 +1,9 @@
 nav.navContainer: ul
   li.logo JTDashboard
-  li.active: a(href='javascript:;') 
+  li: a(href='javascript:;') 
     i.glyphicon.glyphicon-dashboard
     | Dashboard
-  li: a(href='javascript:;') 
+  li(class='#{TEMPLATE === "stats"? "active" : ""}'): a(href='javascript:;') 
     i.glyphicon.glyphicon-stats
     | Stats
   li: a(href='javascript:;') 

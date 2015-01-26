@@ -76,6 +76,7 @@ var formatData = function(docs, type){
     var arr = [];
     _.forEach(docs, function(doc){
       arr.push(doc.key + '||');
+      arr.push(doc.type + '||');
       var tmpArr = [];
       _.forEach(doc.values, function(value){
         tmpArr.push(value.t + '|' + value.v);
@@ -261,8 +262,18 @@ var mergeDocs = function(docs, interval){
     });
     mergeResult[key] = mergeResult[key].concat(result);
   });
+  var getType = function(key){
+    var type = '';
+    _.each(docs, function(doc){
+      if(doc.key === key){
+        type = doc.type;
+      }
+    });
+    return type;
+  };
   return _.map(mergeResult, function(v, k){
     return {
+      type : getType(k),
       key : k,
       values : v
     };
