@@ -87,6 +87,15 @@ function stats($http, STATS_SETTING){
   }
 
 
+  
+  /**
+   * [convertData 将数据转换为chart使用]
+   * @param  {[type]} result   [description]
+   * @param  {[type]} arr      [description]
+   * @param  {[type]} server   [description]
+   * @param  {[type]} interval [description]
+   * @return {[type]}          [description]
+   */
   function convertData(result, arr, server, interval){
     angular.forEach(result, function(item){
       item.interval = interval;
@@ -127,9 +136,11 @@ function stats($http, STATS_SETTING){
         if(valid){
           if(info.type === 'pie'){
             switch(item.type){
+              // 如果是累加，则计算总和，时间取最新
               case 'counter':
                 item.values = [sum(item.values)];
                 break;
+              // 如果是平均值，计算其平均时，时间取最新
               case 'average':
                 item.values = [average(item.values)];
                 break;
@@ -169,7 +180,6 @@ function stats($http, STATS_SETTING){
     promise.then(function(res){
       var cpu = {
         title : 'CPU监控',
-        type : 'bar',
         keys : ['cpu.busy', 'cpu.iowait']
       };
       var mem = {
@@ -202,37 +212,13 @@ function stats($http, STATS_SETTING){
       };
 
       var result = [
-        // cpu,
-        // mem,
-        // process,
-        // tcpAndUdp,
-        // network,
+        cpu,
+        mem,
+        process,
+        tcpAndUdp,
+        network,
         disk
       ];
-
-      // angular.forEach(result, function(item){
-      //   item.interval = interval;
-      //   item.title += '(' + server + ')';
-      //   item.data = [];
-      // });
-
-
-      // angular.forEach(res.data, function(item){
-      //   var key = item.key;
-      //   angular.forEach(result, function(info){
-      //     if(angular.isFunction(info.keys)){
-      //       if(info.keys(key)){
-      //         info.data.push(item);
-      //       }
-      //     }else if(info.keys.indexOf(key) !== -1){
-      //       info.data.push(item);
-      //     }
-      //   });
-      // });
-
-      // angular.forEach(result, function(item){
-      //   delete item.keys;
-      // });
       res.data = convertData(result, res.data, server, interval);
     });
     return promise;
@@ -321,8 +307,6 @@ function stats($http, STATS_SETTING){
     });
     return promise;
   }
-
-
 }
 
 

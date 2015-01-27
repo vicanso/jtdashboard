@@ -3,7 +3,7 @@ block bodyContainer
   include ./header
   include ./nav
   .dashboardPage(ng-controller='StatsController as stats')
-    jt-charts.charts(jt-data='stats.charts')
+    jt-charts.charts.row(jt-data='stats.charts')
     //- .jtChart(jt-chart='stats.mem')
 
   

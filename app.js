@@ -25,7 +25,6 @@ var initAppSetting = function(app){
   app.set('view engine', 'jade');
   app.set('trust proxy', true);
   app.set('views', path.join(__dirname, 'views'));
-  app.locals.pretty = config.env === 'development';
   app.locals.ENV = config.env;
   app.locals.STATIC_URL_PREFIX = config.staticUrlPrefix;
 };

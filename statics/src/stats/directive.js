@@ -3,7 +3,6 @@
 var app = angular.module('jtApp');
 
 app.directive('jtChart', jtChart);
-
 function jtChart(STATS_SETTING, utils){
   return {
     restrict : 'E',
@@ -148,12 +147,17 @@ function jtChart(STATS_SETTING, utils){
         var showPointsCount = chartOptions.showPointsCount;
         // 由于key在下面都会加到数组最前，所以start最小从1开始
         var end = -(chartOptions.maxPage - page) * showPointsCount;
-        var start = end - showPointsCount 
+        var start = end - showPointsCount;
         if(end === 0){
           end = undefined;
         }
         angular.forEach(chartOptions.data, function(arr){
-          result.push([arr[0]].concat(arr.slice(start, end)));
+          var key = arr[0];
+          var sliceArr = arr.slice(start, end);
+          if(key !== sliceArr[0]){
+            sliceArr.unshift(key);
+          }
+          result.push(sliceArr);
         });
         return {
           x : 'x',
@@ -245,8 +249,6 @@ jtChart.$inject = ['STATS_SETTING', 'utils'];
 
 
 app.directive('jtCharts', jtCharts);
-
-
 function jtCharts($compile, $parse){
   return {
     restrict : 'E',
@@ -273,7 +275,7 @@ function jtCharts($compile, $parse){
        * @return {[type]} [description]
        */
       function loading(){
-        element.html('正在加载中，请稍候...');
+        element.html('<div class="alert alert-info"><i class="glyphicon glyphicon-time"></i>正在加载中，请稍候...</div>');
       }
 
       /**
@@ -285,7 +287,11 @@ function jtCharts($compile, $parse){
         var charts = getter(scope);
         var htmlArr = [];
         angular.forEach(charts.data, function(item, i){
-          htmlArr.push('<jt-chart class="jtChart" jt-data="stats.charts.data[' + i + ']"></jt-chart>')
+          var itemCss = 'col-xs-12';
+          if(item.type === 'pie'){
+            itemCss = 'col-xs-4';
+          }
+          htmlArr.push('<jt-chart class="jtChart ' + itemCss + '" jt-data="stats.charts.data[' + i + ']"></jt-chart>');
         });
         element.html(htmlArr.join(''));
         $compile(element.children())(scope);
@@ -298,12 +304,11 @@ function jtCharts($compile, $parse){
        */
       function error(v){
         var charts = getter(scope);
-        element.html(charts.error);
+        element.html('<div class="alert alert-danger"><i class="glyphicon glyphicon-exclamation-sign"></i>' + charts.error + '</div>');
       }
     }
   };
 }
-
 jtCharts.$inject = ['$compile', '$parse'];
 
 })(this);
