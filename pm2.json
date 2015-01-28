@@ -1,13 +1,9 @@
 {
-  "apps" : [
-    {
-      "name" : "express_base",
-      "instances" : 2,
-      "merge_logs" : true,
-      "script" : "app.js",
-      "env": {
-        "NODE_ENV": "production"
-      }
-    }
-  ]
+  "name" : "express_base",
+  "instances" : 2,
+  "merge_logs" : true,
+  "script" : "app.js",
+  "env": {
+    "NODE_ENV": "production"
+  }
 }
