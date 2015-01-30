@@ -24,14 +24,33 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
   ctrl.servers = {
     // 状态：loading、success、error
     stats : '',
-    // 有监控的服务器名称
+    // 服务器名称
+    data : null
+  };
+
+  ctrl.mongodbServers = {
+    // 状态：loading、success、error
+    stats : '',
+    // mongodb服务器名称
     data : null
   };
 
 
   ctrl.showServerStats = function(server){
-    var promise = stats.getServerStats(server, '2015-01-16', 60);
-    showStats(promise);
+    var name = server.name;
+    var type = server.type;
+    var promise = null;
+    switch(type){
+      case 'server':
+        promise = stats.getServerStats(name, '2015-01-16', 60)
+        break;
+      case 'mongodb':
+        promise = stats.getMongodbStats(name, '2015-01-16', 60);
+        break;
+    }
+    if(promise){
+      showStats(promise);
+    }
   };
 
 
