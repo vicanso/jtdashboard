@@ -1,0 +1,35 @@
+header.headerContainer
+  input.search.pull-left(type='search', placeholder='search by keyword')
+  ul.nav.navbar-nav.pull-left
+    li.dropdown(ng-switch='stats.servers.status')
+      a.dropdown-toggle(href='javascript:;') 服务器监控
+        span.caret
+      ul.dropdown-menu(ng-switch-when='success')
+        li(ng-repeat='server in stats.servers.data', ng-click='stats.showServerStats(server)'): a(href='javascript:;', ng-bind='::server')
+      ul.dropdown-menu(ng-switch-when='loading')
+        li: a(href='javascript:;') 正在加载中...
+      ul.dropdown-menu(ng-switch-when='error')
+        li: a(href='javascript:;') 加载数据失败!
+  .functions.pull-right
+    a(href='javascript:;'): i.glyphicon.glyphicon-bell
+    a(href='javascript:;'): i.glyphicon.glyphicon-fullscreen
+    a(href='javascript:;'): i.glyphicon.glyphicon-cog
+    a.name(href='javascript:;')
+      span vicanso
+      i.glyphicon.glyphicon-chevron-down
+
+
+
+
+//- <li class="dropdown">
+//-           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Dropdown <span class="caret"></span></a>
+//-           <ul class="dropdown-menu" role="menu">
+//-             <li><a href="#">Action</a></li>
+//-             <li><a href="#">Another action</a></li>
+//-             <li><a href="#">Something else here</a></li>
+//-             <li class="divider"></li>
+//-             <li><a href="#">Separated link</a></li>
+//-             <li class="divider"></li>
+//-             <li><a href="#">One more separated link</a></li>
+//-           </ul>
+//-         </li>

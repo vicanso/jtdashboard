@@ -36,7 +36,6 @@
   "stats": {
     "css": [
       "/component/bootstrap.css",
-      "/css/header.css",
       "/css/nav.css",
       "/component/c3.css",
       "/css/stats.css"
@@ -55,6 +54,6 @@
       "/stats/directive.js",
       "/stats/controller.js"
     ],
-    "modifiedAt": "2015-01-27 19:46:57"
+    "modifiedAt": "2015-01-30 19:59:39"
   }
 }

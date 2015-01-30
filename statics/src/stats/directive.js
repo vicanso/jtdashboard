@@ -112,10 +112,10 @@ function jtChart(STATS_SETTING, utils){
        */
       function appendCtrls(){
         var prevHtml = '<div class="prev">' +
-            '<i class="glyphicon glyphicon-chevron-left"></i>' +
+            '<i class="glyphicon glyphicon-menu-left"></i>' +
           '</div>';
         var nextHtml = '<div class="next hidden">' +
-            '<i class="glyphicon glyphicon-chevron-right"></i>' +
+            '<i class="glyphicon glyphicon-menu-right"></i>' +
           '</div>';
         var prevBtn = angular.element(prevHtml).on('click', function(){
           showPage(-1);

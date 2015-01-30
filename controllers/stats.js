@@ -15,6 +15,14 @@ exports.view = function(req, res, cbf){
   });
 };
 
+exports.servers = function(req, res, cbf){
+  cbf(null, [
+    'server-black',
+    'server-blue',
+    'server-white'
+  ]);
+};
+
 exports.get = function(req, res, cbf){
 
   var collection = req.param('collection');

@@ -16,6 +16,7 @@ function stats($http, STATS_SETTING){
   var self = {
     getServerStats : getServerStats,
     getMongodbStats : getMongodbStats,
+    getServers : getServers,
     get : get,
     // 返回数据以什么格式返回，可以是text和json，若为text，会在获取到数据之后转换为json
     format : 'json'
@@ -75,7 +76,7 @@ function stats($http, STATS_SETTING){
     var format = self.format;
     params.push('format=' + format);
     params.push('conditions=' + JSON.stringify(conditions));
-    var url = '/stats/' + collection + '?' + params.join('&');
+    var url = '/stats/collection/' + collection + '?' + params.join('&');
     var promise = $http.get(url);
     promise.then(function(res){
       if(format === 'text' && res.data){
@@ -305,6 +306,11 @@ function stats($http, STATS_SETTING){
       });
       res.data = convertData(result, res.data, server, interval);
     });
+    return promise;
+  }
+
+  function getServers(){
+    var promise = $http.get('/stats/servers');
     return promise;
   }
 }

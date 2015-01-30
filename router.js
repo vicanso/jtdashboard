@@ -50,8 +50,12 @@ var routeInfos = [
     handler : controllers.stats.view,
   },
   {
-    route : '/stats/:collection',
+    route : '/stats/collection/:collection',
     handler : controllers.stats.get
+  },
+  {
+    route : '/stats/servers',
+    handler : controllers.stats.servers
   },
   {
     method : 'post',
