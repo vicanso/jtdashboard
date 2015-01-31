@@ -1,3 +1,4 @@
+'use strict';
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require('lodash');
@@ -36,7 +37,7 @@ exports.close = function(cbf){
   }else{
     setImmediate(cbf);
   }
-}
+};
 
 exports.init = _.once(init);
 

@@ -1,3 +1,4 @@
+'use strict';
 exports.view = function(req, res, cbf){
   cbf(null, {
     viewData : {

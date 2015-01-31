@@ -49,7 +49,7 @@ function stats($http, STATS_SETTING){
       result.push(json);
     });
     return result;
-  };
+  }
 
   /**
    * [get description]
@@ -120,7 +120,7 @@ function stats($http, STATS_SETTING){
       var result = sum(data);
       result.v = Maht.ceil(result.v / data.length);
       return result;
-    }
+    };
 
 
     angular.forEach(arr, function(item){
@@ -161,7 +161,7 @@ function stats($http, STATS_SETTING){
       delete item.keys;
     });
 
-    return result
+    return result;
   }
 
   /**

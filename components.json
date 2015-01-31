@@ -1,21 +1,4 @@
 {
-  "index": {
-    "css": [
-      "/component/bootstrap.css",
-      "/css/home.css"
-    ],
-    "js": [
-      "/component/debug.js",
-      "/component/angular.js",
-      "/component/angular-local-storage.js",
-      "/service/utils.js",
-      "/service/http_log.js",
-      "/service/debug.js",
-      "/js/global.js",
-      "/js/home.js"
-    ],
-    "modifiedAt": "2015-01-13 21:48:19"
-  },
   "dashboard": {
     "css": [
       "/component/bootstrap.css",

@@ -1,3 +1,4 @@
+'use strict';
 var pm2 = require('pm2');
 var config = require('../config');
 var async = require('async');

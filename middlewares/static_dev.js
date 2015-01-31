@@ -1,3 +1,4 @@
+'use strict';
 var jtDev = require('jtdev');
 module.exports = function(staticPath){
   var extCoverter = jtDev.ext.converter(staticPath);

@@ -1,3 +1,4 @@
+'use strict';
 var _ = require('lodash');
 module.exports = function(req, res, cbf){
   var ua = req.get('user-agent');

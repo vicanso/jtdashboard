@@ -1,0 +1,1 @@
+!function(){"use strict";var n=angular.module("jt.service.debug",[]),e=function(){};n.factory("debug",function(){var n=window.debug;if(n){var r=CONFIG&&CONFIG.pattern;return r?n.enable(r):n.disable(),n}return function(){return e}})}(this);

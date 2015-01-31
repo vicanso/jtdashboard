@@ -1,3 +1,5 @@
+/* global emit */
+'use strict';
 var _ = require('lodash');
 var async = require('async');
 var moment = require('moment');
@@ -42,7 +44,7 @@ exports.get = function(req, res, cbf){
   
   var interval = conditions.interval;
   if(_.isUndefined(interval) || interval <= 0){
-    interval = 60
+    interval = 60;
   }
   // 非develop环境，设置cache-control
   var maxAge = Math.min(interval, 600);
@@ -114,14 +116,14 @@ var convertConditions = function(conditions){
   if(_.isArray(conditions.date)){
     result.date = {
       '$in' : conditions.date
-    }
+    };
   }else{
     var dateList = conditions.date.split(':').sort();
     if(dateList.length == 2){
       result.date = {
         '$gte' : dateList[0],
         '$lte' : dateList[1]
-      }
+      };
     }else if(dateList[0].length === 10){
       result.date = dateList[0];
     }else{

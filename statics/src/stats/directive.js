@@ -51,7 +51,7 @@ function jtChart(STATS_SETTING, utils){
             current = time;
           }
         });
-        return result
+        return result;
       }
 
       /**
@@ -238,9 +238,8 @@ function jtChart(STATS_SETTING, utils){
           showChart(config);
         }else{
           showPieChart(config);
-        }
-        
-      };
+        } 
+      }
     }
   };
 }

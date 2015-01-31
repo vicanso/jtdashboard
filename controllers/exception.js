@@ -1,3 +1,4 @@
+'use strict';
 module.exports = function(req, res, cbf){
   var body = req.body;
   if(body){

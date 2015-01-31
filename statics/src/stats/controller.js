@@ -48,7 +48,7 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
     ctrl.currentServer = name;
     switch(type){
       case 'server':
-        promise = stats.getServerStats(name, date, 60)
+        promise = stats.getServerStats(name, date, 60);
         break;
       case 'mongodb':
         promise = stats.getMongodbStats(name, date, 60);
