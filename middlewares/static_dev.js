@@ -1,6 +1,6 @@
 'use strict';
-var jtDev = require('jtdev');
 module.exports = function(staticPath){
+  var jtDev = require('jtdev');
   var extCoverter = jtDev.ext.converter(staticPath);
   var stylusParser = jtDev.stylus.parser(staticPath);
   return function(req, res, next){
