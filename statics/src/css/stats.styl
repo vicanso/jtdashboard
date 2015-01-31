@@ -1,8 +1,8 @@
 @import 'nib'
 @import './constant'
 html, body
-  // height 100%
-  // overflow hidden
+  height 100%
+  overflow hidden
   // visibility hidden
 
 
@@ -21,10 +21,6 @@ NavCss($navHeight)
           display block
 HeaderCss()
   .headerContainer
-    position absolute
-    left $NAV_WIDTH
-    right 0
-    top 0
     height $HEADER_HEIGHT
     line-height @height
     background-color #1d3446
@@ -99,9 +95,17 @@ JTChartCss()
 
 .dashboardPage
   margin-left $NAV_WIDTH
-  margin-top $HEADER_HEIGHT
-  .charts
+  height 100%
+  position relative
+  .chartsContainer
+    position absolute
+    top $HEADER_HEIGHT
+    left 0
+    right 0
+    bottom 0
     padding 20px
+    overflow scroll
+    overflow-scrolling touch
   HeaderCss()
   JTChartCss()
   
