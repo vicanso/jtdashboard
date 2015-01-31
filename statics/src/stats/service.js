@@ -135,23 +135,26 @@ function stats($http, STATS_SETTING){
           valid = true;
         }
         if(valid){
+          var resultItem = angular.copy(item, {});
           if(info.type === 'pie'){
             switch(item.type){
               // 如果是累加，则计算总和，时间取最新
               case 'counter':
-                item.values = [sum(item.values)];
+                resultItem.values = [sum(item.values)];
                 break;
               // 如果是平均值，计算其平均时，时间取最新
               case 'average':
-                item.values = [average(item.values)];
+                resultItem.values = [average(item.values)];
                 break;
               case 'gauge':
                 var last = item.values[item.values.length - 1];
-                item.values = [last];
+                resultItem.values = [last];
                 break;
             }
+          }else{
+            resultItem.values = angular.copy(item.values);
           }
-          info.data.push(item);
+          info.data.push(resultItem);
         }
         
       });
@@ -197,9 +200,17 @@ function stats($http, STATS_SETTING){
         keys : ['tcp', 'udp']
       };
       var network = {
-        title : '网络状况',
+        title : '网络传输',
         keys : function(key){
-          var reg = /\S*?\.(receive|transmit)\.(kbytes|rate|packets|errs|drop)/;
+          var reg = /\S*?\.(receive|transmit)\.(kbytes|rate|packets)/;
+          return reg.test(key);
+        }
+      };
+
+      var networkError = {
+        title : '网络出错',
+        keys : function(key){
+          var reg = /\S*?\.(receive|transmit)\.(errs|drop)/;
           return reg.test(key);
         }
       };
@@ -218,6 +229,7 @@ function stats($http, STATS_SETTING){
         process,
         tcpAndUdp,
         network,
+        networkError,
         disk
       ];
       res.data = convertData(result, res.data, server, interval);
@@ -262,13 +274,31 @@ function stats($http, STATS_SETTING){
         keys : ['indexCounters.accesses', 'indexCounters.hits', 'indexCounters.misses', 'indexCounters.missRatio']
       };
 
+      var indexCountersPie = {
+        title : 'indexCounters',
+        type : 'pie',
+        keys : ['indexCounters.hits', 'indexCounters.misses']
+      };
+
       var network = {
         title : 'network',
         keys : ['network.outkb', 'network.inkb', 'network.numRequests']
       };
 
+      var networkPie = {
+        title : 'network',
+        type : 'pie',
+        keys : ['network.outkb', 'network.inkb']
+      };
+
       var opcounters = {
         title : 'opcounters',
+        keys : ['opcounters.query', 'opcounters.update', 'opcounters.delete', 'opcounters.insert', 'opcounters.getmore', 'opcounters.command']
+      };
+
+      var opcountersPie = {
+        title : 'opcounters',
+        type : 'pie',
         keys : ['opcounters.query', 'opcounters.update', 'opcounters.delete', 'opcounters.insert', 'opcounters.getmore', 'opcounters.command']
       };
 
@@ -284,6 +314,9 @@ function stats($http, STATS_SETTING){
       };
 
       var result = [
+        indexCountersPie,
+        opcountersPie,
+        networkPie,
         bgFlushing,
         connections,
         globalLock,

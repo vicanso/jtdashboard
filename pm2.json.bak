@@ -2,11 +2,12 @@
   "name" : "jtdashboard",
   "instances" : 2,
   "merge_logs" : true,
-  "max-memory-restart" : "100M",
+  "max-memory-restart" : "200M",
   "script" : "app.js",
   "log_file" : "/vicanso/pm2/log/jtdashboard.log",
   "error_file" : "/vicanso/pm2/log/jtdashboard-error.log",
   "out_file" : "/vicanso/pm2/log/jtdashboard-out.log",
+  "args" : ["-p", "10010"],
   "env" : {
     "NODE_ENV" : "production",
     "MONGODB_URI" : "mongodb://user:pwd@black:5000/stats"

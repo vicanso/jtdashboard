@@ -8,6 +8,9 @@ var mongodb = require('../helpers/mongodb');
 var debug = require('debug')('jtdashboard.stats');
 
 exports.view = function(req, res, cbf){
+  if(config.env !== 'development'){
+    res.header('Cache-Control', 'public, max-age=300');
+  }
   cbf(null, {
     viewData : {
       globalVariable : {
@@ -18,6 +21,16 @@ exports.view = function(req, res, cbf){
 };
 
 exports.servers = function(req, res, cbf){
+  // cbf(null, [
+  //   {
+  //     name : 'server-black',
+  //     type : 'server' 
+  //   },
+  //   {
+  //     name : 'robot',
+  //     type : 'mongodb'
+  //   }
+  // ]);
   cbf(null, [
     {
       name : 'black',
@@ -32,7 +45,7 @@ exports.servers = function(req, res, cbf){
 
 exports.get = function(req, res, cbf){
 
-  var collection = req.param('collection');
+  var collection = req.params.collection;
   // TODO 判断collection是否允许访问（只允许是性能统计的collection）
   
 
