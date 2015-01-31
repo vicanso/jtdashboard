@@ -18,11 +18,11 @@ exports.view = function(req, res, cbf){
 exports.servers = function(req, res, cbf){
   cbf(null, [
     {
-      name : 'server-black',
+      name : 'black',
       type : 'server'
     },
     {
-      name : 'mongodb',
+      name : 'robot',
       type : 'mongodb'
     }
   ]);

@@ -1,9 +1,14 @@
 {
-  "name" : "express_base",
+  "name" : "jtdashboard",
   "instances" : 2,
   "merge_logs" : true,
+  "max-memory-restart" : "100M",
   "script" : "app.js",
-  "env": {
-    "NODE_ENV": "production"
+  "log_file" : "/vicanso/pm2/log/jtdashboard.log",
+  "error_file" : "/vicanso/pm2/log/jtdashboard-error.log",
+  "out_file" : "/vicanso/pm2/log/jtdashboard-out.log",
+  "env" : {
+    "NODE_ENV" : "production",
+    "MONGODB_URI" : "mongodb://user:pwd@black:5000/stats"
   }
 }

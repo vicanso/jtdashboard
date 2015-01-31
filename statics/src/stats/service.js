@@ -245,9 +245,10 @@ function stats($http, STATS_SETTING){
         keys : ['bgFlushing.flushes', 'bgFlushing.average_ms', 'bgFlushing.total_ms']
       };
 
+      // 'connections.available' 不显示该统计
       var connections = {
         title : 'connections',
-        keys : ['connections.current', 'connections.available', 'connections.totalCreated']
+        keys : ['connections.current', 'connections.totalCreated']
       };
 
       var globalLock = {

@@ -1,7 +1,8 @@
 mixin Servers
   ul.nav.navbar-nav.pull-left
     li.dropdown(ng-switch='stats.servers.status')
-      a.dropdown-toggle(href='javascript:;') 服务器列表
+      a.dropdown-toggle(href='javascript:;') 
+        span(ng-bind='stats.currentServer || "服务器列表"') 服务器列表
         span.caret
       ul.dropdown-menu(ng-switch-when='success')
         li(ng-repeat='server in stats.servers.data', ng-click='stats.showServerStats(server)'): a(href='javascript:;', ng-bind='::server.name')

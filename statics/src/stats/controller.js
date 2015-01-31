@@ -5,8 +5,11 @@
 angular.module('jtApp')
   .controller('StatsController', StatsCtrl);
 
-function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
+function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
   debug = debug('homePage');
+
+  stats.format = 'text';
+
 
   var ctrl = this;
 
@@ -18,8 +21,6 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
     // chart的数据
     data : null
   };
-
-  stats.format = 'text';
 
   ctrl.servers = {
     // 状态：loading、success、error
@@ -35,17 +36,22 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
     data : null
   };
 
+  // 当前所选服务器
+  ctrl.currentServer = '';
+
 
   ctrl.showServerStats = function(server){
     var name = server.name;
     var type = server.type;
     var promise = null;
+    var date = utils.getDate();
+    ctrl.currentServer = name;
     switch(type){
       case 'server':
-        promise = stats.getServerStats(name, '2015-01-16', 60)
+        promise = stats.getServerStats(name, date, 60)
         break;
       case 'mongodb':
-        promise = stats.getMongodbStats(name, '2015-01-16', 60);
+        promise = stats.getMongodbStats(name, date, 60);
         break;
     }
     if(promise){
@@ -84,7 +90,7 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats) {
 
 }
 
-StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', 'debug', 'stats'];
+StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', 'debug', 'stats', 'utils'];
 
 
 
