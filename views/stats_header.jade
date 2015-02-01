@@ -15,6 +15,9 @@ mixin Servers
 header.headerContainer
   input.search.pull-left(type='search', placeholder='search by keyword')
   +Servers()
+  button.btn.btn-link.editConfig(type='button', ng-click='stats.conditions.status = "show"')
+    i.glyphicon.glyphicon-edit 
+    | 参数修改
   .functions.pull-right
     a(href='javascript:;'): i.glyphicon.glyphicon-bell
     a(href='javascript:;'): i.glyphicon.glyphicon-fullscreen

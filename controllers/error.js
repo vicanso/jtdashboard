@@ -2,7 +2,10 @@
 var config = require('../config');
 
 module.exports = function(err, req, res, next){
-  if(req.accepts('application/json')){
+  
+  if(req.accepts('html')){
+    next(err);
+  }else if(req.accepts('application/json')){
     var data = {
       error : err.message,
       msg : err.msg

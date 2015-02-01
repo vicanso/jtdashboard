@@ -35,6 +35,9 @@ HeaderCss()
       line-height @height
       margin-top (($HEADER_HEIGHT - @height) / 2)
       border-radius 3px
+    .editConfig i
+      width 14px
+      margin-right 3px
     NavCss 40px
     .functions
       a
@@ -50,6 +53,7 @@ HeaderCss()
         i
           margin-left 10px
           font-size 12px
+          width @font-size
         
   
 JTChartCss()
@@ -91,7 +95,15 @@ JTChartCss()
     .next
       left auto
       right 0
-    
+      
+
+ConditionsCss()
+  .conditionsContainer
+    position absolute
+    padding 5px 20px
+    z-index 2
+    .btn
+      width 100%
 
 .dashboardPage
   margin-left $NAV_WIDTH
@@ -107,5 +119,6 @@ JTChartCss()
     overflow scroll
     overflow-scrolling touch
   HeaderCss()
+  ConditionsCss()
   JTChartCss()
   

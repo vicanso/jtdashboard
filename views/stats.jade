@@ -3,6 +3,17 @@ block bodyContainer
   include ./nav
   .dashboardPage(ng-controller='StatsController as stats')
     include ./stats_header
+    .conditionsContainer.hidden(ng-class='{hidden : stats.conditions.status !== "show"}'): .row
+      .col-xs-3: .input-group
+        span.input-group-addon 日期：
+        input.form-control(type='text', placeholder='YYYY-MM-DD', ng-model='stats.conditions.date')
+      .col-xs-3: .input-group
+        span.input-group-addon 间隔：
+        input.form-control(type='number', placeholder='默认为60，单位秒', ng-model='stats.conditions.interval')
+      .col-xs-2
+        button.btn.btn-primary(type='button') 刷新
+
+
     .chartsContainer
       jt-charts.row(jt-data='stats.charts')
     //- .jtChart(jt-chart='stats.mem')
