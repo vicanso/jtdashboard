@@ -202,19 +202,28 @@ var getData = function(collection, conditions, interval, cbf){
     },
     map : function(){
       var tenMinutes = 60 * 100;
-      var minutes = 60;
-      if(interval % tenMinutes === 0 && this.tenMinutes){
+      var minute = 60;
+      var hour = 3600;
+      if(interval % hour === 0 && this.hours){
+        // 使用1小时间隔的统计数据
+        delete this.minutes;
+        delete this.seconds;
+        delete this.tenMinutes;
+      }else if(interval % tenMinutes === 0 && this.tenMinutes){
         // 使用10分钟间隔的统计数据
         delete this.minutes;
         delete this.seconds;
-      }else if(interval % minutes === 0 && this.minutes){
+        delete this.hours;
+      }else if(interval % minute === 0 && this.minutes){
         // 使用1分钟间隔的统计数据
         delete this.seconds;
         delete this.tenMinutes;
-      }else{
+        delete this.hours
+      }else if(this.seconds){
         // 使用1秒间隔的统计数据
         delete this.minutes;
         delete this.tenMinutes;
+        delete this.hours;
       }
       emit(this._id, this);
     }
@@ -232,6 +241,45 @@ var getData = function(collection, conditions, interval, cbf){
   });
 };
 
+
+/**
+ * [convertDataToSeconds 将未整理的数据转换为已整理的按秒分隔的数据]
+ * @param  {[type]} data [description]
+ * @param  {[type]} type [description]
+ * @return {[type]}      [description]
+ */
+var convertDataToSeconds = function(data, type){
+  var result = [];
+  _.forEach(data, function(item){
+    var arr = item.split(':');
+    var index = parseInt(arr[0], 32);
+    var value = parseFloat(arr[1]);
+    if(!result[index]){
+      result[index] = [];
+    }
+    result[index].push(value);
+  });
+  _.forEach(result, function(arr, i){
+    if(!arr){
+      return;
+    }
+    var v;
+    switch(type){
+      case 'counter':
+        v = sum(arr);
+      break;
+      case 'average':
+        v = average(arr);
+      break;
+      case 'gauge':
+        v = _.last(arr);
+      break;
+    }
+    result[i] = v;
+  });
+  return result;
+}
+
 /**
  * [mergeDocs 将相同key的数据合并]
  * @param  {[type]} docs [description]
@@ -240,10 +288,16 @@ var getData = function(collection, conditions, interval, cbf){
  */
 var mergeDocs = function(docs, interval){
   var mergeResult = {};
+
+
   _.forEach(docs, function(doc){
     var key = doc.key;
     if(!mergeResult[key]){
       mergeResult[key] = [];
+    }
+    if(doc.data){
+      doc.seconds = convertDataToSeconds(doc.data, doc.type);
+      delete doc.data;
     }
     var startOfSeconds = Math.floor(moment(doc.date, 'YYYY-MM-DD').valueOf() / 1000);
     var tenMinutes = 60 * 100;
@@ -259,7 +313,10 @@ var mergeDocs = function(docs, interval){
     }
     var tmpResult = {};
     // 将interval间隔之间的统计合并到一个object中
-    _.map(doc[time], function(v, t){
+    _.forEach(doc[time], function(v, t){
+      if(_.isUndefined(v)){
+        return;
+      }
       var seconds = parseInt(t) * base;
       var index = Math.floor(seconds / interval);
       if(!tmpResult[index]){
