@@ -197,42 +197,39 @@ var getData = function(collection, conditions, interval, cbf){
   debug('collection:%s, conditions:%j', collection, conditions);
 
 
-  var mapOptions = {
-    query : conditions,
-    scope : {
-      interval : interval
-    },
-    map : function(){
-      var tenMinutes = 60 * 100;
-      var minute = 60;
-      var hour = 3600;
-      if(interval % hour === 0 && this.hours){
-        // 使用1小时间隔的统计数据
-        delete this.minutes;
-        delete this.seconds;
-        delete this.tenMinutes;
-      }else if(interval % tenMinutes === 0 && this.tenMinutes){
-        // 使用10分钟间隔的统计数据
-        delete this.minutes;
-        delete this.seconds;
-        delete this.hours;
-      }else if(interval % minute === 0 && this.minutes){
-        // 使用1分钟间隔的统计数据
-        delete this.seconds;
-        delete this.tenMinutes;
-        delete this.hours
-      }else if(this.seconds){
-        // 使用1秒间隔的统计数据
-        delete this.minutes;
-        delete this.tenMinutes;
-        delete this.hours;
-      }
-      emit(this._id, this);
-    }
-    // out : {
-    //   replace : 'stats_map_reduce'
-    // }
-  };
+  // var mapOptions = {
+  //   query : conditions,
+  //   scope : {
+  //     interval : interval
+  //   },
+  //   map : function(){
+  //     var tenMinutes = 60 * 100;
+  //     var minute = 60;
+  //     var hour = 3600;
+  //     if(interval % hour === 0 && this.hours){
+  //       // 使用1小时间隔的统计数据
+  //       delete this.minutes;
+  //       delete this.seconds;
+  //       delete this.tenMinutes;
+  //     }else if(interval % tenMinutes === 0 && this.tenMinutes){
+  //       // 使用10分钟间隔的统计数据
+  //       delete this.minutes;
+  //       delete this.seconds;
+  //       delete this.hours;
+  //     }else if(interval % minute === 0 && this.minutes){
+  //       // 使用1分钟间隔的统计数据
+  //       delete this.seconds;
+  //       delete this.tenMinutes;
+  //       delete this.hours
+  //     }else if(this.seconds){
+  //       // 使用1秒间隔的统计数据
+  //       delete this.minutes;
+  //       delete this.tenMinutes;
+  //       delete this.hours;
+  //     }
+  //     emit(this._id, this);
+  //   }
+  // };
   mongodb.getStatsModel(collection).find(conditions, function(err, docs){
     if(err){
       return cbf(err);
@@ -243,18 +240,17 @@ var getData = function(collection, conditions, interval, cbf){
     docs = mergeDocs(docs, interval);
     cbf(null, docs);
   });
-  return;
-  mongodb.getStatsModel(collection).mapReduce(mapOptions, function(err, docs){
-    if(err){
-      cbf(err);
-    }else{
-      docs = _.map(docs, function(doc){
-        return doc.value;
-      });
-      docs = mergeDocs(docs, interval);
-      cbf(null, docs);
-    }
-  });
+  // mongodb.getStatsModel(collection).mapReduce(mapOptions, function(err, docs){
+  //   if(err){
+  //     cbf(err);
+  //   }else{
+  //     docs = _.map(docs, function(doc){
+  //       return doc.value;
+  //     });
+  //     docs = mergeDocs(docs, interval);
+  //     cbf(null, docs);
+  //   }
+  // });
 };
 
 
@@ -294,7 +290,7 @@ var convertDataToSeconds = function(data, type){
     result[i] = v;
   });
   return result;
-}
+};
 
 /**
  * [mergeDocs 将相同key的数据合并]

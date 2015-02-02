@@ -21,22 +21,5 @@
       "/stats/controller.js"
     ],
     "modifiedAt": "2015-01-30 19:59:39"
-  },
-  "index": {
-    "css": [
-      "/component/bootstrap.css",
-      "/css/home.css"
-    ],
-    "js": [
-      "/component/debug.js",
-      "/component/angular.js",
-      "/component/angular-local-storage.js",
-      "/service/utils.js",
-      "/service/http_log.js",
-      "/service/debug.js",
-      "/js/global.js",
-      "/js/home.js"
-    ],
-    "modifiedAt": "2015-01-31 19:19:03"
   }
 }

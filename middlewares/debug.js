@@ -6,9 +6,9 @@ var config = require('../config');
  */
 module.exports = function(){
   return function(req, res, next){
-    res.locals.DEBUG = req.query['_debug'] !== undefined;
-    res.locals.pretty = req.query['_pretty'] !== undefined;
-    var pattern = req.query['_pattern'];
+    res.locals.DEBUG = req.query._debug !== undefined;
+    res.locals.pretty = req.query._pretty !== undefined;
+    var pattern = req.query._pattern;
     if(!pattern && config.env === 'development'){
       pattern = '*';
     }
