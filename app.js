@@ -56,7 +56,7 @@ var initServer = function(){
   initAppSetting(app);
 
   // http请求10秒超时
-  app.use(connectTimeout(30 * 1000));
+  app.use(connectTimeout(60 * 1000));
 
   //用于varnish haproxy检测node server是否可用
   app.use('/ping', function(req, res){

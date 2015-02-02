@@ -195,6 +195,8 @@ var convertConditions = function(conditions){
  */
 var getData = function(collection, conditions, interval, cbf){
   debug('collection:%s, conditions:%j', collection, conditions);
+
+
   var mapOptions = {
     query : conditions,
     scope : {
@@ -227,7 +229,21 @@ var getData = function(collection, conditions, interval, cbf){
       }
       emit(this._id, this);
     }
+    // out : {
+    //   replace : 'stats_map_reduce'
+    // }
   };
+  mongodb.getStatsModel(collection).find(conditions, function(err, docs){
+    if(err){
+      return cbf(err);
+    }
+    docs = _.map(docs, function(doc){
+      return doc.toObject();
+    });
+    docs = mergeDocs(docs, interval);
+    cbf(null, docs);
+  });
+  return;
   mongodb.getStatsModel(collection).mapReduce(mapOptions, function(err, docs){
     if(err){
       cbf(err);
