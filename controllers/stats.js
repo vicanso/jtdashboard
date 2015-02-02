@@ -203,9 +203,9 @@ var getData = function(collection, conditions, interval, cbf){
   //     interval : interval
   //   },
   //   map : function(){
-  //     var tenMinutes = 60 * 100;
-  //     var minute = 60;
-  //     var hour = 3600;
+      // var tenMinutes = 60 * 100;
+      // var minute = 60;
+      // var hour = 3600;
   //     if(interval % hour === 0 && this.hours){
   //       // 使用1小时间隔的统计数据
   //       delete this.minutes;
@@ -230,7 +230,20 @@ var getData = function(collection, conditions, interval, cbf){
   //     emit(this._id, this);
   //   }
   // };
-  mongodb.getStatsModel(collection).find(conditions, function(err, docs){
+  var minute = 60;
+  var tenMinutes = 60 * 100;
+  var hour = 3600;
+  var rejectFields;
+  if(interval % hour === 0){
+    rejectFields = '-minutes -seconds -tenMinutes';
+  }else if(interval % tenMinutes === 0){
+    rejectFields = '-minutes -seconds -hours';
+  }else if(interval % minute === 0){
+    rejectFields = '-seconds -tenMinutes -hours';
+  }else{
+    rejectFields = '-minutes -tenMinutes -hours';
+  }
+  mongodb.getStatsModel(collection).find(conditions, rejectFields, function(err, docs){
     if(err){
       return cbf(err);
     }

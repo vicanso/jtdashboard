@@ -24,10 +24,10 @@ var init = function(uri, options){
   options = _.extend(options, defaults);
   client = mongoose.createConnection(uri, options);
   client.on('connected', function(){
-    console.info(uri + ' connected');
+    console.info('mongodb connected');
   });
   client.on('disconnected', function(){
-    console.info(uri + ' disconnected');
+    console.info('mongodb disconnected');
   });
 };
 
