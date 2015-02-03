@@ -1,0 +1,35 @@
+@import 'nib'
+@import './constant'
+html, body
+  height 100%
+  overflow hidden
+
+LogListCss()
+  .logList
+    position absolute
+    left 10px
+    top 10px
+    right 10px
+    bottom 10px
+    border 1px solid #333
+    word-wrap break-word
+    overflow auto
+    padding 5px
+    p
+      font-size 12px
+      line-height 16px
+      margin 0
+      color #0c0
+      font-weight 400
+      font-family 'Source Sans Pro',Verdana,Arial,sans-serif
+      span
+        margin-right 5px
+      .topic
+        color #ffbb78
+        
+.logPage
+  margin-left $NAV_WIDTH
+  height 100%
+  position relative
+  background-color #111
+  LogListCss()

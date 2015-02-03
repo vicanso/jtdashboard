@@ -4,14 +4,16 @@ block bodyContainer
   .dashboardPage(ng-controller='StatsController as stats')
     include ./stats_header
     .conditionsContainer.hidden(ng-class='{hidden : stats.conditions.status !== "show"}'): .row
-      .col-xs-3: .input-group
+      .col-xs-5: .input-group
         span.input-group-addon 日期：
         input.form-control(type='text', placeholder='YYYY-MM-DD', ng-model='stats.conditions.date')
-      .col-xs-3: .input-group
+      .col-xs-4: .input-group
         span.input-group-addon 间隔：
         input.form-control(type='number', placeholder='默认为60，单位秒', ng-model='stats.conditions.interval')
-      .col-xs-2
-        button.btn.btn-primary(type='button') 刷新
+      .col-xs-3
+        .btn-group.btn-group-justified
+          a.btn.btn-primary(href='javascript:;', ng-click='stats.refresh()') 刷新
+          a.btn.btn-default(href='javascript:;', ng-click='stats.conditions.status = "hidden"') 关闭
 
 
     .chartsContainer

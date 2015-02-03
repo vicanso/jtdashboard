@@ -50,6 +50,12 @@ var routeInfos = [
     handler : controllers.stats.view,
   },
   {
+    route : '/log',
+    template : 'log',
+    middleware : [addImporter],
+    handler : controllers.log.view
+  },
+  {
     route : '/stats/collection/:collection',
     handler : controllers.stats.get
   },

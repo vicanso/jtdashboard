@@ -31,7 +31,7 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
 
 
   // 当前所选服务器
-  ctrl.currentServer = '';
+  ctrl.currentServer = null;
 
   // 统计配置信息
   ctrl.conditions = {
@@ -41,6 +41,8 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
 
 
   ctrl.showServerStats = function(server){
+
+    ctrl.currentServer = server;
     var name = server.name;
     var type = server.type;
     var promise = null;
@@ -53,7 +55,6 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
       date = utils.getDate();
     }
     var interval = ctrl.conditions.interval || 60;
-    ctrl.currentServer = name;
     switch(type){
       case 'server':
         promise = stats.getServerStats(name, date, interval);
@@ -64,6 +65,13 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
     }
     if(promise){
       showStats(promise);
+    }
+  };
+
+  ctrl.refresh = function(){
+    var server = ctrl.currentServer;
+    if(server){
+      ctrl.showServerStats(server);
     }
   };
 

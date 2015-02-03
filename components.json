@@ -21,5 +21,39 @@
       "/stats/controller.js"
     ],
     "modifiedAt": "2015-01-30 19:59:39"
+  },
+  "log": {
+    "css": [
+      "/component/bootstrap.css",
+      "/css/nav.css",
+      "/css/log.css"
+    ],
+    "js": [
+      "/component/debug.js",
+      "/component/angular.js",
+      "/component/angular-local-storage.js",
+      "/service/utils.js",
+      "/service/http_log.js",
+      "/service/debug.js",
+      "/js/global.js",
+      "/component/socket.io.js",
+      "/log/controller.js"
+    ],
+    "modifiedAt": "2015-02-03 20:24:11"
+  },
+  "index": {
+    "css": [
+      "/component/bootstrap.css"
+    ],
+    "js": [
+      "/component/debug.js",
+      "/component/angular.js",
+      "/component/angular-local-storage.js",
+      "/service/utils.js",
+      "/service/http_log.js",
+      "/service/debug.js",
+      "/js/global.js"
+    ],
+    "modifiedAt": "2015-02-03 16:45:32"
   }
 }

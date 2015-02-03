@@ -15,7 +15,7 @@ var connectTimeout = require('connect-timeout');
 var monitor = require('./helpers/monitor');
 var mongodb = require('./helpers/mongodb');
 var domain = require('domain');
-
+var io = require('./helpers/io');
 /**
  * [initAppSetting 初始化app的配置信息]
  * @param  {[type]} app [description]
@@ -41,6 +41,7 @@ var initMongodb = function(uri){
   mongodb.init(uri);
 };
 
+
 var initServer = function(){
 
   initMongodb(config.mongodbUri);
@@ -48,15 +49,22 @@ var initServer = function(){
   //性能监控的间隔时间
   var monitorInterval = 10 * 1000;
   if(config.env === 'development'){
-    monitorInterval = 60 * 1000;
+    monitorInterval = 30 * 1000;
   }
   monitor.start(monitorInterval);
 
   var app = express();
+  var server = require('http').Server(app);
+  io.init(server);
+
   initAppSetting(app);
 
   // http请求10秒超时
-  app.use(connectTimeout(60 * 1000));
+  var httpTimeout = 10 * 1000;
+  if(config.env === 'development'){
+    httpTimeout = 60 * 1000;
+  }
+  app.use(connectTimeout(httpTimeout));
 
   //用于varnish haproxy检测node server是否可用
   app.use('/ping', function(req, res){
@@ -109,7 +117,7 @@ var initServer = function(){
   app.use(require('./router'));
 
   app.use(require('./controllers/error'));
-  app.listen(config.port);
+  server.listen(config.port);
   console.log('server listen on:' + config.port);
 };
 
