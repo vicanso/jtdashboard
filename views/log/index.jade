@@ -1,9 +1,10 @@
-extends ./layout
+extends ../layout
 block bodyContainer
-  include ./nav
+  include ../nav
   .logPage(ng-controller='LogController as log')
+    include ./header
     .logList
 
   - importer.import('/component/socket.io.js');
-  - importer.import('/log/controller.js');
+  - importer.import('/log/service.js', '/log/controller.js');
   - importer.import('/css/log.css');

@@ -1,8 +1,8 @@
-extends ./layout
+extends ../layout
 block bodyContainer
-  include ./nav
+  include ../nav
   .dashboardPage(ng-controller='StatsController as stats')
-    include ./stats_header
+    include ./header
     .conditionsContainer.hidden(ng-class='{hidden : stats.conditions.status !== "show"}'): .row
       .col-xs-5: .input-group
         span.input-group-addon 日期：

@@ -45,13 +45,13 @@ var routeInfos = [
   },
   {
     route : '/stats',
-    template : 'stats',
+    template : 'stats/index',
     middleware : [addImporter],
     handler : controllers.stats.view,
   },
   {
     route : '/log',
-    template : 'log',
+    template : 'log/index',
     middleware : [addImporter],
     handler : controllers.log.view
   },

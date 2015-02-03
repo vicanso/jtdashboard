@@ -8,7 +8,7 @@ LogListCss()
   .logList
     position absolute
     left 10px
-    top 10px
+    top $HEADER_HEIGHT + 10
     right 10px
     bottom 10px
     border 1px solid #333
@@ -27,9 +27,20 @@ LogListCss()
       .topic
         color #ffbb78
         
+HeaderCss()
+  .headerContainer
+    height $HEADER_HEIGHT
+    line-height @height
+    background-color #1d3446
+    .search
+      width 400px
+      padding-top (($HEADER_HEIGHT - 35) / 2)
+
+        
 .logPage
   margin-left $NAV_WIDTH
   height 100%
   position relative
   background-color #111
+  HeaderCss()
   LogListCss()
