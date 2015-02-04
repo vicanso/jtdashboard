@@ -88,6 +88,7 @@
     ],
     "js": [
       "/component/debug.js",
+      "/component/jquery.js",
       "/component/angular.js",
       "/component/angular-local-storage.js",
       "/service/utils.js",
@@ -96,8 +97,9 @@
       "/js/global.js",
       "/component/socket.io.js",
       "/log/service.js",
+      "/log/directive.js",
       "/log/controller.js"
     ],
-    "modifiedAt": "2015-02-03 21:41:22"
+    "modifiedAt": "2015-02-04 20:39:17"
   }
 }

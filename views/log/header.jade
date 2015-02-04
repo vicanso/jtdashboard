@@ -1,4 +1,4 @@
 header.headerContainer
   .input-group.search
-    input.form-control(type='text', placeholder='请输入要查看的log节点，以,号分隔', ng-model='log.log.key')
+    input.form-control(type='text', placeholder='请输入要查看的log节点，以,号分隔', ng-model='log.filter.key', ng-keyup='log.confirm($event)')
     a.input-group-addon(href='javascript:;', ng-click='log.show()') GO
