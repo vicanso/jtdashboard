@@ -4,7 +4,7 @@ block bodyContainer
   .logPage(ng-controller='LogController as log')
     include ./header
     .logList
-      jt-log(jt-data='log.messageList[0]')
+      jt-log(jt-data='log.messageList')
 
   - importer.import('/component/socket.io.js');
   - importer.import('/log/service.js', '/log/directive.js', '/log/controller.js');

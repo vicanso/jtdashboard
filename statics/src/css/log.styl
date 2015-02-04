@@ -7,18 +7,22 @@ html, body
 
 LogListCss()
   .logList
-    position absolute
     left 10px
     top $HEADER_HEIGHT + 10
     right 10px
     bottom 10px
-    border 1px solid #333
-    word-wrap break-word
-    padding 5px
+    position absolute
     jt-log
       display block
       height 100%
       overflow auto
+      border 1px solid #333
+      word-wrap break-word
+      padding 5px
+      position relative
+      &:hover
+        .ctrls
+          display block
       p
         font-size 12px
         line-height 16px
@@ -30,6 +34,17 @@ LogListCss()
           margin-right 5px
         .topic
           color #ffbb78
+      .ctrls
+        display none
+        position absolute
+        right 5px
+        top 5px
+        z-index 1
+        a
+          color #fff
+          text-decoration none
+          &.selected
+            color #0c0
         
 HeaderCss()
   .headerContainer

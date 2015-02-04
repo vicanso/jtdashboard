@@ -13,15 +13,25 @@ function LogCtrl($scope, $element, io){
     key : ''
   };
 
+  // 消息列表
   ctrl.messageList = [];
 
+  // 与服务器的连接状态
   ctrl.status = '';
 
+  // 显示log节点的消息
   ctrl.show = show;
 
+  // 输入log节点后按回车时的确定
   ctrl.confirm = confirm;
 
 
+  // ctrl.viewOptions = {
+  //   // 表示log是否固定显示最底
+  //   bottom : true
+  // };
+
+  var watchTopicList = [];
 
 
 
@@ -43,12 +53,7 @@ function LogCtrl($scope, $element, io){
     angular.forEach(topicList, function(topic){
       if(!find(topic)){
         io.watch(topic);
-        ctrl.messageList.push({
-          topic : topic,
-          filter : '',
-          total : 0,
-          data : []
-        });
+        watchTopicList.push(topic);
       }
     });
   }
@@ -61,8 +66,8 @@ function LogCtrl($scope, $element, io){
 
   function find(topic){
     var result;
-    angular.forEach(ctrl.messageList, function(item){
-      if(!result && item.topic === topic){
+    angular.forEach(watchTopicList, function(item){
+      if(!result && item === topic){
         result = item;
       }
     });
@@ -76,12 +81,15 @@ function LogCtrl($scope, $element, io){
       ctrl.status = 'connect';
     });
     io.on('log', function(data){
-      var msgData = find(data.topic);
-      if(msgData){
-        msgData.data.push(data.msg);
-        msgData.total = msgData.data.length;
-        $scope.$digest();
-      }
+      ctrl.messageList.push(data);
+      $scope.$digest();
+      // var msgData = find(data.topic);
+      // if(msgData){
+
+      //   msgData.data.push(data.msg);
+      //   msgData.total = msgData.data.length;
+      //   $scope.$digest();
+      // }
     });
   }
 
