@@ -6,7 +6,7 @@ angular.module('jtApp')
   .controller('LogController', LogCtrl);
 
 
-function LogCtrl($scope, $element, io){
+function LogCtrl($scope, $element, io, utils){
   var ctrl = this;
 
   ctrl.filter = {
@@ -26,11 +26,6 @@ function LogCtrl($scope, $element, io){
   ctrl.confirm = confirm;
 
 
-  // ctrl.viewOptions = {
-  //   // 表示log是否固定显示最底
-  //   bottom : true
-  // };
-
   var watchTopicList = [];
 
 
@@ -38,11 +33,13 @@ function LogCtrl($scope, $element, io){
 
   init('http://localhost:10000/');
 
-  // setTimeout(function(){
-  //   $scope.$apply(function(){
-  //     show();
-  //   });
-  // }, 1000);
+  // for test
+  setTimeout(function(){
+    ctrl.filter.key = 'haproxy';
+    $scope.$apply(function(){
+      show();
+    });
+  }, 1000);
 
 
   var logList = $element.children();
@@ -74,6 +71,10 @@ function LogCtrl($scope, $element, io){
     return result;
   }
 
+  var digest = utils.throttle(function(){
+    $scope.$digest();
+  }, 100);
+
   function init(url){
     io.connect(url);
     ctrl.status = 'connecting';
@@ -82,14 +83,7 @@ function LogCtrl($scope, $element, io){
     });
     io.on('log', function(data){
       ctrl.messageList.push(data);
-      $scope.$digest();
-      // var msgData = find(data.topic);
-      // if(msgData){
-
-      //   msgData.data.push(data.msg);
-      //   msgData.total = msgData.data.length;
-      //   $scope.$digest();
-      // }
+      digest();
     });
   }
 
@@ -109,6 +103,6 @@ function LogCtrl($scope, $element, io){
 
 }
 
-LogCtrl.$inject = ['$scope', '$element', 'io'];
+LogCtrl.$inject = ['$scope', '$element', 'io', 'utils'];
 
 })(this);
