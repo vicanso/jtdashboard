@@ -34,12 +34,12 @@ function LogCtrl($scope, $element, io, utils){
   init('http://localhost:10000/');
 
   // for test
-  setTimeout(function(){
-    ctrl.filter.key = 'haproxy';
-    $scope.$apply(function(){
-      show();
-    });
-  }, 1000);
+  // setTimeout(function(){
+  //   ctrl.filter.key = 'haproxy';
+  //   $scope.$apply(function(){
+  //     show();
+  //   });
+  // }, 1000);
 
 
   var logList = $element.children();

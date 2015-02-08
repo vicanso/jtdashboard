@@ -3,7 +3,7 @@
 html, body
   height 100%
   overflow hidden
-  visibility hidden
+  // visibility hidden
 
 LogListCss()
   .logList
@@ -15,7 +15,7 @@ LogListCss()
     jt-log
       display block
       height 100%
-      overflow auto
+      overflow hidden
       border 1px solid #333
       word-wrap break-word
       padding 5px
@@ -23,6 +23,9 @@ LogListCss()
       &:hover
         .ctrls
           display block
+      .msgContainer
+        height 100%
+        overflow scroll
       p
         font-size 12px
         line-height 16px
@@ -35,16 +38,18 @@ LogListCss()
         .topic
           color #ffbb78
       .ctrls
-        display none
+        // display none
         position absolute
         right 5px
         top 5px
         z-index 1
-        a
-          color #fff
-          text-decoration none
-          &.selected
-            color #0c0
+        .btn
+          outline none
+        .filter
+          position absolute
+          top 35px
+          right 0
+          width 250px
         
 HeaderCss()
   .headerContainer

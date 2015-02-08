@@ -13,14 +13,30 @@ function jtLog($compile){
     link : function(scope, element, attr){
       var appendIndex = 0;
       var ctrlsHtml = '<div class="ctrls">' +
-        '<a class="glyphicon glyphicon-pushpin" ng-class="{selected : bottom}" ng-click="bottom = !bottom" href="javascript:;"></a>' +
+        '<div class="input-group filter">' + 
+          '<span class="input-group-addon"><i class="glyphicon glyphicon-filter"></i></span>' +
+          '<input type="text" class="form-control" placeholder="Username">' +
+          '<a class="glyphicon glyphicon-pushpin" ng-class="{selected : bottom}" ng-click="bottom = !bottom" href="javascript:;"></a>' +
+        '</div>' +
+        
       '</div>';
+
+      var ctrlsHtml = '<div class="ctrls btn-group">' +
+        '<button class="btn btn-default" ng-class=\'{"btn-primary" : filter}\' ng-click="filter = !filter"><i class="glyphicon glyphicon-filter"></i></button>' +
+        '<button class="btn btn-default" ng-class=\'{"btn-primary" : bottom}\' ng-click="bottom = !bottom"><i class="glyphicon glyphicon-pushpin"></i></button>' +
+        '<div class="input-group filter" ng-show="filter">' +
+          '<input type="text" class="form-control" placeholder="请输入关键字" />' +
+        '</div>' +
+      '</div>';
+
       // 用于fitler log的显示
       var filter = null;
       // 是否固定log底部显示
       scope.bottom = true;
+      // 是否显示关键字筛选
+      scope.filter = false;
       element.append(ctrlsHtml);
-      var msgContainer = angular.element('<div></div>');
+      var msgContainer = angular.element('<div class="msgContainer"></div>');
       element.append(msgContainer);
       $compile(element.children())(scope);
       scope.$watchCollection('data', function(v){
@@ -80,11 +96,11 @@ function jtLog($compile){
       });
 
 
-      setTimeout(function(){
-        scope.$apply(function(){
-          scope.key = 'haproxy';
-        });
-      }, 10000);
+      // setTimeout(function(){
+      //   scope.$apply(function(){
+      //     scope.key = 'haproxy';
+      //   });
+      // }, 10000);
 
       /**
        * [appendLog 插入消息]
@@ -103,8 +119,6 @@ function jtLog($compile){
             var result = filter(msg);
             if(!result.filter){
               return; 
-            }else{
-
             }
           }
           var topicHtml = '<span class="topic">' + topic + '</span>';
@@ -112,7 +126,7 @@ function jtLog($compile){
         });
         msgContainer.append(arr.join(''));
         if(scope.bottom){
-          element.scrollTop(Number.POSITIVE_INFINITY);
+          msgContainer.scrollTop(Number.POSITIVE_INFINITY);
         }
       }
     }
