@@ -4,7 +4,12 @@ var app = angular.module('jtApp');
 
 app.directive('jtLog', jtLog);
 
-function jtLog($compile){
+
+var logFormatter = {
+  haproxy : haproxyFormatter
+};
+
+function jtLog($compile, utils){
   return {
     restrict : 'E',
     scope : {
@@ -21,16 +26,23 @@ function jtLog($compile){
         
       '</div>';
 
-      var ctrlsHtml = '<div class="ctrls btn-group">' +
+      var ctrlsHtml = '<div class="ctrls btn-group input-group">' +
         '<button class="btn btn-default" ng-class=\'{"btn-primary" : filter}\' ng-click="filter = !filter"><i class="glyphicon glyphicon-filter"></i></button>' +
+        '<input type="text" class="form-control" placeholder="请输入关键字" />' +
         '<button class="btn btn-default" ng-class=\'{"btn-primary" : bottom}\' ng-click="bottom = !bottom"><i class="glyphicon glyphicon-pushpin"></i></button>' +
         '<div class="input-group filter" ng-show="filter">' +
-          '<input type="text" class="form-control" placeholder="请输入关键字" />' +
         '</div>' +
       '</div>';
 
+      var ctrlsHtml = '<div class="ctrls input-group">' +
+        '<span class="input-group-addon ctrl" ng-class="{selected : filter}" ng-click="filter = !filter"><i class="glyphicon glyphicon-filter"></i></span>' +
+        '<input type="text" class="form-control keyword" placeholder="请输入关键字" ng-model="key" />' +
+        '<span class="input-group-addon ctrl" ng-class="{selected : bottom}" ng-click="bottom = !bottom"><i class="glyphicon glyphicon-pushpin"></i></span>' +
+      '</div>';
+
+
       // 用于fitler log的显示
-      var filter = null;
+      var filterHandler = null;
       // 是否固定log底部显示
       scope.bottom = true;
       // 是否显示关键字筛选
@@ -60,45 +72,57 @@ function jtLog($compile){
           }else{
             result = true;
           }
+          var newMsg = msg;
           angular.forEach(arr, function(key){
-            var reg = new RegExp(key, 'gi');
-            console.dir(reg.exec(msg));
+            var reg = new RegExp('(' + key + ')', 'gi');
+            newMsg = newMsg.replace(reg, '<span class="key">$1</span>');
             if(type === 'or'){
               if(!result){
-                result = reg.test(msg);
+                result = newMsg !== msg;
               }
             }else{
               if(result){
-                result = reg.test(msg);
+                result = newMsg !== msg;
               }
             }
           });
           return {
-            filter : result
+            filter : result,
+            msg : newMsg
           };
         }
       };
 
       // 监控key的变化，对消息记录做filter
-      scope.$watch('key', function(v){
-        if(v){
-          if(v.indexOf('||') !== -1){
-            filter = getRegFilter(v.split('||'), 'or');
-          }else if(v.indexOf('&&') !== -1){
-            filter = getRegFilter(v.split('&&'), 'and');
+      
+      var filterLog = function(){
+        var key = scope.key;
+        var filter = scope.filter;
+        if(key && filter){
+          if(key.indexOf('||') !== -1){
+            filterHandler = getRegFilter(key.split('||'), 'or');
+          }else if(key.indexOf('&&') !== -1){
+            filterHandler = getRegFilter(key.split('&&'), 'and');
           }else{
-            filter = getRegFilter([v]);
+            filterHandler = getRegFilter([key]);
           }
-          appendIndex = 0;
-          msgContainer.empty();
-          appendLog(scope.data);
+        }else{
+          filterHandler = null;
         }
-      });
+        appendIndex = 0;
+        msgContainer.empty();
+        appendLog(scope.data);
+      };
+      var debounceFn = utils.debounce(function(){
+        scope.$apply(filterLog);
+      }, 500);
+      scope.$watch('key', debounceFn);
+      scope.$watch('filter', debounceFn);
 
 
       // setTimeout(function(){
       //   scope.$apply(function(){
-      //     scope.key = 'haproxy';
+      //     scope.key = '80port';
       //   });
       // }, 10000);
 
@@ -115,13 +139,18 @@ function jtLog($compile){
         angular.forEach(msgList, function(item){
           var topic = item.topic;
           var msg = item.msg;
-          if(filter){
-            var result = filter(msg);
+          if(filterHandler){
+            var result = filterHandler(msg);
             if(!result.filter){
               return; 
             }
+            msg = result.msg;
           }
           var topicHtml = '<span class="topic">' + topic + '</span>';
+          var formatter = logFormatter[topic];
+          if(formatter){
+            msg = formatter(msg);
+          }
           arr.push('<p>' + topicHtml + msg + '</p>');
         });
         msgContainer.append(arr.join(''));
@@ -132,5 +161,22 @@ function jtLog($compile){
     }
   }
 }
-jtLog.$inject = ['$compile'];
+jtLog.$inject = ['$compile', 'utils'];
+
+
+/**
+ * [haproxyFormatter 格式化haproxy的log]
+ * @param  {[type]} msg [description]
+ * @return {[type]}     [description]
+ */
+function haproxyFormatter(msg){
+  var tag = '[HAPROXY]';
+  var index = msg.indexOf(tag);
+  if(index !== -1){
+    msg = msg.substring(index + tag.length);
+  }
+  console.dir(msg);
+  return msg;
+}
+
 })(this);

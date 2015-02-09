@@ -48,6 +48,7 @@
     ],
     "js": [
       "/component/debug.js",
+      "/component/jquery.js",
       "/component/angular.js",
       "/component/angular-local-storage.js",
       "/service/utils.js",
@@ -55,7 +56,7 @@
       "/service/debug.js",
       "/js/global.js"
     ],
-    "modifiedAt": "2015-02-03 16:45:32"
+    "modifiedAt": "2015-02-09 10:06:05"
   },
   "stats/index": {
     "css": [
@@ -101,6 +102,6 @@
       "/log/directive.js",
       "/log/controller.js"
     ],
-    "modifiedAt": "2015-02-04 20:39:17"
+    "modifiedAt": "2015-02-09 19:34:51"
   }
 }

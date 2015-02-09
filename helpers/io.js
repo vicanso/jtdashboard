@@ -30,14 +30,14 @@ exports.init = function(server){
       });
       debug('io disconnect');
     });
-    socket.on('watch', function(data){
-      if(data){
-        zmqSocket.subscribe(data);
+    socket.on('watch', function(topic){
+      if(topic){
+        zmqSocket.subscribe(topic);
       }
-      if(!socketDict[data]){
-        socketDict[data] = [socket];
-      }else if(!_.find(socketDict[data], socket)){
-        socketDict[data].push(socket);
+      if(!socketDict[topic]){
+        socketDict[topic] = [socket];
+      }else if(!_.find(socketDict[topic], socket)){
+        socketDict[topic].push(socket);
       }
     });
   });

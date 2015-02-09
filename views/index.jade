@@ -1,6 +1,7 @@
 extends ./layout
 block bodyContainer
   .homePage(ng-controller='HomePageController')
+    a(href='http://localhost') localhost
     p 测试页
     input(type='text', ng-model='user.name', jt-focus)
     p 「全球最大的开源公司」这一名号，在数易其主之后，最终归属了 Facebook。这家非典型的开源公司不依靠出售软件盈利，反而走上了开源的道路—提供开源代码，经营开源社区。
