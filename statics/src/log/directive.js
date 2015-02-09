@@ -17,22 +17,6 @@ function jtLog($compile, utils){
     },
     link : function(scope, element, attr){
       var appendIndex = 0;
-      var ctrlsHtml = '<div class="ctrls">' +
-        '<div class="input-group filter">' + 
-          '<span class="input-group-addon"><i class="glyphicon glyphicon-filter"></i></span>' +
-          '<input type="text" class="form-control" placeholder="Username">' +
-          '<a class="glyphicon glyphicon-pushpin" ng-class="{selected : bottom}" ng-click="bottom = !bottom" href="javascript:;"></a>' +
-        '</div>' +
-        
-      '</div>';
-
-      var ctrlsHtml = '<div class="ctrls btn-group input-group">' +
-        '<button class="btn btn-default" ng-class=\'{"btn-primary" : filter}\' ng-click="filter = !filter"><i class="glyphicon glyphicon-filter"></i></button>' +
-        '<input type="text" class="form-control" placeholder="请输入关键字" />' +
-        '<button class="btn btn-default" ng-class=\'{"btn-primary" : bottom}\' ng-click="bottom = !bottom"><i class="glyphicon glyphicon-pushpin"></i></button>' +
-        '<div class="input-group filter" ng-show="filter">' +
-        '</div>' +
-      '</div>';
 
       var ctrlsHtml = '<div class="ctrls input-group">' +
         '<span class="input-group-addon ctrl" ng-class="{selected : filter}" ng-click="filter = !filter"><i class="glyphicon glyphicon-filter"></i></span>' +
@@ -90,7 +74,7 @@ function jtLog($compile, utils){
             filter : result,
             msg : newMsg
           };
-        }
+        };
       };
 
       // 监控key的变化，对消息记录做filter
@@ -159,7 +143,7 @@ function jtLog($compile, utils){
         }
       }
     }
-  }
+  };
 }
 jtLog.$inject = ['$compile', 'utils'];
 

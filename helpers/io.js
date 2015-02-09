@@ -14,7 +14,7 @@ zmqSocket.on('message', function(topic, msg){
       topic : topic,
       msg : msg
     });
-  })
+  });
 });
 exports.init = function(server){
   io = require('socket.io')(server);
