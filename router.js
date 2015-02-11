@@ -26,6 +26,7 @@ if(config.env !== 'development'){
 
 var addImporter = importer(importerOptions);
 
+
 var routeInfos = [
   {
     route : '/',
@@ -35,6 +36,7 @@ var routeInfos = [
   },
   {
     route : '/user',
+    method : ['get', 'post'],
     handler : controllers.user
   },
   {

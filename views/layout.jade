@@ -19,10 +19,23 @@ html(lang='zh-CN', ng-app='jtApp')
 
     - importer.import('/service/utils.js', '/service/http_log.js', '/service/debug.js');
 
-    - importer.import('/js/global.js');
+    - importer.import('/js/global.js', '/css/global.css', '/service/user.js');
 
-  body
+  body(ng-controller='AppController as app')
     block bodyContainer
+    .mask.hidden(ng-class='{hidden : app.login.status == "hidden"}')
+    .dialog.loginDialog.hidden(ng-class='{hidden : app.login.status == "hidden"}')
+      .title 登录
+        a.pull-right(href='javascript:;', ng-click='app.login.status = "hidden"'): i.glyphicon.glyphicon-remove
+      .content
+        .input-group
+          span.input-group-addon 用户名：
+          input.form-control(type='text', placeholder='请输入用户名')
+        .input-group
+          span.input-group-addon 密码：
+          input.form-control(type='text', placeholder='请输入密码')
+
+
   include ./global_variable
   script.
     TIMING.end('html');

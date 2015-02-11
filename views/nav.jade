@@ -3,10 +3,10 @@ nav.navContainer: ul
   li: a(href='javascript:;') 
     i.glyphicon.glyphicon-dashboard
     | Dashboard
-  li(class='#{TEMPLATE === "stats"? "active" : ""}'): a(href='javascript:;') 
+  li(class='#{TEMPLATE === "stats/index"? "active" : ""}'): a(href='/stats') 
     i.glyphicon.glyphicon-stats
     | Stats
-  li(class='#{TEMPLATE === "log"? "active" : ""}'): a(href='javascript:;') 
+  li(class='#{TEMPLATE === "log/index"? "active" : ""}'): a(href='/log') 
     i.glyphicon.glyphicon-console
     | Log
   li: a(href='javascript:;') 

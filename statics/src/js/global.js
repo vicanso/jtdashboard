@@ -1,7 +1,7 @@
 ;(function(global){
 
 'use strict';
-var requires = ['LocalStorageModule', 'jt.service.debug', 'jt.service.utils', 'jt.service.httpLog'];
+var requires = ['LocalStorageModule', 'jt.service.debug', 'jt.service.utils', 'jt.service.httpLog', 'jt.service.user'];
 var app = angular.module('jtApp', requires);
 
 // 用户在controller中添加require
@@ -93,11 +93,27 @@ app.run(['$http', '$timeout', '$window', 'debug', function($http, $timeout, $win
   $timeout(function(){
     checkWatchers();
   }, checkWatchers);
-  
-  // console.dir(window.performance);
 }]);
 
+app.controller('AppController', AppController);
 
+function AppController($http){
+  var ctrl = this;
+
+
+  ctrl.login = {
+    status : 'hidden'
+  };
+
+
+
+
+  function login(){
+
+  }
+}
+
+AppController.$inject = ['$http']
 
 
 

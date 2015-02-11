@@ -54,13 +54,15 @@
       "/service/utils.js",
       "/service/http_log.js",
       "/service/debug.js",
-      "/js/global.js"
+      "/js/global.js",
+      "/service/user.js"
     ],
-    "modifiedAt": "2015-02-09 10:06:05"
+    "modifiedAt": "2015-02-11 21:18:33"
   },
   "stats/index": {
     "css": [
       "/component/bootstrap.css",
+      "/css/global.css",
       "/css/nav.css",
       "/component/c3.css",
       "/css/stats.css"
@@ -74,13 +76,14 @@
       "/service/http_log.js",
       "/service/debug.js",
       "/js/global.js",
+      "/service/user.js",
       "/component/d3.js",
       "/component/c3.js",
       "/stats/service.js",
       "/stats/directive.js",
       "/stats/controller.js"
     ],
-    "modifiedAt": "2015-02-07 12:51:34"
+    "modifiedAt": "2015-02-11 21:23:51"
   },
   "log/index": {
     "css": [
@@ -97,11 +100,12 @@
       "/service/http_log.js",
       "/service/debug.js",
       "/js/global.js",
+      "/service/user.js",
       "/component/socket.io.js",
       "/log/service.js",
       "/log/directive.js",
       "/log/controller.js"
     ],
-    "modifiedAt": "2015-02-09 19:34:51"
+    "modifiedAt": "2015-02-11 21:18:40"
   }
 }

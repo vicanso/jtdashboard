@@ -5,7 +5,7 @@
 angular.module('jtApp')
   .controller('StatsController', StatsCtrl);
 
-function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
+function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user) {
   debug = debug('homePage');
 
   stats.format = 'text';
@@ -37,6 +37,30 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
   ctrl.conditions = {
     status : ''
   };
+
+
+  ctrl.session = {
+    status : 'loading'
+  };
+
+
+  ctrl.servers.status = 'loading';
+  stats.getServers().success(function(data){
+    ctrl.servers.status = 'success';
+    ctrl.servers.data = data;
+  }).error(function(res){
+    ctrl.servers.status = 'error';
+    ctrl.servers.error = res.msg || res.error;
+  });
+
+
+  user.session().success(function(res){
+    angular.extend(ctrl.session, res);
+    ctrl.session.status = 'success';
+  }).error(function(res){
+    ctrl.session.status = 'error';
+    ctrl.session.error = res.msg || res.error;
+  });
 
 
 
@@ -87,26 +111,11 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils) {
     });
   }
 
-
-  // stats.getServerStats(server, date, interval)
-  // var serverPromise = stats.getServerStats('server-black', '2015-01-16', 60);
-  // showStats(serverPromise);
-
-  // var mongodbPromise = stats.getMongodbStats('mongodb', '2015-01-16', 60);
-  // showStats(mongodbPromise);
-
-  ctrl.servers.status = 'loading';
-  stats.getServers().success(function(data){
-    ctrl.servers.status = 'success';
-    ctrl.servers.data = data;
-  }).error(function(res){
-    ctrl.servers.status = 'error';
-    ctrl.servers.error = res.msg || res.error;
-  });
+  
 
 }
 
-StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', 'debug', 'stats', 'utils'];
+StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', 'debug', 'stats', 'utils', 'user'];
 
 
 

@@ -1,10 +1,5 @@
 'use strict';
-var toobusy = null;
-try{
-  toobusy = require('toobusy');
-}catch(err){
-  console.error('require toobusy error:' + err.message);
-}
+var toobusy = require('toobusy-js');
 var MB = 1024 * 1024;
 var config = require('../config');
 var processName = config.process;

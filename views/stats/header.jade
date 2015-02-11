@@ -18,13 +18,15 @@ header.headerContainer
   button.btn.btn-link.editConfig(type='button', ng-click='stats.conditions.status = "show"')
     i.glyphicon.glyphicon-edit 
     | 参数修改
-  .functions.pull-right
+  .functions.pull-right.hidden(ng-class='{hidden : stats.session.anonymous !== false}')
     a(href='javascript:;'): i.glyphicon.glyphicon-bell
     a(href='javascript:;'): i.glyphicon.glyphicon-fullscreen
     a(href='javascript:;'): i.glyphicon.glyphicon-cog
     a.name(href='javascript:;')
-      span vicanso
+      span(ng-bind='stats.session.name')
       i.glyphicon.glyphicon-chevron-down
+  .functions.pull-right.hidden(ng-class='{hidden : stats.session.anonymous !== true}')
+    a(href='javascript:;', title='登录', ng-click='app.login.status = "show"'): i.glyphicon.glyphicon-log-in
 
 
 

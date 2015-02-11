@@ -1,0 +1,41 @@
+@import 'nib'
+@import './constant'
+
+
+.mask
+  position fixed
+  z-index 1
+  left 0
+  right 0
+  bottom 0
+  top 0
+  background-color rgba(0, 0, 0, 0.3)
+
+.dialog
+  position fixed
+  z-index 2
+  top 50%
+  height 400px
+  margin-top -(@height / 2)
+  left 50%
+  width 600px
+  margin-left -(@width / 2)
+  border 1px solid #e1e1e8
+  background-color #fff
+  .title
+    line-height 40px
+    background-color #1d3446
+    padding 0 10px
+    color #fff
+    a
+      color #ddd
+      &:hover
+        color #fff
+  .content
+    margin 15px
+    
+
+.loginDialog
+  .input-group
+    margin-bottom 15px
+  
