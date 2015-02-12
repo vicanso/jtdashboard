@@ -19,21 +19,30 @@ html(lang='zh-CN', ng-app='jtApp')
 
     - importer.import('/service/utils.js', '/service/http_log.js', '/service/debug.js');
 
-    - importer.import('/js/global.js', '/css/global.css', '/service/user.js');
+    - importer.import('/js/global.js', '/css/global.css', '/js/directive.js', '/service/user.js');
 
   body(ng-controller='AppController as app')
     block bodyContainer
-    .mask.hidden(ng-class='{hidden : app.login.status == "hidden"}')
-    .dialog.loginDialog.hidden(ng-class='{hidden : app.login.status == "hidden"}')
-      .title 登录
-        a.pull-right(href='javascript:;', ng-click='app.login.status = "hidden"'): i.glyphicon.glyphicon-remove
+  script#loginDialog(type='text/tpl')
+    jt-dialog.dialog.loginDialog.hidden(jt-options='app.loginOptions')
+      p(ng-bind='options')
+      .title
+        span(ng-show='options.type == "login"') 登录
+        span(ng-show='options.type != "login"') 注册
+        a.pull-right.destroy(href='javascript:;'): i.glyphicon.glyphicon-remove
       .content
         .input-group
           span.input-group-addon 用户名：
           input.form-control(type='text', placeholder='请输入用户名')
         .input-group
           span.input-group-addon 密码：
-          input.form-control(type='text', placeholder='请输入密码')
+          input.form-control(type='password', placeholder='请输入密码')
+
+        .row
+          .col-xs-6: a.btn.btn-primary(href='javascript:;') 登录
+          .col-xs-6: a.btn.btn-default.destroy(href='javascript:;') 取消
+        a.pull-right.mtop10.font12(href='javascript:;', ng-show='options.type == "login"', ng-click='options.type == "register"')  注册
+        a.pull-right.mtop10.font12(href='javascript:;', ng-show='options.type == "register"') 登录
 
 
   include ./global_variable

@@ -6,7 +6,7 @@ angular.module('jtApp')
   .controller('StatsController', StatsCtrl);
 
 function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user) {
-  debug = debug('homePage');
+  debug = debug('stats');
 
   stats.format = 'text';
 
@@ -55,6 +55,7 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
 
 
   user.session().success(function(res){
+    debug('user info:%j', res);
     angular.extend(ctrl.session, res);
     ctrl.session.status = 'success';
   }).error(function(res){

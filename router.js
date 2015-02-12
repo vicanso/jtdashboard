@@ -25,7 +25,8 @@ if(config.env !== 'development'){
 }
 
 var addImporter = importer(importerOptions);
-
+var session = require('./middlewares/session')();
+var cacheQueryChecker = require('./middlewares/query_checker')('cache=false');
 
 var routeInfos = [
   {
@@ -37,6 +38,7 @@ var routeInfos = [
   {
     route : '/user',
     method : ['get', 'post'],
+    middleware : [cacheQueryChecker, session],
     handler : controllers.user
   },
   {

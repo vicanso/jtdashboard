@@ -76,6 +76,7 @@
       "/service/http_log.js",
       "/service/debug.js",
       "/js/global.js",
+      "/js/directive.js",
       "/service/user.js",
       "/component/d3.js",
       "/component/c3.js",
@@ -83,11 +84,12 @@
       "/stats/directive.js",
       "/stats/controller.js"
     ],
-    "modifiedAt": "2015-02-11 21:23:51"
+    "modifiedAt": "2015-02-12 21:30:19"
   },
   "log/index": {
     "css": [
       "/component/bootstrap.css",
+      "/css/global.css",
       "/css/nav.css",
       "/css/log.css"
     ],
@@ -100,12 +102,13 @@
       "/service/http_log.js",
       "/service/debug.js",
       "/js/global.js",
+      "/js/directive.js",
       "/service/user.js",
       "/component/socket.io.js",
       "/log/service.js",
       "/log/directive.js",
       "/log/controller.js"
     ],
-    "modifiedAt": "2015-02-11 21:18:40"
+    "modifiedAt": "2015-02-12 21:30:13"
   }
 }

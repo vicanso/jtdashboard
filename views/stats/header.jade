@@ -26,7 +26,7 @@ header.headerContainer
       span(ng-bind='stats.session.name')
       i.glyphicon.glyphicon-chevron-down
   .functions.pull-right.hidden(ng-class='{hidden : stats.session.anonymous !== true}')
-    a(href='javascript:;', title='登录', ng-click='app.login.status = "show"'): i.glyphicon.glyphicon-log-in
+    a(href='javascript:;', title='登录', ng-click='app.login()'): i.glyphicon.glyphicon-log-in
 
 
 

@@ -41,10 +41,13 @@ exports.stats = {
 // session的配置
 exports.session = {
   secret : 'jenny&tree',
-  key : 'vicanso',
+  name : 'vicanso',
   ttl : 3600 * 12
 };
 
+
+
+exports.redisUri = process.env.REDIS_URI || 'redis://localhost:4000';
 
 // mongodb服务器的连接uri
 exports.mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost:10020/stats';

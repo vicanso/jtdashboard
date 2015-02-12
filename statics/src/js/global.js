@@ -1,7 +1,7 @@
 ;(function(global){
 
 'use strict';
-var requires = ['LocalStorageModule', 'jt.service.debug', 'jt.service.utils', 'jt.service.httpLog', 'jt.service.user'];
+var requires = ['LocalStorageModule', 'jt.service.debug', 'jt.service.utils', 'jt.service.httpLog', 'jt.directive.widget', 'jt.service.user'];
 var app = angular.module('jtApp', requires);
 
 // 用户在controller中添加require
@@ -69,13 +69,13 @@ app.run(['$http', '$timeout', '$window', 'debug', function($http, $timeout, $win
   if(CONFIG.env !== 'development'){
     return;
   }
-  var checkInterval = 10 * 1000;
+  var checkInterval = 5 * 1000;
   var checkWatchers = function(){
     var watchTotal = 0;
     var fn = function(element){
       if(element.data().hasOwnProperty('$scope')){
         var watchers = element.data().$scope.$$watchers;
-        if(watchers){
+        if(watchers && watchers.length){
           watchTotal += watchers.length;
         }
       }
@@ -97,23 +97,31 @@ app.run(['$http', '$timeout', '$window', 'debug', function($http, $timeout, $win
 
 app.controller('AppController', AppController);
 
-function AppController($http){
+function AppController($scope, $http, $compile, $element, user){
   var ctrl = this;
 
 
-  ctrl.login = {
-    status : 'hidden'
+  ctrl.loginOptions = {
+    status : 'hidden',
+    type : 'login',
+    modal : true
   };
 
+  ctrl.login = login;
 
 
 
   function login(){
-
+    var obj = angular.element(angular.element('#loginDialog').html());
+    $compile(obj)($scope);
+    $element.append(obj);
+    ctrl.loginOptions.status = 'show';
   }
+
+  user.session();
 }
 
-AppController.$inject = ['$http']
+AppController.$inject = ['$scope', '$http', '$compile', '$element', 'user']
 
 
 
