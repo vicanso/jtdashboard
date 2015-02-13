@@ -23,6 +23,7 @@ app.config(['localStorageServiceProvider', function(localStorageServiceProvider)
   // localstorage的前缀
   localStorageServiceProvider.prefix = 'jt';
 }]).config(['$httpProvider', function($httpProvider){
+  $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
   $httpProvider.interceptors.push('httpLog');
 }]).config(['$provide', function($provide){
   var params = ['$log', '$injector', function($log, $injector){
@@ -89,6 +90,7 @@ app.run(['$http', '$timeout', '$window', 'debug', function($http, $timeout, $win
       checkWatchers();
     }, checkInterval);
   };
+
   
   $timeout(function(){
     checkWatchers();
@@ -101,24 +103,50 @@ function AppController($scope, $http, $compile, $element, user){
   var ctrl = this;
 
 
-  ctrl.loginOptions = {
-    status : 'hidden',
-    type : 'login',
-    modal : true
-  };
-
   ctrl.login = login;
 
 
 
   function login(){
     var obj = angular.element(angular.element('#loginDialog').html());
-    $compile(obj)($scope);
+    var tmpScope = $scope.$new(true);
+    angular.extend(tmpScope, {
+      status : 'hidden',
+      type : 'login',
+      modal : true
+    });
+
+    // test
+    tmpScope.type = 'register';
+    tmpScope.account = 'vicanso';
+    tmpScope.password = 'Jenny7771';
+
+    $compile(obj)(tmpScope);
     $element.append(obj);
-    ctrl.loginOptions.status = 'show';
+    tmpScope.status = 'show';
+    tmpScope.submit = function(){
+      submit(tmpScope);
+    };
   }
 
-  user.session();
+  function submit(tmpScope){
+    if(tmpScope.type === 'register'){
+      user.register(tmpScope.account, tmpScope.password).success(function(){
+        tmpScope.destroy();
+      }).error(function(res){
+        tmpScope.error = res.msg || res.error || '未知异常';
+      });
+    }
+  }
+
+  // setTimeout(function(){
+  //   $scope.$apply(function(){
+  //     login();
+  //     setTimeout(function(){
+  //       $('.dialog .btn-primary').click();        
+  //     }, 2000);
+  //   });
+  // }, 1000);
 }
 
 AppController.$inject = ['$scope', '$http', '$compile', '$element', 'user']

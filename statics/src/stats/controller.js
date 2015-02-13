@@ -54,11 +54,11 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
   });
 
 
-  user.session().success(function(res){
+  user.session().then(function(res){
     debug('user info:%j', res);
     angular.extend(ctrl.session, res);
     ctrl.session.status = 'success';
-  }).error(function(res){
+  }, function(res){
     ctrl.session.status = 'error';
     ctrl.session.error = res.msg || res.error;
   });

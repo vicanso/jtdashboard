@@ -4,18 +4,15 @@ var module = angular.module('jt.directive.widget', []);
 
 
 module.directive('jtDialog', jtDialog);
-function jtDialog(){
+function jtDialog($compile){
   return {
     restrict : 'E',
-    scope : {
-      options : '=jtOptions'
-    },
+    // scope : {
+    //   options : '=jtOptions'
+    // },
     link : function(scope, element, attr){
-      var options = scope.options;
       var mask;
-      
-
-      var listener = scope.$watch('options.status', function(v){
+      scope.$watch('status', function(v){
         if(v === 'hidden'){
           element.addClass('hidden');
         }else{
@@ -23,17 +20,16 @@ function jtDialog(){
         }
       });
 
-      console.dir(options);
-
-
-      element.on('click', '.destroy', function(){
-        listener();
-
+      scope.destroy = function(){
         element.remove();
         if(mask){
           mask.remove();
         }
         scope.$destroy();
+      };
+
+      element.on('click', '.destroy', function(){
+        scope.destroy();
       });
 
 
@@ -45,7 +41,7 @@ function jtDialog(){
           'margin-left' : -width / 2,
           'margin-top' : -height / 2
         });
-        if(options.modal){
+        if(scope.modal){
           mask = angular.element('<div class="mask"></div>');
           element.after(mask);
         }
@@ -53,5 +49,7 @@ function jtDialog(){
     }
   };
 }
+
+jtDialog.$inject = ['$compile'];
 
 })(this);

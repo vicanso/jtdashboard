@@ -15,7 +15,7 @@ html(lang='zh-CN', ng-app='jtApp')
     //CSS_FILES_CONTAINER
     if PATTERN
       - importer.import('/component/debug.js');
-    - importer.import('/component/bootstrap.css', '/component/jquery.js', '/component/angular.js', '/component/angular-local-storage.js');
+    - importer.import('/component/bootstrap.css', '/component/jquery.js', '/component/angular.js', '/component/angular-local-storage.js', '/component/sha1.js');
 
     - importer.import('/service/utils.js', '/service/http_log.js', '/service/debug.js');
 
@@ -24,25 +24,25 @@ html(lang='zh-CN', ng-app='jtApp')
   body(ng-controller='AppController as app')
     block bodyContainer
   script#loginDialog(type='text/tpl')
-    jt-dialog.dialog.loginDialog.hidden(jt-options='app.loginOptions')
-      p(ng-bind='options')
+    jt-dialog.dialog.loginDialog(ng-switch='type')
       .title
-        span(ng-show='options.type == "login"') 登录
-        span(ng-show='options.type != "login"') 注册
+        span(ng-switch-when='login') 登录
+        span(ng-switch-default) 注册
         a.pull-right.destroy(href='javascript:;'): i.glyphicon.glyphicon-remove
       .content
         .input-group
           span.input-group-addon 用户名：
-          input.form-control(type='text', placeholder='请输入用户名')
+          input.form-control(type='text', placeholder='请输入用户名', ng-model='account')
         .input-group
           span.input-group-addon 密码：
-          input.form-control(type='password', placeholder='请输入密码')
+          input.form-control(type='password', placeholder='请输入密码', ng-model='password')
 
+        .alert-danger.alert(ng-bind='error', ng-show='error')
         .row
-          .col-xs-6: a.btn.btn-primary(href='javascript:;') 登录
+          .col-xs-6: a.btn.btn-primary(href='javascript:;', ng-click='submit() && destroy()') 确定
           .col-xs-6: a.btn.btn-default.destroy(href='javascript:;') 取消
-        a.pull-right.mtop10.font12(href='javascript:;', ng-show='options.type == "login"', ng-click='options.type == "register"')  注册
-        a.pull-right.mtop10.font12(href='javascript:;', ng-show='options.type == "register"') 登录
+        a.pull-right.mtop10.font12(href='javascript:;', ng-switch-when='login', ng-click='type == "register"')  注册
+        a.pull-right.mtop10.font12(href='javascript:;', ng-switch-default, ng-click='type == "login"') 登录
 
 
   include ./global_variable

@@ -39,6 +39,7 @@ var initMongodb = function(uri){
     return ;
   }
   mongodb.init(uri);
+  mongodb.initModels(path.join(__dirname, 'models'));
 };
 
 
@@ -110,7 +111,7 @@ var initServer = function(){
   
 
   app.use(function(req, res, next){
-    res.set('Cache-Control', 'no-cahce, max-age=0, s-maxage=0');
+    res.set('Cache-Control', 'no-nocache, max-age=0, s-maxage=0');
     next();
   });
 
