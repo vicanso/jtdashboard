@@ -2,19 +2,22 @@
 'use strict';
 var module = angular.module('jt.service.user', []);
 
-module.factory('user', ['$http', '$q', function($http, $q){
+module.factory('user', ['$http', '$rootScope', function($http, $rootScope){
 
-  var userSessionDefer;
-
+  var userSessionPromise;
+  var userSession;
 
   var user = {
     url : '/user?cache=false',
-    session : function(){
-      if(!userSessionDefer){
-        userSessionDefer = $q.defer();
-        $http.get(user.url).success(userSessionDefer.resolve).error(userSessionDefer.reject);
+    session : function(refresh){
+      if(!userSessionPromise || refresh){
+        userSessionPromise = $http.get(user.url);
+        userSessionPromise.success(function(res){
+          userSession = res;
+          $rootScope.$broadcast('user', res);
+        });
       }
-      return userSessionDefer.promise;
+      return userSessionPromise;
     },
     register : function(account, password){
       var data = {
@@ -22,18 +25,31 @@ module.factory('user', ['$http', '$q', function($http, $q){
         account : account,
         password : CryptoJS.SHA1(password).toString()
       };
-      var promise = $http.post(user.url, data);
-      promise.success(function(res){
-        userSessionDefer.resolve(res);
-        user.session().then(function(res){
-          console.dir(res);
-        });
-        
-      });
-      return promise;
+      return post(data);
+    },
+    login : function(account, password){
+      var str = CryptoJS.SHA1(password).toString();
+      password = CryptoJS.SHA1(str + userSession.code).toString();
+      var data = {
+        type : 'login',
+        account : account,
+        password : password
+      };
+      return post(data);
     }
   };
   return user;
+
+
+  function post(data){
+    var promise = $http.post(user.url, data);
+    promise.success(function(res){
+      userSessionPromise = null;
+      userSession = res;
+      $rootScope.$broadcast('user', res);
+    });
+    return promise;
+  }
 
 }]);
 

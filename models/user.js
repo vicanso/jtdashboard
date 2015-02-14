@@ -9,7 +9,11 @@ module.exports = {
       type : String,
       required : true
     },
-    name : String,
+    name : {
+      type : String,
+      required : true,
+      unique : true
+    },
     createdAt : {
       type : String,
       required : true

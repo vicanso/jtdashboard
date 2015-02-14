@@ -101,6 +101,7 @@
       "/component/jquery.js",
       "/component/angular.js",
       "/component/angular-local-storage.js",
+      "/component/sha1.js",
       "/service/utils.js",
       "/service/http_log.js",
       "/service/debug.js",
@@ -112,6 +113,6 @@
       "/log/directive.js",
       "/log/controller.js"
     ],
-    "modifiedAt": "2015-02-12 21:30:13"
+    "modifiedAt": "2015-02-14 11:24:33"
   }
 }

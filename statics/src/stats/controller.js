@@ -53,15 +53,21 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
     ctrl.servers.error = res.msg || res.error;
   });
 
-
-  user.session().then(function(res){
+  $scope.$on('user', function(e, res){
     debug('user info:%j', res);
     angular.extend(ctrl.session, res);
     ctrl.session.status = 'success';
-  }, function(res){
-    ctrl.session.status = 'error';
-    ctrl.session.error = res.msg || res.error;
   });
+  user.session();
+
+  // user.session().success(function(res){
+    // debug('user info:%j', res);
+    // angular.extend(ctrl.session, res);
+    // ctrl.session.status = 'success';
+  // }).error(function(res){
+  //   ctrl.session.status = 'error';
+  //   ctrl.session.error = res.msg || res.error;
+  // });
 
 
 

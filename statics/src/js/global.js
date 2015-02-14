@@ -116,11 +116,6 @@ function AppController($scope, $http, $compile, $element, user){
       modal : true
     });
 
-    // test
-    tmpScope.type = 'register';
-    tmpScope.account = 'vicanso';
-    tmpScope.password = 'Jenny7771';
-
     $compile(obj)(tmpScope);
     $element.append(obj);
     tmpScope.status = 'show';
@@ -130,13 +125,17 @@ function AppController($scope, $http, $compile, $element, user){
   }
 
   function submit(tmpScope){
-    if(tmpScope.type === 'register'){
-      user.register(tmpScope.account, tmpScope.password).success(function(){
+    tmpScope.submiting = true;
+    var fn = user[tmpScope.type];
+    if(fn){
+      fn(tmpScope.account, tmpScope.password).success(function(){
         tmpScope.destroy();
       }).error(function(res){
         tmpScope.error = res.msg || res.error || '未知异常';
+        tmpScope.submiting = false;
       });
     }
+    
   }
 
   // setTimeout(function(){
