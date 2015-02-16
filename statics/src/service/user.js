@@ -2,8 +2,8 @@
 'use strict';
 var module = angular.module('jt.service.user', []);
 
-module.factory('user', ['$http', '$rootScope', function($http, $rootScope){
-
+module.factory('user', ['$http', '$rootScope', 'utils', 'debug', function($http, $rootScope, utils, debug){
+  debug = debug('user');
   var userSessionPromise;
   var userSession;
 
@@ -12,9 +12,8 @@ module.factory('user', ['$http', '$rootScope', function($http, $rootScope){
     session : function(refresh){
       if(!userSessionPromise || refresh){
         userSessionPromise = $http.get(user.url);
-        userSessionPromise.success(function(res){
-          userSession = res;
-          $rootScope.$broadcast('user', res);
+        userSessionPromise.then(function(res){
+          setSession(res);
         });
       }
       return userSessionPromise;
@@ -36,6 +35,14 @@ module.factory('user', ['$http', '$rootScope', function($http, $rootScope){
         password : password
       };
       return post(data);
+    },
+    logout : function(){
+      var promise = $http.delete(user.url);
+      promise.then(function(res){
+        userSessionPromise = null;
+        setSession(res);
+      });
+      return promise;
     }
   };
   return user;
@@ -43,12 +50,18 @@ module.factory('user', ['$http', '$rootScope', function($http, $rootScope){
 
   function post(data){
     var promise = $http.post(user.url, data);
-    promise.success(function(res){
+    promise.then(function(res){
       userSessionPromise = null;
-      userSession = res;
-      $rootScope.$broadcast('user', res);
+      setSession(res);
     });
     return promise;
+  }
+
+  function setSession(res){
+    userSession = res.data;
+    userSession.deviation = utils.now() - userSession.now;
+    debug('user:%j', userSession);
+    $rootScope.$broadcast('user', userSession);
   }
 
 }]);

@@ -1,0 +1,6 @@
+extends ./layout
+block bodyContainer
+  each glyphicon in viewData.glyphicons
+    i.glyphicon(class='#{glyphicon}', title='#{glyphicon}')
+
+  - importer.import('/css/glyphicon.css');

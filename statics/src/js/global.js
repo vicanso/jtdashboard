@@ -23,6 +23,7 @@ app.config(['localStorageServiceProvider', function(localStorageServiceProvider)
   // localstorage的前缀
   localStorageServiceProvider.prefix = 'jt';
 }]).config(['$httpProvider', function($httpProvider){
+  $httpProvider.defaults.timeout = 5000;
   $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
   $httpProvider.interceptors.push('httpLog');
 }]).config(['$provide', function($provide){
@@ -105,37 +106,54 @@ function AppController($scope, $http, $compile, $element, user){
 
   ctrl.login = login;
 
-
+  ctrl.logout = logout;
 
   function login(){
     var obj = angular.element(angular.element('#loginDialog').html());
     var tmpScope = $scope.$new(true);
     angular.extend(tmpScope, {
-      status : 'hidden',
+      status : 'show',
       type : 'login',
       modal : true
     });
 
     $compile(obj)(tmpScope);
     $element.append(obj);
-    tmpScope.status = 'show';
     tmpScope.submit = function(){
       submit(tmpScope);
     };
+    angular.forEach(['account', 'password'], function(key){
+      tmpScope.$watch(key, function(){
+        tmpScope.error = '';
+      });
+    });
+    
+  }
+
+
+  function logout(){
+    user.logout();
   }
 
   function submit(tmpScope){
+    if(!tmpScope.account || !tmpScope.password){
+      tmpScope.error = '账号和密码均不能为空';
+      return;
+    }
+    
     tmpScope.submiting = true;
+    tmpScope.msg = '正在提交，请稍候...';
     var fn = user[tmpScope.type];
     if(fn){
       fn(tmpScope.account, tmpScope.password).success(function(){
         tmpScope.destroy();
+        tmpScope.msg = '';
       }).error(function(res){
         tmpScope.error = res.msg || res.error || '未知异常';
         tmpScope.submiting = false;
+        tmpScope.msg = '';
       });
     }
-    
   }
 
   // setTimeout(function(){

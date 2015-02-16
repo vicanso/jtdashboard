@@ -7,9 +7,6 @@ module.directive('jtDialog', jtDialog);
 function jtDialog($compile){
   return {
     restrict : 'E',
-    // scope : {
-    //   options : '=jtOptions'
-    // },
     link : function(scope, element, attr){
       var mask;
       scope.$watch('status', function(v){
@@ -19,7 +16,7 @@ function jtDialog($compile){
           showDialog();
         }
       });
-
+      
       scope.destroy = function(){
         element.remove();
         if(mask){
@@ -30,6 +27,12 @@ function jtDialog($compile){
 
       element.on('click', '.destroy', function(){
         scope.destroy();
+      });
+
+      element.on('keyup', function(e){
+        if(e.keyCode === 0x0d && scope.submit){
+          scope.submit();
+        }
       });
 
 
@@ -45,6 +48,7 @@ function jtDialog($compile){
           mask = angular.element('<div class="mask"></div>');
           element.after(mask);
         }
+        element.find('input:first').focus();
       }
     }
   };

@@ -29,15 +29,12 @@ module.exports = function(req, res, cbf){
     }else{
       login(sess, data, cbf)
     }
+  }else if(method === 'DELETE'){
+    sess.data = null;
+    getUserInfo(sess, cbf);
   }else{
     cbf(new Error('not support method:' + method));
   }
-  // console.dir(method);
-  // console.dir(sess);
-  // cbf(null, {
-  //   anonymous : true,
-  //   name : 'vicanso'
-  // });
 };
 
 
@@ -45,18 +42,25 @@ var getUserInfo = function(sess, cbf){
   var data = sess.data;
   if(!data){
     data = {
-      anonymous : true,
       code : uuid.v4()
     };
     sess.data = data;
   }
-  cbf(null, data);
+  cbf(null, getSession(data));
 };
 
 
-var getSession = function(data){
-  var result = _.pick(data, ['account', 'name']);
-  result.anonymous = false;
+var getSession = function(doc){
+  if(doc.toObject){
+    doc = doc.toObject();
+  }
+  var result = _.pick(doc, ['account', 'name', 'code', 'lastLoginedAt', 'loginTimes']);
+  if(result.account){
+    result.anonymous = false;
+  }else{
+    result.anonymous = true;
+  }
+  result.now = Date.now();
   return result;
 };
 
@@ -69,9 +73,10 @@ var register = function(sess, data, cbf){
   async.waterfall([
     function(cbf){
       new User(data).save(cbf);
-    }, function(data, count, cbf){
-      sess.data = getSession(data);
-      cbf(null, sess.data);
+    }, function(doc, count, cbf){
+      sess.data = doc;
+      var userSession = getSession(sess.data);
+      cbf(null, userSession);
     }
   ], cbf);
 };
@@ -86,13 +91,25 @@ var login = function(sess, data, cbf){
     function(doc, cbf){
       shasum.update(doc.password + sess.data.code);
       if(shasum.digest('hex') === data.password){
-        sess.data = getSession(doc);
-        cbf(null, sess.data);
+
+        // 更新最近登录时间
+        doc.lastLoginedAt =  moment().format('YYYY-MM-DDTHH:mm:ss');
+        doc.loginTimes++;
+
+        sess.data = doc;
+        var userSession = getSession(sess.data);
+        cbf(null, userSession);
+
+        
+        doc.save(function(err){
+          if(err){
+            console.error(err);
+          }
+        });
+
       }else{
         cbf(new Error('login fail!'));
       }
     }
   ], cbf);
-  console.dir(data);
-
 };

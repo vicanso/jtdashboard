@@ -77,6 +77,7 @@ module.factory('httpLog', ['$q', '$injector', 'localStorageService', function($q
       var use = now() - config._createdAt;
       successLog.push({
         url : url,
+        method : config.method,
         use : use
       });
       save();

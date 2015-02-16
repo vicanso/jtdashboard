@@ -5,7 +5,7 @@
 angular.module('jtApp')
   .controller('StatsController', StatsCtrl);
 
-function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user) {
+function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, utils, user) {
   debug = debug('stats');
 
   stats.format = 'text';
@@ -39,6 +39,7 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
   };
 
 
+  // session信息
   ctrl.session = {
     status : 'loading'
   };
@@ -54,23 +55,46 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
   });
 
   $scope.$on('user', function(e, res){
-    debug('user info:%j', res);
     angular.extend(ctrl.session, res);
     ctrl.session.status = 'success';
   });
   user.session();
 
-  // user.session().success(function(res){
-    // debug('user info:%j', res);
-    // angular.extend(ctrl.session, res);
-    // ctrl.session.status = 'success';
-  // }).error(function(res){
-  //   ctrl.session.status = 'error';
-  //   ctrl.session.error = res.msg || res.error;
-  // });
+  // 添加统计配置
+  ctrl.addStats = function(){
+    var obj = angular.element(angular.element('#addStatsDialog').html());
+    var tmpScope = $scope.$new(true);
+    angular.extend(tmpScope, {
+      status : 'show',
+      modal : true
+    });
 
+    $compile(obj)(tmpScope);
+    $element.append(obj);
+    tmpScope.submit = function(){
+      tmpScope.error = '';
+      if(!tmpScope.type || !tmpScope.name || !tmpScope.date){
+        tmpScope.error = '参数不能为空';
+        return;
+      }
+      var data = {
+        type : tmpScope.type,
+        name : tmpScope.name,
+        date : tmpScope.date
+      };
+      tmpScope.msg = '正在提交，请稍候...';
+      stats.add(data).success(function(){
 
+      }).error(function(){
 
+      });
+    };
+
+  };
+
+  // ctrl.addStats();
+
+  // 根据统计的配置显示相应的统计数据
   ctrl.showServerStats = function(server){
 
     ctrl.currentServer = server;
@@ -99,7 +123,8 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
     }
   };
 
-  ctrl.refresh = function(){
+  // 重新加载统计图表
+  ctrl.reload = function(){
     var server = ctrl.currentServer;
     if(server){
       ctrl.showServerStats(server);
@@ -107,6 +132,7 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
   };
 
 
+  // 显示统计数据
   function showStats(promise){
     ctrl.charts.status = 'loading';
     promise.success(function(res){
@@ -117,12 +143,11 @@ function StatsCtrl($scope, $http, $element, $timeout, debug, stats, utils, user)
       ctrl.charts.error = res.msg || res.error;
     });
   }
-
   
 
 }
 
-StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', 'debug', 'stats', 'utils', 'user'];
+StatsCtrl.$inject = ['$scope', '$http', '$element', '$timeout', '$compile', 'debug', 'stats', 'utils', 'user'];
 
 
 

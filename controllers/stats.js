@@ -12,11 +12,24 @@ exports.view = function(req, res, cbf){
   }
   cbf(null, {
     viewData : {
-      globalVariable : {
-        name : 'tree'
-      }
+      statsTypeList : [
+        {
+          name : 'mongodb'
+        },
+        {
+          name : 'server'
+        },
+        {
+          name : 'other'
+        }
+      ]
     }
   });
+};
+
+exports.add = function(req, res, cbf){
+  var data = req.body;
+  console.dir(data);
 };
 
 exports.servers = function(req, res, cbf){

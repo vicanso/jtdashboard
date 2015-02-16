@@ -37,7 +37,7 @@ var routeInfos = [
   },
   {
     route : '/user',
-    method : ['get', 'post'],
+    method : 'all',
     middleware : [cacheQueryChecker, session],
     handler : controllers.user
   },
@@ -52,6 +52,12 @@ var routeInfos = [
     template : 'stats/index',
     middleware : [addImporter],
     handler : controllers.stats.view,
+  },
+  {
+    route : '/stats',
+    method : 'post',
+    middleware : [session],
+    handler : controllers.stats.add
   },
   {
     route : '/log',
@@ -87,6 +93,12 @@ var routeInfos = [
     handler : function(req, res){
       res.status(301).redirect('/');
     }
+  },
+  {
+    route : '/glyphicon',
+    template : 'glyphicon',
+    middleware : [addImporter],
+    handler : controllers.glyphicon
   }
 ];
 

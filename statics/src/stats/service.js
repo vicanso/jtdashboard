@@ -18,6 +18,7 @@ function stats($http, STATS_SETTING){
     getMongodbStats : getMongodbStats,
     getServers : getServers,
     get : get,
+    add : add,
     // 返回数据以什么格式返回，可以是text和json，若为text，会在获取到数据之后转换为json
     format : 'json'
   };
@@ -345,6 +346,11 @@ function stats($http, STATS_SETTING){
 
   function getServers(){
     var promise = $http.get('/stats/servers');
+    return promise;
+  }
+
+  function add(data){
+    var promise = $http.post('/stats', data);
     return promise;
   }
 }

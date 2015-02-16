@@ -87,7 +87,7 @@
       "/stats/directive.js",
       "/stats/controller.js"
     ],
-    "modifiedAt": "2015-02-13 14:34:13"
+    "modifiedAt": "2015-02-16 20:09:35"
   },
   "log/index": {
     "css": [
@@ -114,5 +114,26 @@
       "/log/controller.js"
     ],
     "modifiedAt": "2015-02-14 11:24:33"
+  },
+  "glyphicon": {
+    "css": [
+      "/component/bootstrap.css",
+      "/css/global.css",
+      "/css/glyphicon.css"
+    ],
+    "js": [
+      "/component/debug.js",
+      "/component/jquery.js",
+      "/component/angular.js",
+      "/component/angular-local-storage.js",
+      "/component/sha1.js",
+      "/service/utils.js",
+      "/service/http_log.js",
+      "/service/debug.js",
+      "/js/global.js",
+      "/js/directive.js",
+      "/service/user.js"
+    ],
+    "modifiedAt": "2015-02-15 14:15:53"
   }
 }

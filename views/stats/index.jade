@@ -1,7 +1,7 @@
 extends ../layout
 block bodyContainer
   include ../nav
-  .dashboardPage(ng-controller='StatsController as stats')
+  .dashboardPage(ng-controller='StatsController as stats', ng-class='{fullScreen : stats.view.type == "full"}')
     include ./header
     .conditionsContainer.hidden(ng-class='{hidden : stats.conditions.status !== "show"}'): .row
       .col-xs-5: .input-group
@@ -12,15 +12,39 @@ block bodyContainer
         input.form-control(type='number', placeholder='默认为60，单位秒', ng-model='stats.conditions.interval')
       .col-xs-3
         .btn-group.btn-group-justified
-          a.btn.btn-primary(href='javascript:;', ng-click='stats.refresh()') 刷新
+          a.btn.btn-primary(href='javascript:;', ng-click='stats.reload()') 刷新
           a.btn.btn-default(href='javascript:;', ng-click='stats.conditions.status = "hidden"') 关闭
 
 
     .chartsContainer
       jt-charts.row(jt-data='stats.charts')
-    //- .jtChart(jt-chart='stats.mem')
 
-  
+
   - importer.import('/component/c3.css', '/component/d3.js', '/component/c3.js');
   - importer.import('/stats/service.js', '/stats/directive.js', '/stats/controller.js');
   - importer.import('/css/stats.css');
+
+block append templateContainer
+  script#addStatsDialog(type='text/tpl')
+    jt-dialog.dialog.addStatsDialog
+      .title 添加Stats配置
+        a.pull-right.destroy(href='javascript:;'): i.glyphicon.glyphicon-remove
+      .content
+        .row
+          each statsType in viewData.statsTypeList
+            - var name = statsType.name;
+            .col-xs-4: .input-group
+              span.input-group-addon: input(type='radio', id='statsType_#{name}', name='statsType', value='#{name}', ng-model='type')
+              label.form-control(for='statsType_#{name}') #{name}
+        .input-group.mtop15
+          span.input-group-addon 名称：
+          input.form-control(type='text', ng-model='name')
+        .input-group.mtop15
+          span.input-group-addon 日期：
+          input.form-control(type='text', placeholder='请输入要显示的统计时间', ng-model='date')
+        .tips.font12 可支持的日期格式有：'2015-01-10', '2015-01-10:2015-01-20', ['2015-01-17', '2015-01-20'], '8h', '9d'
+        .alert-danger.alert(ng-bind='error', ng-show='error')
+        .alert-info.alert(ng-bind='msg', ng-show='msg')
+        .row
+          .col-xs-6: a.btn.btn-primary(href='javascript:;', ng-click='submit()', ng-class='{disabled : submiting}') 确定
+          .col-xs-6: a.btn.btn-default.destroy(href='javascript:;') 取消

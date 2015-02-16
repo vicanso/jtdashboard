@@ -21,6 +21,10 @@ module.exports = {
     lastLoginedAt : {
       type : String,
       required : true
+    },
+    loginTimes : {
+      type : Number,
+      'default' : 0
     }
   },
   // 索引数组

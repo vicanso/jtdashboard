@@ -13,10 +13,10 @@ module.exports = function(req, res, cbf){
   }
   var httpLog = 'ip:' + ip + ', ua:' + ua;
   _.forEach(data.success, function(tmp){
-    console.log(httpLog + ', url:' + tmp.url + ', use:' + tmp.use);
+    console.log('%s, url:%s, method:%s, use:%d', httpLog, tmp.url, tmp.method, tmp.use);
   });
   _.forEach(data.error, function(tmp){
-    console.error(httpLog + ', url:' + tmp.url + ', status:' + tmp.status + ', use:' + tmp.use);
+    console.error('%s, url:%s, method:%s, status:%d, use:%d', httpLog, tmp.url, tmp.method, tmp.status, tmp.use);
   });
   cbf(null, responseData);
 };

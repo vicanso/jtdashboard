@@ -40,21 +40,37 @@ HeaderCss()
       margin-right 3px
     NavCss 40px
     .functions
-      a
+      margin 0
+      padding 0
+      > li
+        cursor pointer
+        list-style none
         margin-right 20px
         color #82a2b7
-        font-size 20px
+        font-size 16px
+        text-align center
         &:hover
           color #fff
+        > a
+          display block
+          width 30px
+          color #d0d0d0
+          &:hover
+            color #fff
+          
       .name
-        span 
-          color #fff
-          font-size 18px
+        position relative
+        &:hover
+          .dropdown-menu
+            display block
         i
           margin-left 10px
           font-size 12px
           width @font-size
-        
+        .dropdown-menu
+          left auto
+          right 0
+          margin-top 0
   
 JTChartCss()
   jt-charts, jt-chart
@@ -104,11 +120,19 @@ ConditionsCss()
     z-index 2
     background-color #f7f7f9
     border-bottom 1px solid #e1e1e8
+    
+AddStatsDialog()
+  .addStatsDialog
+    .tips
+      margin 5px 0
+      color #999
 
 .dashboardPage
   margin-left $NAV_WIDTH
   height 100%
   position relative
+  &.fullScreen
+    margin-left 0
   .chartsContainer
     position absolute
     top $HEADER_HEIGHT
@@ -118,7 +142,18 @@ ConditionsCss()
     padding 20px
     overflow scroll
     overflow-scrolling touch
+    background-color #fff
+    &.fullScreen
+      top 0
+    .restoreScreen
+      position absolute
+      right 5px
+      top 5px
+      font-size 18px
+      z-index 1
   HeaderCss()
   ConditionsCss()
   JTChartCss()
+  AddStatsDialog()
+  
   
