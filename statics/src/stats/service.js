@@ -16,7 +16,7 @@ function stats($http, STATS_SETTING){
   var self = {
     getServerStats : getServerStats,
     getMongodbStats : getMongodbStats,
-    getServers : getServers,
+    getStats : getStats,
     get : get,
     add : add,
     // 返回数据以什么格式返回，可以是text和json，若为text，会在获取到数据之后转换为json
@@ -344,8 +344,8 @@ function stats($http, STATS_SETTING){
     return promise;
   }
 
-  function getServers(){
-    var promise = $http.get('/stats/servers');
+  function getStats(){
+    var promise = $http.get('/my/stats?cache=false');
     return promise;
   }
 

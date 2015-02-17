@@ -147,7 +147,6 @@ function AppController($scope, $http, $compile, $element, user){
     if(fn){
       fn(tmpScope.account, tmpScope.password).success(function(){
         tmpScope.destroy();
-        tmpScope.msg = '';
       }).error(function(res){
         tmpScope.error = res.msg || res.error || '未知异常';
         tmpScope.submiting = false;

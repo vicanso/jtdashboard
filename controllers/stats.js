@@ -4,6 +4,7 @@ var async = require('async');
 var moment = require('moment');
 var config = require('../config');
 var mongodb = require('../helpers/mongodb');
+var Stats = mongodb.model('Stats');
 var debug = require('debug')('jtdashboard.stats');
 
 exports.view = function(req, res, cbf){
@@ -29,30 +30,54 @@ exports.view = function(req, res, cbf){
 
 exports.add = function(req, res, cbf){
   var data = req.body;
-  console.dir(data);
+  var account = req.session.data.account;
+  if(!account){
+    var err = new Error('is not login!');
+    err.msg = '请先登录才可以添加配置';
+    cbf(err);
+    return;
+  }
+  var statsData = _.pick(data, ['type', 'category', 'interval', 'name']);
+  statsData.creator = account;
+  if(_.isString(data.date)){
+    statsData.date = [data.date];
+  }else{
+    statsData.date = date.date;
+  }
+  statsData.createdAt = moment().format('YYYY-MM-DDTHH:mm:ss');
+  debug('add stats:%j', statsData);
+  new Stats(statsData).save(cbf);
 };
 
-exports.servers = function(req, res, cbf){
-  // cbf(null, [
-  //   {
-  //     name : 'server-black',
-  //     type : 'server' 
-  //   },
-  //   {
-  //     name : 'robot',
-  //     type : 'mongodb'
-  //   }
-  // ]);
-  cbf(null, [
-    {
-      name : 'black',
-      type : 'server'
+exports.myStats = function(req, res, cbf){
+  var userInfo = req.session.data;
+  var account = userInfo.account;
+  if(!account){
+    var err = new Error('is not login!');
+    err.msg = '请先登录';
+    cbf(err);
+    return;
+  }
+  async.waterfall([
+    function(cbf){
+      Stats.find({creator : account}, cbf)
     },
-    {
-      name : 'robot',
-      type : 'mongodb'
+    function(docs, cbf){
+      var result = _.map(docs, function(doc){
+        doc = doc.toObject();
+        var tmp = _.pick(doc, 'type category interval name creator'.split(' '));
+        if(doc.date.length === 1){
+          tmp.date = doc.date[0];
+        }else{
+          tmp.date = doc.date;
+        }
+        return tmp;
+      });
+      debug('my stats:%j', result);
+      cbf(null, result);
     }
-  ]);
+  ], cbf);
+  
 };
 
 exports.get = function(req, res, cbf){

@@ -1,7 +1,7 @@
 extends ../layout
 block bodyContainer
   include ../nav
-  .dashboardPage(ng-controller='StatsController as stats', ng-class='{fullScreen : stats.view.type == "full"}')
+  .dashboardPage(ng-controller='StatsController as stats')
     include ./header
     .conditionsContainer.hidden(ng-class='{hidden : stats.conditions.status !== "show"}'): .row
       .col-xs-5: .input-group
@@ -36,15 +36,21 @@ block append templateContainer
             .col-xs-4: .input-group
               span.input-group-addon: input(type='radio', id='statsType_#{name}', name='statsType', value='#{name}', ng-model='type')
               label.form-control(for='statsType_#{name}') #{name}
-        .input-group.mtop15
+        .input-group
           span.input-group-addon 名称：
-          input.form-control(type='text', ng-model='name')
-        .input-group.mtop15
+          input.form-control(type='text', ng-model='name', placeholder='请输入该统计的名称')
+        .input-group
+          span.input-group-addon 类别：
+          input.form-control(type='text', ng-model='category', placeholder='请输入统计的类别')
+        .input-group
           span.input-group-addon 日期：
           input.form-control(type='text', placeholder='请输入要显示的统计时间', ng-model='date')
         .tips.font12 可支持的日期格式有：'2015-01-10', '2015-01-10:2015-01-20', ['2015-01-17', '2015-01-20'], '8h', '9d'
-        .alert-danger.alert(ng-bind='error', ng-show='error')
-        .alert-info.alert(ng-bind='msg', ng-show='msg')
-        .row
-          .col-xs-6: a.btn.btn-primary(href='javascript:;', ng-click='submit()', ng-class='{disabled : submiting}') 确定
+        .input-group
+          span.input-group-addon 时间间隔：
+          input.form-control(type='text', placeholder='请输入要显示的统计点的间隔时间', ng-model='interval')
+        .alert-danger.alert.mtop15(ng-bind='error', ng-show='error')
+        .alert-info.alert.mtop15(ng-bind='msg', ng-show='msg')
+        .row.mtop15
+          .col-xs-6: a.btn.btn-primary(href='javascript:;', ng-click='!submiting && submit()', ng-class='{disabled : submiting}') 确定
           .col-xs-6: a.btn.btn-default.destroy(href='javascript:;') 取消

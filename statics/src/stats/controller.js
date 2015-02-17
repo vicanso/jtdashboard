@@ -22,16 +22,16 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
     data : null
   };
 
-  ctrl.servers = {
+  ctrl.myStats = {
     // 状态：loading、success、error
     status : '',
-    // 服务器信息
+    // stats配置
     data : null
   };
 
 
-  // 当前所选服务器
-  ctrl.currentServer = null;
+  // 当前所选stats
+  ctrl.currentStats = null;
 
   // 统计配置信息
   ctrl.conditions = {
@@ -45,18 +45,15 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
   };
 
 
-  ctrl.servers.status = 'loading';
-  stats.getServers().success(function(data){
-    ctrl.servers.status = 'success';
-    ctrl.servers.data = data;
-  }).error(function(res){
-    ctrl.servers.status = 'error';
-    ctrl.servers.error = res.msg || res.error;
-  });
+  
 
   $scope.$on('user', function(e, res){
     angular.extend(ctrl.session, res);
     ctrl.session.status = 'success';
+    if(!res.anonymous){
+      getMyStats();
+    }
+    
   });
   user.session();
 
@@ -64,6 +61,7 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
   ctrl.addStats = function(){
     var obj = angular.element(angular.element('#addStatsDialog').html());
     var tmpScope = $scope.$new(true);
+    var params = 'name type category date interval'.split(' ');
     angular.extend(tmpScope, {
       status : 'show',
       modal : true
@@ -71,22 +69,51 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
 
     $compile(obj)(tmpScope);
     $element.append(obj);
+    angular.forEach(params, function(param){
+      tmpScope.$watch(param, function(cur, prev){
+        if(cur !== prev){
+          tmpScope.error = '';
+        }
+      });
+    });
     tmpScope.submit = function(){
       tmpScope.error = '';
-      if(!tmpScope.type || !tmpScope.name || !tmpScope.date){
+      var valid = true;
+      angular.forEach(params, function(param){
+        if(valid && !tmpScope[param]){
+          valid = false;
+        }
+      });
+      if(!valid){
         tmpScope.error = '参数不能为空';
         return;
+      }
+      var dateList = tmpScope.date.split(',');
+      var result = [];
+      angular.forEach(dateList, function(date){
+        var str = date.trim();
+        if(str){
+          result.push(str);
+        }
+      });
+      if(result.length === 1){
+        result = result[0];
       }
       var data = {
         type : tmpScope.type,
         name : tmpScope.name,
-        date : tmpScope.date
+        category : tmpScope.category,
+        date : result,
+        interval : tmpScope.interval
       };
       tmpScope.msg = '正在提交，请稍候...';
+      tmpScope.submiting = true;
       stats.add(data).success(function(){
-
-      }).error(function(){
-
+        tmpScope.destroy();
+      }).error(function(res){
+        tmpScope.submiting = false;
+        tmpScope.error = res.msg || res.error || '未知异常';
+        tmpScope.msg = '';
       });
     };
 
@@ -95,11 +122,11 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
   // ctrl.addStats();
 
   // 根据统计的配置显示相应的统计数据
-  ctrl.showServerStats = function(server){
+  ctrl.showStats = function(currentStats){
 
-    ctrl.currentServer = server;
-    var name = server.name;
-    var type = server.type;
+    ctrl.currentStats = currentStats;
+    var name = currentStats.name;
+    var type = currentStats.type;
     var promise = null;
     var date = ctrl.conditions.date;
     if(date){
@@ -125,9 +152,9 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
 
   // 重新加载统计图表
   ctrl.reload = function(){
-    var server = ctrl.currentServer;
-    if(server){
-      ctrl.showServerStats(server);
+    var currentStats = ctrl.currentStats;
+    if(currentStats){
+      ctrl.showStats(currentStats);
     }
   };
 
@@ -141,6 +168,17 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
     }).error(function(res){
       ctrl.charts.status = 'error';
       ctrl.charts.error = res.msg || res.error;
+    });
+  }
+
+
+  function getMyStats(){
+    stats.getStats().success(function(data){
+      ctrl.myStats.status = 'success';
+      ctrl.myStats.data = data;
+    }).error(function(res){
+      ctrl.myStats.status = 'error';
+      ctrl.myStats.error = res.msg || res.error;
     });
   }
   

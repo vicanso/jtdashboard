@@ -40,7 +40,7 @@ html(lang='zh-CN', ng-app='jtApp')
         .alert-danger.alert(ng-bind='error', ng-show='error')
         .alert-info.alert(ng-bind='msg', ng-show='msg')
         .row
-          .col-xs-6: a.btn.btn-primary(href='javascript:;', ng-click='submit()', ng-class='{disabled : submiting}') 确定
+          .col-xs-6: a.btn.btn-primary(href='javascript:;', ng-click='!submiting && submit()', ng-class='{disabled : submiting}') 确定
           .col-xs-6: a.btn.btn-default.destroy(href='javascript:;') 取消
         a.pull-right.mtop10.font12(href='javascript:;', ng-switch-when='login', ng-click='$parent.type = "register"')  注册
         a.pull-right.mtop10.font12(href='javascript:;', ng-switch-default, ng-click='$parent.type = "login"') 登录

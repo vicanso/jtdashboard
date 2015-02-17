@@ -70,8 +70,9 @@ var routeInfos = [
     handler : controllers.stats.get
   },
   {
-    route : '/stats/servers',
-    handler : controllers.stats.servers
+    route : '/my/stats',
+    middleware : [cacheQueryChecker, session],
+    handler : controllers.stats.myStats
   },
   {
     method : 'post',
