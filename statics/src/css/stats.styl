@@ -13,7 +13,6 @@ NavCss($navHeight)
       margin-top (($HEADER_HEIGHT - $navHeight) / 2)
       > a
         padding 10px 20px
-        width 130px
       &:hover
         > a
           background-color #eee
@@ -35,9 +34,11 @@ HeaderCss()
       line-height @height
       margin-top (($HEADER_HEIGHT - @height) / 2)
       border-radius 3px
-    .editConfig i
-      width 14px
-      margin-right 3px
+    .editConfig
+      margin-top (($HEADER_HEIGHT - 35) / 2)
+      i
+        width 14px
+        margin-right 3px
     NavCss 40px
     .functions
       margin 0

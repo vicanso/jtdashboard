@@ -3,17 +3,17 @@ block bodyContainer
   include ../nav
   .dashboardPage(ng-controller='StatsController as stats')
     include ./header
-    .conditionsContainer.hidden(ng-class='{hidden : stats.conditions.status !== "show"}'): .row
+    .conditionsContainer.hidden(ng-class='{hidden : !stats.currentStats.modify}'): .row
       .col-xs-5: .input-group
         span.input-group-addon 日期：
-        input.form-control(type='text', placeholder='YYYY-MM-DD', ng-model='stats.conditions.date')
+        input.form-control(type='text', placeholder='YYYY-MM-DD', ng-model='stats.currentStats.date')
       .col-xs-4: .input-group
         span.input-group-addon 间隔：
-        input.form-control(type='number', placeholder='默认为60，单位秒', ng-model='stats.conditions.interval')
+        input.form-control(type='number', placeholder='默认为60，单位秒', ng-model='stats.currentStats.interval')
       .col-xs-3
         .btn-group.btn-group-justified
           a.btn.btn-primary(href='javascript:;', ng-click='stats.reload()') 刷新
-          a.btn.btn-default(href='javascript:;', ng-click='stats.conditions.status = "hidden"') 关闭
+          a.btn.btn-default(href='javascript:;', ng-click='stats.currentStats.modify = false') 关闭
 
 
     .chartsContainer
@@ -47,8 +47,8 @@ block append templateContainer
           input.form-control(type='text', placeholder='请输入要显示的统计时间', ng-model='date')
         .tips.font12 可支持的日期格式有：'2015-01-10', '2015-01-10:2015-01-20', ['2015-01-17', '2015-01-20'], '8h', '9d'
         .input-group
-          span.input-group-addon 时间间隔：
-          input.form-control(type='text', placeholder='请输入要显示的统计点的间隔时间', ng-model='interval')
+          span.input-group-addon 间隔：
+          input.form-control(type='text', placeholder='请输入要显示的统计点的间隔时间，单位秒', ng-model='interval')
         .alert-danger.alert.mtop15(ng-bind='error', ng-show='error')
         .alert-info.alert.mtop15(ng-bind='msg', ng-show='msg')
         .row.mtop15

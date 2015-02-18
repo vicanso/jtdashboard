@@ -24,7 +24,7 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
 
   ctrl.myStats = {
     // 状态：loading、success、error
-    status : '',
+    status : 'loading',
     // stats配置
     data : null
   };
@@ -33,10 +33,6 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
   // 当前所选stats
   ctrl.currentStats = null;
 
-  // 统计配置信息
-  ctrl.conditions = {
-    status : ''
-  };
 
 
   // session信息
@@ -123,12 +119,12 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
 
   // 根据统计的配置显示相应的统计数据
   ctrl.showStats = function(currentStats){
-
+    debug('currentStats:%j', currentStats);
     ctrl.currentStats = currentStats;
     var name = currentStats.name;
     var type = currentStats.type;
     var promise = null;
-    var date = ctrl.conditions.date;
+    var date = currentStats.date;
     if(date){
       if(date.indexOf(',') !== -1){
         date = date.split(',');
@@ -136,7 +132,7 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
     }else{
       date = utils.getDate();
     }
-    var interval = ctrl.conditions.interval || 60;
+    var interval = currentStats.interval || 60;
     switch(type){
       case 'server':
         promise = stats.getServerStats(name, date, interval);

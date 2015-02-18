@@ -2,10 +2,11 @@ mixin Servers
   ul.nav.navbar-nav
     li.dropdown(ng-switch='stats.myStats.status')
       a.dropdown-toggle(href='javascript:;') 
-        span(ng-bind='stats.currentServer.name || "服务器列表"') 服务器列表
+        span(ng-bind='stats.currentStats.name || "服务器列表"') 服务器列表
         span.caret
       ul.dropdown-menu(ng-switch-when='success')
         li(ng-repeat='currentStats in stats.myStats.data', ng-click='stats.showStats(currentStats)'): a(href='javascript:;', ng-bind='::currentStats.name')
+        li(ng-show='!stats.myStats.data.length'): a(href='javascript:;', ng-click='stats.addStats()') 请先添加统计配置
       ul.dropdown-menu(ng-switch-when='loading')
         li: a(href='javascript:;') 正在加载中...
       ul.dropdown-menu(ng-switch-when='error')
@@ -20,7 +21,7 @@ mixin UserCtrls
 header.headerContainer
   input.search.pull-left(type='search', placeholder='search by keyword')
   
-  button.btn.btn-link.editConfig(type='button', ng-click='stats.conditions.status = "show"')
+  button.btn.btn-link.editConfig.pull-left.mleft10(type='button', ng-click='stats.currentStats.modify = true')
     i.glyphicon.glyphicon-edit 
     | 参数修改
   +Servers()
