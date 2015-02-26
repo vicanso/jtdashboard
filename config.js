@@ -5,6 +5,10 @@ var url = require('url');
 var pkg = require('./package');
 program.version(pkg.version)
   .option('-p, --port <n>', 'listen port', parseInt)
+  .option('--stats <n>', 'stats uri, eg:stats://localhost:6000')
+  .option('--redis <n>', 'redis uri, eg:redis://pwd@localhost:4000')
+  .option('--mongodb <n>', 'mongodb uri eg:mongodb://user:pwd@black:5000/stats')
+  .option('--log <n>', 'log server uri eg:log://localhost:2900')
   .parse(process.argv);
 
 
@@ -12,8 +16,8 @@ exports.port = program.port || 10000;
 
 exports.env = process.env.NODE_ENV || 'development';
 
-exports.app = 'express_base';
-exports.process = process.env.pm_id || '-1';
+exports.app = 'jtdashboard';
+exports.processId = process.env.pm_id || '-1';
 
 // 静态文件url前缀
 exports.staticUrlPrefix = '/static';
@@ -21,21 +25,6 @@ exports.staticUrlPrefix = '/static';
 exports.staticPath = path.join(__dirname, 'statics');
 
 exports.staticHosts = exports.env === 'development'? null : ['s1.vicanso.com', 's2.vicanso.com'];
-
-// redis服务器的配置
-
-exports.redis = {
-  port : 4000,
-  host : 'localhost',
-  password : 'MY_REDIS_PWD'
-};
-
-
-// stats服务器的配置
-exports.stats = {
-  port : 6000,
-  host : 'localhost'
-};
 
 
 // session的配置
@@ -45,9 +34,12 @@ exports.session = {
   ttl : 3600 * 12
 };
 
+// stats服务器的配置
+exports.statsUri = program.stats || 'stats://localhost:6000';
 
-
-exports.redisUri = process.env.REDIS_URI || 'redis://localhost:4000';
+exports.redisUri = program.redis || 'redis://localhost:4000';
 
 // mongodb服务器的连接uri
-exports.mongodbUri = process.env.MONGODB_URI || 'mongodb://localhost:10020/stats';
+exports.mongodbUri = program.mongodb || 'mongodb://localhost:10020/stats';
+
+exports.logServerUri = program.log || 'log://localhost:2900';

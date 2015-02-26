@@ -1,13 +1,7 @@
 'use strict';
 var config = require('./config');
-var jtLogger = require('jtlogger');
-jtLogger.appPath = __dirname + '/';
-if(config.env !== 'development'){
-  jtLogger.logPrefix = '[' + config.process + ']';
-}
-
+initLog();
 var express = require('express');
-
 var path = require('path');
 var requireTree = require('require-tree');
 var middlewares = requireTree('./middlewares');
@@ -16,12 +10,43 @@ var monitor = require('./helpers/monitor');
 var mongodb = require('./helpers/mongodb');
 var domain = require('domain');
 var io = require('./helpers/io');
+
+
+
+
+if(config.env === 'development'){
+  initServer();
+}else{
+  var d = domain.create();
+  d.on('error', function(err){
+    console.error(err);
+  });
+  d.run(initServer);
+}
+
+
+function initLog(){
+  var jtLogger = require('jtlogger');
+  var util = require('util');
+  var url = require('url');
+  var logServerInfo = url.parse(config.logServerUri);
+  jtLogger.appPath = __dirname + '/';
+  if(config.env !== 'development'){
+    jtLogger.logPrefix = util.format('[%s][%s]', config.app, config.processId);
+  }
+  jtLogger.add(jtLogger.transports.Console);
+  jtLogger.add(jtLogger.transports.UDP, {
+    host : logServerInfo.hostname,
+    port : logServerInfo.port
+  });
+}
+
 /**
  * [initAppSetting 初始化app的配置信息]
  * @param  {[type]} app [description]
  * @return {[type]}     [description]
  */
-var initAppSetting = function(app){
+function initAppSetting(app){
   app.set('view engine', 'jade');
   app.set('trust proxy', true);
   app.set('views', path.join(__dirname, 'views'));
@@ -34,7 +59,7 @@ var initAppSetting = function(app){
  * @param  {[type]} uri [description]
  * @return {[type]}     [description]
  */
-var initMongodb = function(uri){
+function initMongodb(uri){
   if(!uri){
     return ;
   }
@@ -43,7 +68,7 @@ var initMongodb = function(uri){
 };
 
 
-var initServer = function(){
+function initServer(){
 
   initMongodb(config.mongodbUri);
 
@@ -80,7 +105,7 @@ var initServer = function(){
   app.use(middlewares.http_log(httpLoggerType));
 
   // 添加一些信息到response header中
-  app.use(middlewares.jtinfo(config.process));
+  app.use(middlewares.jtinfo(config.processId));
 
   //单位秒
   var staticMaxAge = 365 * 24 * 3600;
@@ -122,12 +147,3 @@ var initServer = function(){
   console.log('server listen on:' + config.port);
 };
 
-if(config.env === 'development'){
-  initServer();
-}else{
-  var d = domain.create();
-  d.on('error', function(err){
-    console.error(err);
-  });
-  d.run(initServer);
-}
