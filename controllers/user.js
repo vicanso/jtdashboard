@@ -74,6 +74,7 @@ var register = function(sess, data, cbf){
     function(cbf){
       new User(data).save(cbf);
     }, function(doc, count, cbf){
+      console.info('user:%s register success!', data.account);
       sess.data = doc;
       var userSession = getSession(sess.data);
       cbf(null, userSession);
@@ -91,7 +92,7 @@ var login = function(sess, data, cbf){
     function(doc, cbf){
       shasum.update(doc.password + sess.data.code);
       if(shasum.digest('hex') === data.password){
-
+        console.info('user:%s login success!', data.account);
         // 更新最近登录时间
         doc.lastLoginedAt =  moment().format('YYYY-MM-DDTHH:mm:ss');
         doc.loginTimes++;
@@ -108,6 +109,7 @@ var login = function(sess, data, cbf){
         });
 
       }else{
+        console.info('user:%s login fail!', data.account);
         cbf(new Error('login fail!'));
       }
     }

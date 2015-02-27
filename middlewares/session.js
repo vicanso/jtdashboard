@@ -1,5 +1,5 @@
 'use strict';
-var cookieParser = require('cookie-parser')();
+
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var config = require('../config');
@@ -18,15 +18,7 @@ var sessionParser = session(_.extend({
   resave : false
 }, sessionInfo));
 module.exports = function(){
-  return function(req, res, next){
-    cookieParser(req, res, function(err){
-      if(err){
-        next(err);
-      }else{
-        sessionParser(req, res, next);
-      }
-    });
-  };
+  return sessionParser;
 };
 
 

@@ -56,9 +56,19 @@ HeaderCss()
     line-height @height
     background-color #1d3446
     .search
-      width 400px
       padding-top (($HEADER_HEIGHT - 35) / 2)
-
+    .watchTopicList
+      margin 0
+      padding 0
+      padding-top (($HEADER_HEIGHT - 30) / 2)
+      li
+        float left
+        width 150px
+        list-style none
+        cursor pointer
+        margin-right 15px
+        &:last-child
+          margin-right 0
         
 .logPage
   margin-left $NAV_WIDTH

@@ -20,7 +20,7 @@ module.exports = function(staticPath, maxAge){
       });
     }else{
       res.set({
-        'Cache-Control' : 'no-cache'
+        'Cache-Control' : 'no-cache, no-store, must-revalidate, max-age=0, s-maxage=0'
       });
     }
     handler(req, res, function(err){

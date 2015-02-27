@@ -52,6 +52,7 @@
       "/component/jquery.js",
       "/component/angular.js",
       "/component/angular-local-storage.js",
+      "/component/sha1.js",
       "/service/utils.js",
       "/service/http_log.js",
       "/service/debug.js",
@@ -59,7 +60,7 @@
       "/js/directive.js",
       "/service/user.js"
     ],
-    "modifiedAt": "2015-02-13 09:43:19"
+    "modifiedAt": "2015-02-27 16:05:33"
   },
   "stats/index": {
     "css": [

@@ -9,6 +9,8 @@ angular.module('jtApp')
 function LogCtrl($scope, $element, io, utils){
   var ctrl = this;
 
+  var watchTopicList = [];
+
   ctrl.filter = {
     key : ''
   };
@@ -17,7 +19,9 @@ function LogCtrl($scope, $element, io, utils){
   ctrl.messageList = [];
 
   // 与服务器的连接状态
-  ctrl.status = '';
+  ctrl.io = {
+    status : 'connecting'
+  };
 
   // 显示log节点的消息
   ctrl.show = show;
@@ -25,9 +29,9 @@ function LogCtrl($scope, $element, io, utils){
   // 输入log节点后按回车时的确定
   ctrl.confirm = confirm;
 
+  ctrl.watchTopicList = watchTopicList;
 
-  var watchTopicList = [];
-
+  ctrl.remove = remove;
 
 
 
@@ -35,7 +39,7 @@ function LogCtrl($scope, $element, io, utils){
 
   // for test
   // setTimeout(function(){
-  //   ctrl.filter.key = 'haproxy';
+  //   ctrl.filter.key = 'trees-MacBook-Air.local.mongodb';
   //   $scope.$apply(function(){
   //     show();
   //   });
@@ -77,9 +81,19 @@ function LogCtrl($scope, $element, io, utils){
 
   function init(url){
     io.connect(url);
-    ctrl.status = 'connecting';
     io.on('connect', function(){
-      ctrl.status = 'connect';
+      ctrl.io.status = 'connect';
+    });
+    io.on('connect_error', function(){
+      ctrl.io.status = 'connect_error';
+    });
+    io.on('reconnecting', function(){
+      ctrl.io.status = 'reconnecting';
+    });
+    io.on('reconnect', function(){
+      angular.forEach(watchTopicList, function(topic){
+        io.watch(topic);
+      });
     });
     io.on('log', function(data){
       ctrl.messageList.push(data);
@@ -87,18 +101,12 @@ function LogCtrl($scope, $element, io, utils){
     });
   }
 
-
-  // socket.on('log', function (data) {
-  //   console.log(data);
-  //   appendLog(data.topic, data.msg);
-  // });
-  // socket.on('connect', function(){
-  //   socket.emit('watch', 'haproxy')
-  // });
-
-  function appendLog(topic, msg){
-    topic = '<span class="topic">' + topic + '</span>';
-    logList.append('<p>' + topic + msg + '</p>');
+  function remove(topic){
+    var index = watchTopicList.indexOf(topic);
+    if(index !== -1){
+      watchTopicList.splice(index, 1);
+      io.unwatch(topic);
+    }
   }
 
 }

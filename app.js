@@ -33,12 +33,13 @@ function initLog(){
   jtLogger.appPath = __dirname + '/';
   if(config.env !== 'development'){
     jtLogger.logPrefix = util.format('[%s][%s]', config.app, config.processId);
+    // jtLogger.add(jtLogger.transports.UDP, {
+    //   host : logServerInfo.hostname,
+    //   port : logServerInfo.port
+    // });
   }
   jtLogger.add(jtLogger.transports.Console);
-  jtLogger.add(jtLogger.transports.UDP, {
-    host : logServerInfo.hostname,
-    port : logServerInfo.port
-  });
+  
 }
 
 /**
@@ -97,8 +98,11 @@ function initServer(){
     res.send('OK');
   });
 
+  var cookieParser = require('cookie-parser');
+  app.use(cookieParser());
+
   // http log
-  var httpLoggerType = ':remote-addr ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"';
+  var httpLoggerType = ':remote-addr ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent" ":session" ":uuid"';
   if(config.env === 'development'){
     httpLoggerType = 'dev';
   }

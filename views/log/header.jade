@@ -1,4 +1,11 @@
 header.headerContainer
-  .input-group.search
-    input.form-control(type='text', placeholder='请输入要查看的log节点，以,号分隔', ng-model='log.filter.key', ng-keyup='log.confirm($event)')
-    a.input-group-addon(href='javascript:;', ng-click='log.show()') GO
+  .col-xs-4
+    .input-group.search
+      input.form-control(type='text', placeholder='请输入要查看的log节点，以,号分隔', ng-model='log.filter.key', ng-keyup='log.confirm($event)')
+      a.input-group-addon(href='javascript:;', ng-click='log.show()') ADD
+  .col-xs-8
+    ul.watchTopicList.clearfix
+      li(ng-repeat='topic in log.watchTopicList', ng-click='log.remove(topic)'): .input-group.input-group-sm
+        span.form-control(ng-bind='::topic', title='{{::topic}}')
+        span.input-group-addon: i.glyphicon.glyphicon-remove
+        

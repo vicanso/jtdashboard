@@ -9,7 +9,8 @@ function socketIO(){
   var self = {
     connect : connect,
     on : on,
-    watch : watch
+    watch : watch,
+    unwatch : unwatch
   };
   return self;
   function connect(url){
@@ -28,6 +29,13 @@ function socketIO(){
       throw new Error('socket is not inited');
     }
     socket.emit('watch', topic);
+  }
+
+  function unwatch(topic){
+    if(!socket){
+      throw new Error('socket is not inited');
+    }
+    socket.emit('unwatch', topic);
   }
 
 }
