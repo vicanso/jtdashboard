@@ -1,6 +1,6 @@
 mixin Servers
-  ul.nav.navbar-nav
-    li.dropdown(ng-switch='stats.myStats.status')
+  ul.nav.navbar-nav(ng-switch='stats.session.anonymous')
+    li.dropdown(ng-switch='stats.myStats.status', ng-switch-when='false')
       a.dropdown-toggle(href='javascript:;') 
         span(ng-bind='stats.currentStats.name || "服务器列表"') 服务器列表
         span.caret

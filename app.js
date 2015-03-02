@@ -1,46 +1,104 @@
 'use strict';
 var config = require('./config');
 initLog();
-var express = require('express');
+
+var util = require('util');
 var path = require('path');
-var requireTree = require('require-tree');
-var middlewares = requireTree('./middlewares');
-var connectTimeout = require('connect-timeout');
-var monitor = require('./helpers/monitor');
-var mongodb = require('./helpers/mongodb');
 var domain = require('domain');
-var io = require('./helpers/io');
+var async = require('async');
+var request = require('request');
 
 
 
 
 if(config.env === 'development'){
-  initServer();
+  start();
 }else{
   var d = domain.create();
   d.on('error', function(err){
     console.error(err);
   });
-  d.run(initServer);
+  d.run(start);
 }
 
 
+/**
+ * [initLog 初始化log配置]
+ * @return {[type]} [description]
+ */
 function initLog(){
   var jtLogger = require('jtlogger');
-  var util = require('util');
-  var url = require('url');
-  var logServerInfo = url.parse(config.logServerUri);
   jtLogger.appPath = __dirname + '/';
   if(config.env !== 'development'){
     jtLogger.logPrefix = util.format('[%s][%s]', config.app, config.processId);
-    // jtLogger.add(jtLogger.transports.UDP, {
-    //   host : logServerInfo.hostname,
-    //   port : logServerInfo.port
-    // });
   }
   jtLogger.add(jtLogger.transports.Console);
   
 }
+
+
+function start(){
+  async.waterfall([
+    getServers,
+    initServers
+  ], function(err){
+    if(err){
+      console.error(err);
+    }
+  });
+}
+
+function initServers(serverList){
+  config.serverList = serverList;
+  var mongodbServer = serverList.mongodb;
+  var mongodbUri = util.format('%s:%s/stats', mongodbServer.host, mongodbServer.port);
+  var mongodbAuth = process.env.MONGODB_AUTH;
+  if(mongodbAuth){
+    mongodbUri = mongodbAuth + '@' + mongodbUri;
+  }
+  mongodbUri = 'mongodb://' + mongodbUri;
+
+
+  initMongodb(mongodbUri);
+  initServer();
+}
+
+/**
+ * [getServers 获取服务器列表]
+ * @param  {[type]} cbf [description]
+ * @return {[type]}     [description]
+ */
+function getServers(cbf){
+  if(config.env === 'development'){
+    setImmediate(function(){
+      cbf(null, {
+        mongodb : {
+          host : 'localhost',
+          port : 10020
+        },
+        redis : {
+          host : 'localhost',
+          port : 4000
+        }
+      });
+    });
+  }else{
+    request.get(config.serverConfigUrl, function(err, res, body){
+      if(err){
+        cbf(err);
+        return;
+      }
+      try{
+        var data = JSON.parse(body);
+      }catch(err){
+        cbf(err);
+        return;
+      }
+      cbf(null, data);
+    });
+  }
+}
+
 
 /**
  * [initAppSetting 初始化app的配置信息]
@@ -64,14 +122,20 @@ function initMongodb(uri){
   if(!uri){
     return ;
   }
+  var mongodb = require('./helpers/mongodb');
   mongodb.init(uri);
   mongodb.initModels(path.join(__dirname, 'models'));
 };
 
 
 function initServer(){
+  var express = require('express');
+  var requireTree = require('require-tree');
+  var middlewares = requireTree('./middlewares');
+  var monitor = require('./helpers/monitor');
+  var io = require('./helpers/io');
 
-  initMongodb(config.mongodbUri);
+  
 
   //性能监控的间隔时间
   var monitorInterval = 10 * 1000;
@@ -82,6 +146,7 @@ function initServer(){
 
   var app = express();
   var server = require('http').Server(app);
+
   io.init(server);
 
   initAppSetting(app);
@@ -91,7 +156,7 @@ function initServer(){
   if(config.env === 'development'){
     httpTimeout = 60 * 1000;
   }
-  app.use(connectTimeout(httpTimeout));
+  app.use(require('connect-timeout')(httpTimeout));
 
   //用于varnish haproxy检测node server是否可用
   app.use('/ping', function(req, res){

@@ -34,12 +34,11 @@ exports.session = {
   ttl : 3600 * 12
 };
 
-// stats服务器的配置
-exports.statsUri = program.stats || 'stats://localhost:6000';
 
-exports.redisUri = program.redis || 'redis://localhost:4000';
 
-// mongodb服务器的连接uri
-exports.mongodbUri = program.mongodb || 'mongodb://localhost:10020/stats';
+exports.serverConfigUrl = 'http://jt-service.oss-cn-shenzhen.aliyuncs.com/server.json';
 
-exports.logServerUri = program.log || 'log://localhost:2900';
+if(exports.env === 'development'){
+  exports.serverConfigUrl = 'http://jt-service.oss-cn-shenzhen.aliyuncs.com/dev_server.json';
+}
+

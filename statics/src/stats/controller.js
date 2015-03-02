@@ -41,17 +41,11 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
   };
 
 
-  
-
-  $scope.$on('user', function(e, res){
-    angular.extend(ctrl.session, res);
-    ctrl.session.status = 'success';
-    if(!res.anonymous){
-      getMyStats();
-    }
-    
+  $scope.$on('user', function(e, type){
+    getSession();
   });
-  user.session();
+  getSession();
+  
 
   // 添加统计配置
   ctrl.addStats = function(){
@@ -178,6 +172,21 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
     });
   }
   
+  function getSession(){
+    ctrl.session.status = 'loading';
+    user.session().then(function(res){
+      angular.extend(ctrl.session, res);
+      ctrl.session.status = 'success';
+      if(!res.anonymous){
+        getMyStats();
+      }else{
+        ctrl.myStats.data = null;
+      }
+    }, function(err){
+      ctrl.session.error = err;
+      ctrl.session.status = 'fail';
+    });
+  }
 
 }
 

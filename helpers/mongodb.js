@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require('lodash');
 var requireTree = require('require-tree');
+var debug = require('debug')('jt.dashboard.mongodb');
 var client = null;
 
 /**
@@ -22,12 +23,16 @@ var init = function(uri, options){
     }
   };
   options = _.extend(options, defaults);
+  console.info('init mongodb %s, options:%j', uri, options);
   client = mongoose.createConnection(uri, options);
   client.on('connected', function(){
     console.info('mongodb connected');
   });
   client.on('disconnected', function(){
     console.info('mongodb disconnected');
+  });
+  client.on('error', function(err){
+    console.error(err);
   });
 };
 

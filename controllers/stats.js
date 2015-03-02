@@ -5,7 +5,7 @@ var moment = require('moment');
 var config = require('../config');
 var mongodb = require('../helpers/mongodb');
 var Stats = mongodb.model('Stats');
-var debug = require('debug')('jtdashboard.stats');
+var debug = require('debug')('jt.dashboard.stats');
 
 exports.view = function(req, res, cbf){
   if(config.env !== 'development'){
