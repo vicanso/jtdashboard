@@ -96,7 +96,7 @@ function initAppSetting(app){
   app.set('views', path.join(__dirname, 'views'));
   app.locals.ENV = config.env;
   app.locals.STATIC_URL_PREFIX = config.staticUrlPrefix;
-};
+}
 
 /**
  * [initMongodb 初始化mongodb]
@@ -110,7 +110,7 @@ function initMongodb(uri){
   var mongodb = require('./helpers/mongodb');
   mongodb.init(uri);
   mongodb.initModels(path.join(__dirname, 'models'));
-};
+}
 
 
 function initServer(){
@@ -199,5 +199,5 @@ function initServer(){
   app.use(require('./controllers/error'));
   server.listen(config.port);
   console.log('server listen on:' + config.port);
-};
+}
 

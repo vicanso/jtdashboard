@@ -42,7 +42,7 @@ exports.add = function(req, res, cbf){
   if(_.isString(data.date)){
     statsData.date = [data.date];
   }else{
-    statsData.date = date.date;
+    statsData.date = data.date;
   }
   statsData.createdAt = moment().format('YYYY-MM-DDTHH:mm:ss');
   debug('add stats:%j', statsData);
@@ -60,7 +60,7 @@ exports.myStats = function(req, res, cbf){
   }
   async.waterfall([
     function(cbf){
-      Stats.find({creator : account}, cbf)
+      Stats.find({creator : account}, cbf);
     },
     function(docs, cbf){
       var result = _.map(docs, function(doc){

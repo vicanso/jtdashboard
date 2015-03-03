@@ -155,17 +155,9 @@ function AppController($scope, $http, $compile, $element, user){
     }
   }
 
-  // setTimeout(function(){
-  //   $scope.$apply(function(){
-  //     login();
-  //     setTimeout(function(){
-  //       $('.dialog .btn-primary').click();        
-  //     }, 2000);
-  //   });
-  // }, 1000);
 }
 
-AppController.$inject = ['$scope', '$http', '$compile', '$element', 'user']
+AppController.$inject = ['$scope', '$http', '$compile', '$element', 'user'];
 
 
 

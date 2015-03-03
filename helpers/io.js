@@ -20,7 +20,7 @@ var initZmqSocket = function(server){
       });
     });
   });
-}
+};
 
 exports.init = function(server){
   initZmqSocket(config.serverList.zmq);

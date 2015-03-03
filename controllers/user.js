@@ -27,7 +27,7 @@ module.exports = function(req, res, cbf){
     if(data.type === 'register'){
       register(sess, data, cbf);
     }else{
-      login(sess, data, cbf)
+      login(sess, data, cbf);
     }
   }else if(method === 'DELETE'){
     sess.data = null;

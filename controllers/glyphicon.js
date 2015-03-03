@@ -7,7 +7,7 @@ module.exports = function(req, res, cbf){
   async.waterfall([
     function(cbf){
       var file = path.join(__dirname, '../statics/src/component/bootstrap.css');
-      fs.readFile(file, 'utf8', cbf)
+      fs.readFile(file, 'utf8', cbf);
     },
     function(css, cbf){
       var reg = /\.glyphicon\-\S+\:before/gi;
@@ -20,6 +20,6 @@ module.exports = function(req, res, cbf){
         }
       });
     }
-  ], cbf)
+  ], cbf);
 
 };

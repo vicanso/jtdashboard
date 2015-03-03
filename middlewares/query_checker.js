@@ -25,5 +25,5 @@ module.exports = function(query){
       _.extend(query, result);
       res.status(302).redirect(urlInfo.pathname + '?' + querystring.stringify(query));
     }
-  }
+  };
 };
