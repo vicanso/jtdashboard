@@ -69,34 +69,19 @@ function initServers(serverList){
  * @return {[type]}     [description]
  */
 function getServers(cbf){
-  if(config.env === 'development'){
-    setImmediate(function(){
-      cbf(null, {
-        mongodb : {
-          host : 'localhost',
-          port : 10020
-        },
-        redis : {
-          host : 'localhost',
-          port : 4000
-        }
-      });
-    });
-  }else{
-    request.get(config.serverConfigUrl, function(err, res, body){
-      if(err){
-        cbf(err);
-        return;
-      }
-      try{
-        var data = JSON.parse(body);
-      }catch(err){
-        cbf(err);
-        return;
-      }
-      cbf(null, data);
-    });
-  }
+  request.get(config.serverConfigUrl, function(err, res, data){
+    if(err){
+      cbf(err);
+      return;
+    }
+    try{
+      data = JSON.parse(data);
+    }catch(err){
+      cbf(err);
+      return;
+    }
+    cbf(null, data[config.env]);
+  });
 }
 
 

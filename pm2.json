@@ -4,10 +4,11 @@
   "merge_logs" : true,
   "max_memory_restart" : "200M",
   "script" : "app.js",
+  "exec_mode" : "fork",
   "log_file" : "/vicanso/pm2/log/jtdashboard.log",
   "error_file" : "/vicanso/pm2/log/jtdashboard-error.log",
   "out_file" : "/vicanso/pm2/log/jtdashboard-out.log",
-  "args" : ["-p", "10010", "--mongodb", "mongodb://user:pwd@black:5000/stats", "--redis", "redis://pwd@black:4000", "--stats", "stats://black:6000"],
+  "args" : ["-p", "10010"],
   "env" : {
     "NODE_ENV" : "production"
   }

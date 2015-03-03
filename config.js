@@ -38,7 +38,3 @@ exports.session = {
 
 exports.serverConfigUrl = 'http://jt-service.oss-cn-shenzhen.aliyuncs.com/server.json';
 
-if(exports.env === 'development'){
-  exports.serverConfigUrl = 'http://jt-service.oss-cn-shenzhen.aliyuncs.com/dev_server.json';
-}
-
