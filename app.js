@@ -1,8 +1,9 @@
 'use strict';
 var config = require('./config');
-initLog();
 
 var util = require('util');
+initLog();
+
 var path = require('path');
 var domain = require('domain');
 var async = require('async');
