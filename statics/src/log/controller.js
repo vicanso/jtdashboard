@@ -35,7 +35,7 @@ function LogCtrl($scope, $element, io, utils){
 
 
 
-  init('http://localhost:10000/');
+  init('//' + location.host + '/');
 
   // for test
   // setTimeout(function(){
