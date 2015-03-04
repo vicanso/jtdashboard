@@ -1,47 +1,4 @@
 {
-  "stats": {
-    "css": [
-      "/component/bootstrap.css",
-      "/css/nav.css",
-      "/component/c3.css",
-      "/css/stats.css"
-    ],
-    "js": [
-      "/component/debug.js",
-      "/component/angular.js",
-      "/component/angular-local-storage.js",
-      "/service/utils.js",
-      "/service/http_log.js",
-      "/service/debug.js",
-      "/js/global.js",
-      "/component/d3.js",
-      "/component/c3.js",
-      "/stats/service.js",
-      "/stats/directive.js",
-      "/stats/controller.js"
-    ],
-    "modifiedAt": "2015-01-30 19:59:39"
-  },
-  "log": {
-    "css": [
-      "/component/bootstrap.css",
-      "/css/nav.css",
-      "/css/log.css"
-    ],
-    "js": [
-      "/component/debug.js",
-      "/component/angular.js",
-      "/component/angular-local-storage.js",
-      "/service/utils.js",
-      "/service/http_log.js",
-      "/service/debug.js",
-      "/js/global.js",
-      "/component/socket.io.js",
-      "/log/service.js",
-      "/log/controller.js"
-    ],
-    "modifiedAt": "2015-02-03 21:21:37"
-  },
   "index": {
     "css": [
       "/component/bootstrap.css",
