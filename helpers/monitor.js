@@ -16,9 +16,7 @@ var memoryLog = function(interval){
   var heapTotal = Math.floor(memoryUsage.heapTotal / MB);
   var heapUsed = Math.floor(memoryUsage.heapUsed / MB);
   
-  console.info('process:%s memory.rss:%dMB', processId, rss);
-  console.info('process:%s memory.heapTotal:%dMB', processId, heapTotal);
-  console.info('process:%s memory.heapUsed:%dMB', processId, heapUsed);
+  console.info('process:%s memory rss:%dMB, heapTotal:%dMB, heapUsed:%dMB', processId, rss, heapTotal, heapUsed);
   // TODO JTStats log
   
   var timer = setTimeout(function(){

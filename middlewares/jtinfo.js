@@ -16,7 +16,9 @@ module.exports = function(processName){
     handlingReqTotal++;
     requestTotal++;
     onHeaders(res, function(){
-      var jtInfo = util.format('%s,%s,%d,%d,%d,%d', hostname, processName, process.pid, handlingReqTotal, requestTotal, Date.now() - start);
+      var use = Date.now() - start;
+      var jtInfo = util.format('%s,%s,%d,%d,%d,%d', hostname, processName, process.pid, handlingReqTotal, requestTotal, use);
+      console.info('HTTP RES:%s', jtInfo);
       handlingReqTotal--;
       res.set('JT-Info', jtInfo);
     });

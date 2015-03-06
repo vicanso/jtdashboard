@@ -40,7 +40,7 @@ function initLog(){
 
 function start(){
   async.waterfall([
-    getServers,
+    initServersConfig,
     initServers
   ], function(err){
     if(err){
@@ -49,8 +49,8 @@ function start(){
   });
 }
 
-function initServers(serverList){
-  config.serverList = serverList;
+function initServers(){
+  var serverList = config.serverList;
   var mongodbServer = serverList.mongodb;
   var mongodbUri = util.format('%s:%s/stats', mongodbServer.host, mongodbServer.port);
   var mongodbAuth = process.env.MONGODB_AUTH;
@@ -65,11 +65,11 @@ function initServers(serverList){
 }
 
 /**
- * [getServers 获取服务器列表]
+ * [initServersConfig 获取服务器列表]
  * @param  {[type]} cbf [description]
  * @return {[type]}     [description]
  */
-function getServers(cbf){
+function initServersConfig(cbf){
   request.get(config.serverConfigUrl, function(err, res, data){
     if(err){
       cbf(err);
@@ -81,7 +81,8 @@ function getServers(cbf){
       cbf(err);
       return;
     }
-    cbf(null, data[config.env]);
+    config.serverList = data[config.env];
+    cbf();
   });
 }
 
@@ -124,9 +125,9 @@ function initServer(){
   
 
   //性能监控的间隔时间
-  var monitorInterval = 10 * 1000;
+  var monitorInterval = 30 * 1000;
   if(config.env === 'development'){
-    monitorInterval = 30 * 1000;
+    monitorInterval = 60 * 1000;
   }
   monitor.start(monitorInterval);
 
