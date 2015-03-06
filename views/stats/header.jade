@@ -1,5 +1,5 @@
 mixin Servers
-  ul.nav.navbar-nav(ng-switch='stats.session.anonymous')
+  ul.nav.navbar-nav.hidden(ng-switch='stats.session.anonymous', ng-class='{hidden : stats.session.anonymous !== false}')
     li.dropdown(ng-switch='stats.myStats.status', ng-switch-when='false')
       a.dropdown-toggle(href='javascript:;') 
         span(ng-bind='stats.currentStats.name || "服务器列表"') 服务器列表
@@ -21,7 +21,7 @@ mixin UserCtrls
 header.headerContainer
   input.search.pull-left(type='search', placeholder='search by keyword')
   
-  button.btn.btn-link.editConfig.pull-left.mleft10(type='button', ng-click='stats.currentStats.modify = true')
+  button.btn.btn-link.editConfig.pull-left.mleft10.hidden(type='button', ng-click='stats.currentStats.modify = true', ng-class='{hidden : stats.session.anonymous !== false}')
     i.glyphicon.glyphicon-edit 
     | 参数修改
   +Servers()

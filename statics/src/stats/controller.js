@@ -177,6 +177,7 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
     user.session().then(function(res){
       angular.extend(ctrl.session, res);
       ctrl.session.status = 'success';
+      console.dir(ctrl.session);
       if(!res.anonymous){
         getMyStats();
       }else{

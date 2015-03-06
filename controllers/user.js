@@ -90,6 +90,10 @@ var login = function(sess, data, cbf){
       User.findOne({account : data.account}, cbf);
     },
     function(doc, cbf){
+      if(!doc){
+        cbf(new Error('account is not exist!'));
+        return;
+      }
       shasum.update(doc.password + sess.data.code);
       if(shasum.digest('hex') === data.password){
         console.info('user:%s login success!', data.account);
