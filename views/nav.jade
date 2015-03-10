@@ -9,7 +9,7 @@ nav.navContainer: ul
   li(class='#{TEMPLATE === "log/index"? "active" : ""}'): a(href='/log') 
     i.glyphicon.glyphicon-console
     | Log
-  li: a(href='javascript:;') 
+  li.hidden(ng-class='{hidden : app.session.anonymous !== false}'): a(href='javascript:;', ng-click='app.logout()') 
     i.glyphicon.glyphicon-log-out
     | LogOut
 

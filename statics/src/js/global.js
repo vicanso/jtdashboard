@@ -108,6 +108,14 @@ function AppController($scope, $http, $compile, $element, user){
 
   ctrl.logout = logout;
 
+  ctrl.session = {};
+
+
+  $scope.$on('user', function(e, type){
+    getSession();
+  });
+  getSession();
+
   function login(){
     var obj = angular.element(angular.element('#loginDialog').html());
     var tmpScope = $scope.$new(true);
@@ -154,6 +162,19 @@ function AppController($scope, $http, $compile, $element, user){
       });
     }
   }
+
+  // 获取用户信息
+  function getSession(){
+    ctrl.session.status = 'loading';
+    user.session().then(function(res){
+      angular.extend(ctrl.session, res);
+      ctrl.session.status = 'success';
+    }, function(err){
+      ctrl.session.error = err;
+      ctrl.session.status = 'fail';
+    });
+  }
+
 
 }
 

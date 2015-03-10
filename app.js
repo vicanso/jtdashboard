@@ -70,6 +70,33 @@ function initServers(){
  * @return {[type]}     [description]
  */
 function initServersConfig(cbf){
+  if(config.env === 'development'){
+    config.serverList = {
+      "log" : {
+        "host" : "127.0.0.1",
+        "port" : 7000
+      },
+      "zmq" : {
+        "host" : "127.0.0.1",
+        "port" : 7010
+      },
+      "stats" : {
+        "host" : "127.0.0.1",
+        "port" : 6000
+      },
+      "mongodb" : {
+        "host" : "127.0.0.1",
+        "port" : 5000
+      },
+      "redis" : {
+        "host" : "127.0.0.1",
+        "port" : 4000
+      }
+    };
+    cbf();
+    return;
+  }
+
   request.get(config.serverConfigUrl, function(err, res, data){
     if(err){
       cbf(err);

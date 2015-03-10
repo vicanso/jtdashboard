@@ -172,12 +172,13 @@ function StatsCtrl($scope, $http, $element, $timeout, $compile, debug, stats, ut
     });
   }
   
+
+  // 获取用户信息
   function getSession(){
     ctrl.session.status = 'loading';
     user.session().then(function(res){
       angular.extend(ctrl.session, res);
       ctrl.session.status = 'success';
-      console.dir(ctrl.session);
       if(!res.anonymous){
         getMyStats();
       }else{

@@ -1,3 +1,8 @@
+
+mixin UserCtrls
+  ul.dropdown-menu
+    li: a(href='javascript:;', ng-click='app.logout()') 退出登录 
+
 header.headerContainer
   .col-xs-4
     .input-group.search
@@ -8,4 +13,12 @@ header.headerContainer
       li(ng-repeat='topic in log.watchTopicList', ng-click='log.remove(topic)'): .input-group.input-group-sm
         span.form-control(ng-bind='::topic', title='{{::topic}}')
         span.input-group-addon: i.glyphicon.glyphicon-remove
+  ul.functions.pull-right.hidden(ng-class='{hidden : log.session.anonymous !== false}')
+    li.name(href='javascript:;')
+      span(ng-bind='log.session.name')
+      i.glyphicon.glyphicon-chevron-down
+      +UserCtrls
+  ul.functions.pull-right.hidden(ng-class='{hidden : log.session.anonymous !== true}')
+    li: a.login(href='javascript:;', title='登录', ng-click='app.login()'): i.glyphicon.glyphicon-log-in
+
         

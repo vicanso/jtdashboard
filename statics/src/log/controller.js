@@ -6,7 +6,7 @@ angular.module('jtApp')
   .controller('LogController', LogCtrl);
 
 
-function LogCtrl($scope, $element, io, utils){
+function LogCtrl($scope, $element, io, utils, user){
   var ctrl = this;
 
   var watchTopicList = [];
@@ -33,9 +33,14 @@ function LogCtrl($scope, $element, io, utils){
 
   ctrl.remove = remove;
 
+  // session信息
+  ctrl.session = {
+    status : 'loading'
+  };
 
 
-  init('//' + location.host + '/');
+
+  
 
   // for test
   // setTimeout(function(){
@@ -49,6 +54,13 @@ function LogCtrl($scope, $element, io, utils){
   var logList = $element.children();
 
 
+  $scope.$on('user', function(e, type){
+    getSession();
+  });
+  getSession();
+
+
+  // 显示用户查看的log
   function show(){
     var topicList = ctrl.filter.key.trim().split(',');
     angular.forEach(topicList, function(topic){
@@ -65,6 +77,7 @@ function LogCtrl($scope, $element, io, utils){
     }
   }
 
+
   function find(topic){
     var result;
     angular.forEach(watchTopicList, function(item){
@@ -79,6 +92,7 @@ function LogCtrl($scope, $element, io, utils){
     $scope.$digest();
   }, 100);
 
+  // 初始化socket.io
   function init(url){
     io.connect(url);
     io.on('connect', function(){
@@ -101,6 +115,7 @@ function LogCtrl($scope, $element, io, utils){
     });
   }
 
+  // 移除topic
   function remove(topic){
     var index = watchTopicList.indexOf(topic);
     if(index !== -1){
@@ -109,8 +124,24 @@ function LogCtrl($scope, $element, io, utils){
     }
   }
 
+  // 获取用户信息
+  function getSession(){
+    ctrl.session.status = 'loading';
+    user.session().then(function(res){
+      angular.extend(ctrl.session, res);
+      ctrl.session.status = 'success';
+      if(!res.anonymous){
+        init('//' + location.host + '/');
+      }
+
+    }, function(err){
+      ctrl.session.error = err;
+      ctrl.session.status = 'fail';
+    });
+  }
+
 }
 
-LogCtrl.$inject = ['$scope', '$element', 'io', 'utils'];
+LogCtrl.$inject = ['$scope', '$element', 'io', 'utils', 'user'];
 
 })(this);

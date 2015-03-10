@@ -69,6 +69,38 @@ HeaderCss()
         margin-right 15px
         &:last-child
           margin-right 0
+    .functions
+      margin 0
+      padding 0
+      > li
+        cursor pointer
+        list-style none
+        margin-right 20px
+        color #82a2b7
+        font-size 16px
+        text-align center
+        &:hover
+          color #fff
+        > a
+          display block
+          width 30px
+          color #d0d0d0
+          &:hover
+            color #fff
+          
+      .name
+        position relative
+        &:hover
+          .dropdown-menu
+            display block
+        i
+          margin-left 10px
+          font-size 12px
+          width @font-size
+        .dropdown-menu
+          left auto
+          right 0
+          margin-top 0
         
 .logPage
   margin-left $NAV_WIDTH
